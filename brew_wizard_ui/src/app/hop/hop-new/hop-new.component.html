@@ -1,0 +1,170 @@
+<button type="button" class="btn btn-primary float-right d-none d-md-block" *ngIf="(_authService.userSignedIn())" (click)="open(newHop)">+ Add Hop</button>
+<button type="button" class="btn btn-primary float-right d-md-none" *ngIf="(_authService.userSignedIn())" (click)="open(newHop)">+</button>
+
+<ng-template #newHop let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">New Hop</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-8 offset-md-2">
+            <p *ngIf="!newHopItem">
+            {{ errorMessage }}
+            </p>
+            <div class="container" *ngIf="newHopItem">
+              <form #f="ngForm" (ngSubmit)="creationSubmit(f.value)">
+                <div class="form-group" *ngIf="(_authService.isAdmin())">
+                  <label class="switch">
+                    <input type="checkbox" name="global" id="global" [(ngModel)]="newHopItem.global">
+                    <span class="slider round"></span>
+                  </label>
+                  <label class="checkbox-label" for="global">Global</label>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-md-12">
+                    <label for="name">Name</label>
+                    <span class="text-danger" *ngIf="name.errors && name.errors.required && (name.dirty || name.touched)"> *required</span>
+                    <input type="text" class="form-control" id="name" name="name" required maxlength="40" [(ngModel)]="newHopItem.name" #name="ngModel">
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-lg-6 col-12">
+                    <label for="origin">Origin</label>
+                    <input type="text" class="form-control" id="origin" name="origin" maxlength="50" [(ngModel)]="newHopItem.origin" #origin="ngModel">
+                  </div>
+
+                  <div class="form-group col-lg-6 col-12">
+                    <label for="type">Type</label>
+                    <select class="form-control" [(ngModel)]="newHopItem.hop_type" id="type" name="type">
+                      <option>Bittering</option>
+                      <option>Aroma</option>
+                      <option>Both</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-lg-6 col-12">
+                    <label for="alpha">Alpha</label>
+                    <span class="text-danger" *ngIf="alpha.errors && (alpha.dirty || alpha.touched)">
+                      <span *ngIf="alpha.errors.required"> *required</span>
+                      <span *ngIf="alpha.errors.pattern"> *invalid input</span>
+                    </span>
+                    <input type="number" step="0.01" class="form-control" id="alpha" name="alpha" required min="0" max="99.99" pattern="^\d{0,2}(\.\d{0,2})?$" [(ngModel)]="newHopItem.alpha" #alpha="ngModel">
+                  </div>
+
+                  <div class="form-group col-lg-6 col-12">
+                    <label for="beta">Beta</label>
+                    <span class="text-danger" *ngIf="beta.errors && (beta.dirty || beta.touched)">
+                      <span *ngIf="beta.errors.required"> *required</span>
+                      <span *ngIf="beta.errors.pattern"> *invalid input</span>
+                    </span>
+                    <input type="number" step="0.01" class="form-control" id="beta" name="beta" required min="0" max="99.99" pattern="^\d{0,2}(\.\d{0,2})?$" [(ngModel)]="newHopItem.beta" #beta="ngModel">
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-md-12">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" id="description" name="description" maxlength="1000" [(ngModel)]="newHopItem.description"></textarea>
+                  </div>
+                </div>
+
+                <div class="row card pad-top">
+                  <div class="col-12 pad-bottom">
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#hopAromaCollapse" aria-expanded="true" aria-controls="hopAromaCollapse" (click)="hop_aroma_collapse=!hop_aroma_collapse">{{ !hop_aroma_collapse ? '+' : '-' }}
+                    </button>
+                    <label for="hop-substitutions">Hop Aromas</label>
+                  </div>
+
+                  <div class="col-12">
+                    <div class="collapse" id="hopAromaCollapse">
+                      <div class="container">
+                        <div class="row pad-top border-bottom">
+                          <span class="card pad" *ngFor="let aroma of aromas; let i = index ">
+                            <p class="item-name">{{ aroma }}<button type="button" class="btn btn-secondary mini-cancel float-right margin-left" (click)="removeAroma(i)">&#8854;</button></p>
+                          </span>
+                          <!-- <div class="col-8 offset-1 no-right-pad">
+                            <p class="item-name">{{ aroma }}</p>
+                          </div>
+                          <div class="col-2">
+                            <button type="button" class="btn btn-secondary mini-cancel float-right" (click)="removeAroma(i)">&#8854;</button>
+                          </div> -->
+                        </div>
+                        <div class="row pad-bottom">
+                          <div class="col-12">
+                            <form (ngSubmit)="addAroma()">
+                              <input type="text" class="form-control" id="aroma" name="aroma" maxlength="40" [(ngModel)]="newAroma" (ngModelChange)="commaCheck($event)" placeholder="Enter comma separated list.">
+                            </form>
+                            <p>{{newAroma}}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row card pad-top">
+                  <div class="col-12 pad-bottom">
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#hopRelationCollapse" aria-expanded="true" aria-controls="hopRelationCollapse" (click)="hop_relation_collapse=!hop_relation_collapse">{{ !hop_relation_collapse ? '+' : '-' }}
+                    </button>
+                    <label for="hop-substitutions">Hop Substitutions</label>
+                  </div>
+
+                  <div class="col-12">
+                    <div class="collapse" id="hopRelationCollapse">
+                      <div class="container">
+                        <div class="row pad-top">
+                          <span class="card pad" *ngFor="let hop of used_hops; let i = index ">
+                            <p class="item-name">
+                              <span class="help-icon margin-right" title="{{ hop.description }}">&#9432;</span>
+                              {{ hop.name }}
+                              <button type="button" class="btn btn-secondary mini-cancel float-right margin-left" (click)="removeHop(i)">&#8854;</button>
+                            </p>
+                          </span>
+                        </div>
+                      <!--
+                        <div class="row pad-top border-bottom" *ngFor="let hop of used_hops; let i = index ">
+                          <div class="col-1 no-pad">
+                            <span class="help-icon float-right" title="{{ hop.description }}">&#9432; </span>
+                          </div>
+                          <div class="col-8 no-right-pad">
+                            <p class="item-name ">{{ hop.name }}</p>
+                          </div>
+                          <div class="col-2">
+                            <button type="button" class="btn btn-secondary mini-cancel float-right" (click)="removeHop(i)">&#8854;</button>
+                          </div>
+                        </div> -->
+                        <div class="row pad-bottom">
+                          <div class="col-12" *ngIf="!hops">
+                            <p>Loading hop substitutes.</p>
+                          </div>
+                          <div class="col-12" *ngIf="hops">
+                            <select id="hop-substitutions" class="item-selector form-control" [(ngModel)]="selected_hop" (ngModelChange)="onAddHop($event)" [ngModelOptions]="{standalone: true}">
+                              <option *ngFor="let h of hops" [ngValue]="h">{{ h.name }}</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" [disabled]="!f.valid && f.dirty">Create</button>
+                <button type="button" class="btn btn-default" (click)="c('Close click')">Close</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ng-template>

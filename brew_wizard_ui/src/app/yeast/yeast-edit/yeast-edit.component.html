@@ -1,0 +1,216 @@
+<button class="btn btn-link" role="link" (click)="open(editYeast)">Edit</button>
+
+
+<ng-template #editYeast let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Edit Yeast</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-8 offset-md-2">
+            <p *ngIf="!editYeastItem">
+            {{ errorMessage }}
+            </p>
+            <div class="container" *ngIf="editYeastItem">
+              <form #f="ngForm" (ngSubmit)="editSubmit(f.value)">
+                <div class="form-group" *ngIf="(_authService.isAdmin())">
+                  <label class="switch">
+                    <input type="checkbox" name="global" id="global" [(ngModel)]="editYeastItem.global">
+                    <span class="slider round"></span>
+                  </label>
+                  <label class="checkbox-label" for="global">Global</label>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-md-12">
+                    <label for="name">Name</label>
+                    <span class="text-danger" *ngIf="name.errors && name.errors.required && (name.dirty || name.touched)"> *required</span>
+                    <input type="text" class="form-control" id="name" name="name" required maxlength="40" [(ngModel)]="editYeastItem.name" #name="ngModel">
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-lg-6 col-12">
+                    <label for="lab">Lab</label>
+                    <input type="text" class="form-control" id="lab" name="lab" maxlength="40" [(ngModel)]="editYeastItem.lab" #lab="ngModel">
+                  </div>
+
+                  <div class="form-group col-lg-6 col-12">
+                    <label for="product_id">Product ID</label>
+                    <input type="text" class="form-control" id="product_id" name="product_id" maxlength="10" [(ngModel)]="editYeastItem.product_id" #product_id="ngModel">
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+                    <label for="type">Type</label>
+                    <select class="form-control" [(ngModel)]="editYeastItem.yeast_type" id="type" name="type">
+                      <option>Ale</option>
+                      <option>Lager</option>
+                      <option>Wheat</option>
+                      <option>Wine</option>
+                      <option>Champagne</option>
+                      <option>Cider</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+                    <label for="type">Form</label>
+                    <select class="form-control" [(ngModel)]="editYeastItem.form" id="type" name="type">
+                      <option>Liquid</option>
+                      <option>Dry</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+                    <label for="flocculation">Flocculation</label>
+                    <span class="text-danger" *ngIf="flocculation.errors && (flocculation.dirty || flocculation.touched)">
+                      <span *ngIf="flocculation.errors.required"> *required</span>
+                      <span *ngIf="flocculation.errors.pattern"> *invalid input</span>
+                    </span>
+                    <input type="number" step="0.1" class="form-control" id="flocculation" name="flocculation" required min="0" max="5" pattern="^[0-5]?(\.\d)?$" [(ngModel)]="editYeastItem.flocculation" #flocculation="ngModel">
+                  </div>
+
+                  <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+                    <label for="cell_count">Cells/Pack (Billion)</label>
+                    <span class="text-danger" *ngIf="cell_count.errors && (cell_count.dirty || cell_count.touched)">
+                      <span *ngIf="cell_count.errors.required"> *required</span>
+                    </span>
+                    <input type="number" step="0.1" class="form-control" id="cell_count" name="cell_count" required min="0" [(ngModel)]="editYeastItem.cell_count" #cell_count="ngModel">
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+                    <label for="min_attenuation">Min Attenuation</label>
+                    <span class="text-danger" *ngIf="min_attenuation.errors && (min_attenuation.dirty || min_attenuation.touched)">
+                      <span *ngIf="min_attenuation.errors.required"> *required</span>
+                      <span *ngIf="min_attenuation.errors.pattern"> *invalid input</span>
+                    </span>
+                    <input type="number" step="0.1" class="form-control" id="min_attenuation" name="min_attenuation" required min="0" max="100" pattern="^(100|(\d){0,2}((\.)(\d){0,2})?)$" [(ngModel)]="editYeastItem.min_attenuation" #min_attenuation="ngModel">
+                  </div>
+
+                  <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+                    <label for="max_attenuation">Max Attenuation</label>
+                    <span class="text-danger" *ngIf="max_attenuation.errors && (max_attenuation.dirty || max_attenuation.touched)">
+                      <span *ngIf="max_attenuation.errors.required"> *required</span>
+                      <span *ngIf="max_attenuation.errors.pattern"> *invalid input</span>
+                    </span>
+                    <input type="number" step="0.1" class="form-control" id="max_attenuation" name="max_attenuation" required min="0" max="100" pattern="^(100|(\d){0,2}((\.)(\d){0,2})?)$" [(ngModel)]="editYeastItem.max_attenuation" #max_attenuation="ngModel">
+                  </div>
+                  <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+                    <label for="min_temperature">Max Temperature (&deg;F)</label>
+                    <span class="text-danger" *ngIf="min_temperature.errors && (min_temperature.dirty || min_temperature.touched)">
+                      <span *ngIf="min_temperature.errors.required"> *required</span>
+                      <span *ngIf="min_temperature.errors.pattern"> *invalid input</span>
+                    </span>
+                    <input type="number" step="0.1" class="form-control" id="min_temperature" name="min_temperature" required min="0" max="212" pattern="^(212|(20\d|21[0-1]|[0-1]?\d{0,2})(\.\d)?)$" [(ngModel)]="editYeastItem.min_temperature" #min_temperature="ngModel">
+                  </div>
+
+                  <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+                    <label for="max_temperature">Min Temperature (&deg;F)</label>
+                    <span class="text-danger" *ngIf="max_temperature.errors && (max_temperature.dirty || max_temperature.touched)">
+                      <span *ngIf="max_temperature.errors.required"> *required</span>
+                      <span *ngIf="max_temperature.errors.pattern"> *invalid input</span>
+                    </span>
+                    <input type="number" step="0.1" class="form-control" id="max_temperature" name="max_temperature" required min="0" max="212" pattern="^(212|(20\d|21[0-1]|[0-1]?\d{0,2})(\.\d)?)$" [(ngModel)]="editYeastItem.max_temperature" #max_temperature="ngModel">
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-md-12">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" id="description" name="description" maxlength="2000" [(ngModel)]="editYeastItem.description"></textarea>
+                  </div>
+                </div>
+
+                <div class="row card pad-top">
+                  <div class="col-12 pad-bottom">
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#yeastStyleCollapse" aria-expanded="true" aria-controls="yeastStyleCollapse" (click)="yeast_style_collapse=!yeast_style_collapse">{{ !yeast_style_collapse ? '+' : '-' }}
+                    </button>
+                    <label for="recipe-style">Ideal Styles</label>
+                  </div>
+
+                  <div class="col-12">
+                    <div class="collapse" id="yeastStyleCollapse">
+                      <div class="container">
+                        <div class="row pad-bottom">
+                          <div class="col-12" *ngIf="!used_styles">
+                            <p>Loading style relationships.</p>
+                          </div>
+                          <div class="col-12" *ngIf="used_styles">
+                            <select id="recipe-style" class="item-selector form-control" [(ngModel)]="selected_style" (ngModelChange)="onAddStyle($event)" [ngModelOptions]="{standalone: true}">
+                              <option *ngFor="let s of styles" [ngValue]="s">{{ s.name }} - {{ s.category_number }}</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <div class="row pad-top border-bottom" *ngFor="let style of used_styles; let i = index ">
+                          <div class="col-1 no-pad">
+                            <span class="help-icon float-right" title="{{ style.description }}">&#9432; </span>
+                          </div>
+                          <div class="col-8 no-right-pad">
+                            <p class="item-name ">{{ style.name }}</p>
+                          </div>
+                          <div class="col-2">
+                            <button type="button" class="btn btn-secondary mini-cancel float-right" (click)="removeStyle(i)">&#8854;</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row card pad-top">
+                  <div class="col-12 pad-bottom">
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#yeastRelationCollapse" aria-expanded="true" aria-controls="yeastRelationCollapse" (click)="yeast_relation_collapse=!yeast_relation_collapse">{{ !yeast_relation_collapse ? '+' : '-' }}
+                    </button>
+                    <label for="yeast-substitutions">Yeasts Substitutions</label>
+                  </div>
+
+                  <div class="col-12">
+                    <div class="collapse" id="yeastRelationCollapse">
+                      <div class="container">
+                        <div class="row pad-bottom">
+                          <div class="col-12" *ngIf="!yeasts">
+                            <p>Loading yeast substitutes.</p>
+                          </div>
+                          <div class="col-12" *ngIf="yeasts">
+                            <select id="yeast-substitutions" class="item-selector form-control" [(ngModel)]="selected_yeast" (ngModelChange)="onAddYeast($event)" [ngModelOptions]="{standalone: true}">
+                              <option *ngFor="let y of yeasts" [ngValue]="y">{{ y.name }}</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <div class="row pad-top border-bottom" *ngFor="let yeast of used_yeasts; let i = index ">
+                          <div class="col-1 no-pad">
+                            <span class="help-icon float-right" title="{{ yeast.description }}">&#9432; </span>
+                          </div>
+                          <div class="col-8 no-right-pad">
+                            <p class="item-name ">{{ yeast.name }}</p>
+                          </div>
+                          <div class="col-2">
+                            <button type="button" class="btn btn-secondary mini-cancel float-right" (click)="removeYeast(i)">&#8854;</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" [disabled]="!f.valid && f.dirty">Update</button>
+                <button type="button" class="btn btn-default" (click)="c('Close click')">Close</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ng-template>

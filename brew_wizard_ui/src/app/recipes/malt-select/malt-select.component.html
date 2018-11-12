@@ -1,0 +1,69 @@
+<button class="btn btn-primary" (click)="open(addMalt)">Add Malt (Detailed View)</button>
+
+
+<ng-template #addMalt let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Add Malt</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-10 offset-md-1">
+            <div class="container">
+              <form #f="ngForm" (ngSubmit)="addMaltSubmit(f.value)">
+
+                <div class="row">
+                  <select class="form-control col-md-4" [(ngModel)]="filterType" [ngModelOptions]="{standalone: true}">
+                    <option value='any'>Any (Grain/Extract)</option>
+                    <option value='1'>Grain</option>
+                    <option value='2'>Extract</option>
+                    <option value='3'>Liquid Extract</option>
+                    <option value='4'>Sugar</option>
+                  </select>
+                  <select class="form-control col-md-4" [(ngModel)]="filterBase" [ngModelOptions]="{standalone: true}">
+                    <option value='any'>Any (Base/Specialty)</option>
+                    <option value='base'>Base Malt</option>
+                    <option value='specialty'>Specialty Malt</option>
+                  </select>
+                  <input class="form-control col-md-4" type="text" placeholder="Search..." [(ngModel)]="search" [ngModelOptions]="{standalone: true}">
+                </div>
+
+                <div class="row table-div">
+                  <table id="example" class="table tabled-bordered table-hover table-sm nowrap" cellspacing="0" width="100%">
+                    <thead class="thead-default">
+                      <tr>
+                        <th class="sort-table" (click)="sortBy('name')">Name</th>
+                        <th class="sort-table" (click)="sortBy('type')">Type</th>
+                        <th class="sort-table" (click)="sortBy('color')">Color</th>
+                        <th class="sort-table" (click)="sortBy('gravity')">Gravity</th>
+                        <th class="sort-table" (click)="sortBy('diastatic')">Diastatic</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let m of filteredMaltOptions(); let i = index" (click)="selectRow(m)" [ngClass]="{'malt-select': selected_malts.includes(m)}">
+                        <td>{{ m.name }}</td>
+                        <td>{{ maltTypes[m.malt_type_id-1].name }}</td>
+                        <td>{{ m.color }}</td>
+                        <td>{{ .046 * m.malt_yield / 100 + 1 | number:'.3' }}</td>
+                        <td>{{ m.diastatic_power }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="row pad-top">
+                  <button type="submit" class="btn btn-default" [disabled]="!f.valid && f.dirty">Add</button>
+                  <button type="button" class="btn btn-default" (click)="c('Close click')">Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

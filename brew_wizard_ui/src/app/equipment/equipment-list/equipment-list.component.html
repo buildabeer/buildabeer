@@ -1,0 +1,104 @@
+<div class="container">
+
+  <div class="container table-header d-none d-md-block">
+    <div class="row">
+      <div class="col-md-6">
+        <h3 class="align-left">{{ title }}</h3>
+      </div>
+      <div class="col-md-6">
+        <app-equipment-new (onEquipmentCreate)="createEvent($event)"></app-equipment-new>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-7">
+        <div class="row">
+          <div class="col-md-5 col-lg-4 col-xl-4">
+            <form class="form-inline pad-bottom">
+              <div class="form-group">
+                <label class="pad-right-small" for="localGlobalSelect">Show </label>
+                <select id="localGlobalSelect" class="form-control" [(ngModel)]="selectedEquipmentCountDropdown" [ngModelOptions]="{standalone: true}" (change)="filterEquipment()">
+                  <option value="All">All ({{ getGlobalFilteredEquipmentCount(2) }})</option>
+                  <option value="Local">Local ({{ getGlobalFilteredEquipmentCount(0) }})</option>
+                  <option value="Global">Global ({{ getGlobalFilteredEquipmentCount(1) }})</option>
+                </select>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <form class="form-inline">
+              <span class="form-group">
+                <input class="form-control" id="search" [(ngModel)]="search" [ngModelOptions]="{standalone: true}" placeholder="Search..." type="search">
+              </span>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5">
+        <div class="row float-right pad-right">
+          <p class="pagination-text d-none d-lg-block">Results: {{ displayedEquipment.length }}</p>
+          <input class="form-control small-button pagination-element" type="button" value="&laquo;" (click)="page=page-1;onPageChange()" [disabled]="page<=1">
+          <p class="pagination-text">Page</p>
+          <input class="paginate-text form-control pagination-element" type="text" [(ngModel)]="pageText" [ngModelOptions]="{standalone: true}" (change)="page=pageText;onPageChange()">
+          <p class="pagination-text">of {{ getPageCount() }}</p>
+          <input class="form-control small-button pagination-element" type="button" value="&raquo;" (click)="page=page+1;onPageChange()" [disabled]="page>=getPageCount()">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-header d-md-none row">
+    <div class="container">
+      <div class="row">
+        <div class="container col-12 col-sm-6 offset-sm-3">
+          <div class="row">
+            <div class="col-9">
+              <h3 class="align-left">{{ title }}</h3>
+            </div>
+            <div class="col-3">
+              <app-equipment-new (onEquipmentCreate)="createEvent($event)"></app-equipment-new>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <form class="form-inline col-sm-6 offset-sm-3 pad-bottom">
+          <label class="pad-right-small" for="equipmentShowSelectSmall">Show </label>
+          <select class="form-control" id="equipmentShowSelectSmall" [(ngModel)]="selectedEquipmentCountDropdown" [ngModelOptions]="{standalone: true}" (change)="filterEquipment()">
+            <option value="All">All ({{ getGlobalFilteredEquipmentCount(2) }})</option>
+            <option value="Local">Local ({{ getGlobalFilteredEquipmentCount(0) }})</option>
+            <option value="Global">Global ({{ getGlobalFilteredEquipmentCount(1) }})</option>
+          </select>
+        </form>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 offset-sm-3 pad-bottom">
+          <input class="form-control" [(ngModel)]="search" [ngModelOptions]="{standalone: true}" type="search" placeholder="Search...">
+        </div>
+      </div>
+      <div class="row">
+        <form class=" form-inline mx-auto">
+          <input class="form-control small-button pagination-element" type="button" value="&laquo;" (click)="page=page-1;onPageChange()" [disabled]="page<=1">
+          <p class="pagination-text">Page {{ page }} of {{ getPageCount() }}</p>
+          <input class="form-control small-button pagination-element" type="button" value="&raquo;" (click)="page=page+1;onPageChange()" [disabled]="page>=getPageCount()">
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="row title-bar">
+    <p class="text-light offset-1 name">Name</p>
+    <p class="text-light offset-9 help-icon" title="Local items are ones that you personally created and are only available for you to use, while global items are available for all users.">&#9432;</p>
+    <p class="text-light">Status</p>
+  </div>
+
+  <div class="pre-scrollable">
+    <div *ngFor="let equipment of searchedEquipment() | slice:(page-1)*20:(page*20-1); trackBy:trackByEquipmentName">
+
+      <app-equipment-card [equipment]="equipment" (onEquipmentEdit)="editEvent($event)" (onEquipmentDelete)="deleteEvent($event)"></app-equipment-card>
+
+    </div>
+    <h4 *ngIf="equipment.length == 0" >{{ errorMessage }}</h4>
+  </div>
+</div>

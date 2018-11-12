@@ -1,0 +1,83 @@
+@import "../../../styles.scss";
+
+.paginate-text {
+  max-width: 50px;
+  text-align: center;
+}
+
+.pre-scrollable {
+  max-height: 500px;
+  overflow-y: scroll;
+}
+
+.table-header {
+  padding: 40px;
+  margin-bottom: 10px;
+  border-style: solid;
+  border-width: thin;
+  border-radius: 5px;
+}
+
+.expansion-button {
+  width: 40px;
+}
+
+.collapse {
+  margin: 0 15px 0 15px;
+}
+
+.small-button {
+  width: 40px;
+}
+
+.pagination-element {
+  height: 40px;
+}
+
+.pagination-text {
+  padding-top: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.pad-right {
+  padding-right: 15px;
+}
+
+.pad-right-small {
+  padding-right: 5px;
+}
+
+.pad-bottom {
+  padding-bottom: 5px;
+}
+
+.title-bar {
+  background: $primary;
+  height: 24px;
+}
+
+.name {
+  padding-left: 12px;
+}
+
+.help-icon {
+  cursor: default;
+  padding-right: 5px;
+}
+
+.mini-row {
+  h5 {
+    margin-bottom: -7px;
+  }
+  height: 25px;
+}
+
+.tiny-row {
+  height: 15px;
+}
+
+.short {
+  padding-bottom: 3px;
+  margin-bottom: 0px;
+}

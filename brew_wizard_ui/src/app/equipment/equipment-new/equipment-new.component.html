@@ -1,0 +1,156 @@
+<button type="button" class="btn btn-primary float-right d-none d-md-block" *ngIf="(_authService.userSignedIn())" (click)="open(newEquipment)">+ Add Equipment</button>
+<button type="button" class="btn btn-primary float-right d-md-none" *ngIf="(_authService.userSignedIn())" (click)="open(newEquipment)">+</button>
+
+<ng-template #newEquipment let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">New Equipment</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-8 offset-md-2">
+            <p *ngIf="!newEquipmentItem">
+            {{ errorMessage }}
+            </p>
+            <div class="container" *ngIf="newEquipmentItem">
+              <form #f="ngForm" (ngSubmit)="creationSubmit(f.value)">
+                <div class="form-group" *ngIf="(_authService.isAdmin())">
+                  <label class="switch">
+                    <input type="checkbox" name="global" id="global" [(ngModel)]="newEquipmentItem.global">
+                    <span class="slider round"></span>
+                  </label>
+                  <label class="checkbox-label" for="global">Global</label>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-md-6">
+                    <label for="name">Name</label>
+                    <span class="text-danger" *ngIf="name.errors && name.errors.required && (name.dirty || name.touched)"> *required</span>
+                    <input type="text" class="form-control" id="name" name="name" required maxlength="40" [(ngModel)]="newEquipmentItem.name" #name="ngModel">
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label for="type">Highest Capability</label>
+                    <select class="form-control" [(ngModel)]="equipment_type" id="type" name="type">
+                      <option *ngFor="let type of equipmentTypes" [ngValue]="type">{{ type }}</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label for="batch_limit">Max Batch Size</label>
+                    <span class="text-danger" *ngIf="batch_limit.errors && (batch_limit.dirty || batch_limit.touched)">
+                      <span *ngIf="batch_limit.errors.required"> *required</span>
+                      <span *ngIf="batch_limit.errors.pattern"> *invalid input</span>
+                    </span>
+                    <input type="number" class="form-control" id="batch_limit" name="batch_limit" required min="0" max="100" step="0.5" pattern="^(100|(\d){0,2}((\.)(\d){0,2})?)$" [(ngModel)]="newEquipmentItem.batch_limit" #batch_limit="ngModel">
+                  </div>
+
+                  <div class="form-group col-md-6" *ngIf="equipment_type !== 'Extract'">
+                    <label for="efficiency">Mash Efficiency</label>
+                    <span class="text-danger" *ngIf="efficiency.errors && (efficiency.dirty || efficiency.touched)">
+                      <span *ngIf="efficiency.errors.required"> *required</span>
+                      <span *ngIf="efficiency.errors.pattern"> *invalid input</span>
+                    </span>
+                    <input type="number" class="form-control" id="efficiency" name="efficiency" required min="0" max="100" step="0.01" pattern="^(100|(\d){0,2}((\.)(\d){0,2})?)$" [(ngModel)]="newEquipmentItem.efficiency" #efficiency="ngModel">
+                  </div>
+                </div>
+
+                <div class="row align-items-end">
+                  <div class="form-group col-4" *ngIf="equipment_type === 'All Grain'">
+                    <label for="wl_hlt">Water Lost (deadspace and in-line): HLT</label>
+                    <span class="text-danger" *ngIf="wl_hlt.errors && (wl_hlt.dirty || wl_hlt.touched)">
+                      <span *ngIf="wl_hlt.errors.required"> *required</span>
+                      <span *ngIf="wl_hlt.errors.pattern"> *invalid input</span>
+                    </span>
+                    <input type="number" step="0.1" class="form-control" id="wl_hlt" name="wl_hlt" required min="0" max="99.9" pattern="^\d{0,2}(\.\d?)?$" [(ngModel)]="newEquipmentItem.wl_hlt" #wl_hlt="ngModel">
+                  </div>
+
+                  <div class="form-group col-4" *ngIf="equipment_type === 'All Grain'">
+                    <label for="wl_mash">Water Lost (deadspace and in-line): Mash</label>
+                    <span class="text-danger" *ngIf="wl_mash.errors && (wl_mash.dirty || wl_mash.touched)">
+                      <span *ngIf="wl_mash.errors.required"> *required</span>
+                      <span *ngIf="wl_mash.errors.pattern"> *invalid input</span>
+                    </span>
+                    <input type="number" step="0.1" class="form-control" id="wl_mash" name="wl_mash" required min="0" max="99.9" pattern="^\d{0,2}(\.\d?)?$" [(ngModel)]="newEquipmentItem.wl_mash" #wl_mash="ngModel">
+                  </div>
+
+                  <div class="form-group col-4">
+                    <label for="wl_boil">Water Lost (deadspace and in-line): Boil</label>
+                    <span class="text-danger" *ngIf="wl_boil.errors && (wl_boil.dirty || wl_boil.touched)">
+                      <span *ngIf="wl_boil.errors.required"> *required</span>
+                      <span *ngIf="wl_boil.errors.pattern"> *invalid input</span>
+                    </span>
+                    <input type="number" step="0.1" class="form-control" id="wl_boil" name="wl_boil" required min="0" max="99.9" pattern="^\d{0,2}(\.\d?)?$" [(ngModel)]="newEquipmentItem.wl_boil" #wl_boil="ngModel">
+                  </div>
+
+                  <div class="form-group col-4 offset-4">
+                    <label for="boil_rate">Boil Rate (gal/hr)</label>
+                    <span class="text-danger" *ngIf="boil_rate.errors && (boil_rate.dirty || boil_rate.touched)">
+                      <span *ngIf="boil_rate.errors.required"> *required</span>
+                      <span *ngIf="boil_rate.errors.pattern"> *invalid input</span>
+                    </span>
+                    <input type="number" step="0.1" class="form-control" id="boil_rate" name="boil_rate" required min="0" max="99.9" pattern="^\d{0,2}(\.\d?)?$" [(ngModel)]="newEquipmentItem.boil_rate" #boil_rate="ngModel">
+                  </div>
+                </div>
+
+                <div class="row" *ngIf="equipment_type === 'All Grain'">
+                  <div class="form-group col-12">
+                    <div class="form-group">
+                      <label class="switch">
+                        <input type="checkbox" name="whirlpool" id="whirlpool" [(ngModel)]="newEquipmentItem.whirlpool">
+                        <span class="slider round"></span>
+                      </label>
+                      <label class="checkbox-label" for="whirlpool">Is it able to whirlpool the boil kettle?</label>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="switch">
+                        <input type="checkbox" name="hop_back" id="hop_back" [(ngModel)]="newEquipmentItem.hop_back">
+                        <span class="slider round"></span>
+                      </label>
+                      <label class="checkbox-label" for="hop_back">Does it have a hop back?</label>
+                    </div>
+                  </div>
+
+                  <div class="form-group col-12">
+                    <p>What kind of sparging is it capable of?</p>
+                    <div class="form-group">
+                      <label class="switch">
+                        <input type="checkbox" name="batchSparge" id="batchSparge" [(ngModel)]="newEquipmentItem.batch_sparge">
+                        <span class="slider round"></span>
+                      </label>
+                      <label class="checkbox-label" for="batchSparge">Batch Sparge</label>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="switch">
+                        <input type="checkbox" name="flySparge" id="flySparge" [(ngModel)]="newEquipmentItem.fly_sparge">
+                        <span class="slider round"></span>
+                      </label>
+                      <label class="checkbox-label" for="flySparge">Fly Sparge</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-md-12">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" id="description" name="description" maxlength="500" [(ngModel)]="newEquipmentItem.description"></textarea>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" [disabled]="!f.valid && f.dirty">Create</button>
+                <button type="button" class="btn btn-default" (click)="c('Close click')">Close</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ng-template>

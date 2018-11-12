@@ -1,0 +1,111 @@
+<button type="button" class="btn btn-primary float-right d-none d-md-block" *ngIf="(_authService.userSignedIn())" (click)="open(newAgent)">+ Add Profile</button>
+<button type="button" class="btn btn-primary float-right d-md-none" *ngIf="(_authService.userSignedIn())" (click)="open(newAgent)">+</button>
+
+<ng-template #newAgent let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">New Agent</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <form #f="ngForm" (ngSubmit)="creationSubmit(f.value)">
+          <div class="form-group" *ngIf="(_authService.isAdmin())">
+            <label class="switch">
+              <input type="checkbox" name="global" id="global" [(ngModel)]="newAgentItem.global">
+              <span class="slider round"></span>
+            </label>
+            <label class="checkbox-label" for="global">Global</label>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-12">
+              <label for="name">Name</label>
+              <span class="text-danger" *ngIf="name.errors && name.errors.required && (name.dirty || name.touched)"> *required</span>
+              <input type="text" class="form-control" id="name" name="name" required maxlength="40" [(ngModel)]="newAgentItem.name" #name="ngModel">
+            </div>
+          </div>
+
+          <div class="row align-items-end">
+            <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+              <label for="ph">pH</label>
+              <span class="text-danger" *ngIf="ph.errors && (ph.dirty || ph.touched)">
+                <span *ngIf="ph.errors.required"> *required</span>
+                <span *ngIf="ph.errors.pattern"> *invalid input</span>
+              </span>
+              <input type="number" step="0.1" class="form-control" id="ph" name="ph" required min="0" max="14" pattern="^((\d|1[0-3])(\.\d)?|14)$" [(ngModel)]="newAgentItem.ph" #ph="ngModel">
+            </div>
+
+            <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+              <label for="calcium">Calcium (ppm/g)</label>
+              <span class="text-danger" *ngIf="calcium.errors && (calcium.dirty || calcium.touched)">
+                <span *ngIf="calcium.errors.required"> *required</span>
+                <span *ngIf="calcium.errors.pattern"> *invalid input</span>
+              </span>
+              <input type="number" class="form-control" id="calcium" name="calcium" required min="0" max="999.9" step="0.1" pattern="^\d{0,3}(\.\d)?$" [(ngModel)]="newAgentItem.calcium" #calcium="ngModel">
+            </div>
+
+            <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+              <label for="magnesium">Magnesium (ppm/g)</label>
+              <span class="text-danger" *ngIf="magnesium.errors && (magnesium.dirty || magnesium.touched)">
+                <span *ngIf="magnesium.errors.required"> *required</span>
+                <span *ngIf="magnesium.errors.pattern"> *invalid input</span>
+              </span>
+              <input type="number" class="form-control" id="magnesium" name="magnesium" required min="0" max="999.9" step="0.1" pattern="^\d{0,3}(\.\d)?$" [(ngModel)]="newAgentItem.magnesium" #magnesium="ngModel">
+            </div>
+
+            <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+              <label for="sodium">Sodium (ppm/g)</label>
+              <span class="text-danger" *ngIf="sodium.errors && (sodium.dirty || sodium.touched)">
+                <span *ngIf="sodium.errors.required"> *required</span>
+                <span *ngIf="sodium.errors.pattern"> *invalid input</span>
+              </span>
+              <input type="number" class="form-control" id="sodium" name="sodium" required min="0" max="999.9" step="0.1" pattern="^\d{0,3}(\.\d)?$" [(ngModel)]="newAgentItem.sodium" #sodium="ngModel">
+            </div>
+
+            <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+              <label for="sulfate">Sulfate (ppm/g)</label>
+              <span class="text-danger" *ngIf="sulfate.errors && (sulfate.dirty || sulfate.touched)">
+                <span *ngIf="sulfate.errors.required"> *required</span>
+                <span *ngIf="sulfate.errors.pattern"> *invalid input</span>
+              </span>
+              <input type="number" class="form-control" id="sulfate" name="sulfate" required min="0" max="999.9" step="0.1" pattern="^\d{0,3}(\.\d)?$" [(ngModel)]="newAgentItem.sulfate" #sulfate="ngModel">
+            </div>
+
+            <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+              <label for="chloride">Chloride (ppm/g)</label>
+              <span class="text-danger" *ngIf="chloride.errors && (chloride.dirty || chloride.touched)">
+                <span *ngIf="chloride.errors.required"> *required</span>
+                <span *ngIf="chloride.errors.pattern"> *invalid input</span>
+              </span>
+              <input type="number" class="form-control" id="chloride" name="chloride" required min="0" max="999.9" step="0.1" pattern="^\d{0,3}(\.\d)?$" [(ngModel)]="newAgentItem.chloride" #chloride="ngModel">
+            </div>
+
+            <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+              <label for="bicarbonate">Bicarbonate (ppm/g)</label>
+              <span class="text-danger" *ngIf="bicarbonate.errors && (bicarbonate.dirty || bicarbonate.touched)">
+                <span *ngIf="bicarbonate.errors.required"> *required</span>
+                <span *ngIf="bicarbonate.errors.pattern"> *invalid input</span>
+              </span>
+              <input type="number" class="form-control" id="bicarbonate" name="bicarbonate" required min="0" max="999.9" step="0.1" pattern="^\d{0,3}(\.\d)?$" [(ngModel)]="newAgentItem.bicarbonate" #bicarbonate="ngModel">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-12">
+              <label for="description">Description</label>
+              <textarea class="form-control" id="description" name="description" maxlength="500" [(ngModel)]="newAgentItem.description"></textarea>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" [disabled]="!f.valid">Create</button>
+          <button type="button" class="btn btn-default" (click)="c('Close click')">Close</button>
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+</ng-template>

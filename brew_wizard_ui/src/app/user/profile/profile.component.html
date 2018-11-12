@@ -1,0 +1,216 @@
+<div class="container">
+  <div class="row d-md-none">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" title="User Details" id="pills-user-tab" href="#user-tab" data-toggle="pill" role="tab" aria-controls="user-tab" aria-expanded="true">
+          User Info
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" title="Measurement Settings" id="pills-measurement-tab" href="#measurement-tab" data-toggle="pill" role="tab" aria-controls="measurement-tab" aria-expanded="true">
+          Measurements
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" title="Calendar" id="pills-calendar-tab" href="#calendar-tab" data-toggle="pill" role="tab" aria-controls="calendar-tab" aria-expanded="true">
+          Calendar
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" title="History" id="pills-history-tab" href="#history-tab" data-toggle="pill" role="tab" aria-controls="history-tab" aria-expanded="true">
+          History
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-2 no-right-pad d-none d-md-block">
+          <ul class="nav nav-tabs nav-stacked flex-column" id="pills-tab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" title="User Details" id="pills-user-tab" href="#user-tab" data-toggle="pill" role="tab" aria-controls="user-tab" aria-expanded="true">
+                User Info
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" title="Measurement Settings" id="pills-measurement-tab" href="#measurement-tab" data-toggle="pill" role="tab" aria-controls="measurement-tab" aria-expanded="true">
+                Measurement Settings
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" title="Calendar" id="pills-calendar-tab" href="#calendar-tab" data-toggle="pill" role="tab" aria-controls="calendar-tab" aria-expanded="true">
+                Calendar
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" title="History" id="pills-history-tab" href="#history-tab" data-toggle="pill" role="tab" aria-controls="history-tab" aria-expanded="true">
+                History
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-10">
+          <div class="tab-content">
+
+            <div class="tab-pane fade show active" id="user-tab" role="tabpanel" aria-labelledby="pills-user-tab">
+              <h3 class="underline">User Info</h3>
+
+              <div class="container" *ngIf="_authTokenService.currentUserData">
+                <div class="row col-6 offset-3">
+                  <table class="table">
+                    <tr>
+                      <th>Email</th>
+                      <td><b>{{ _authTokenService.currentUserData.email }}</b></td>
+                    </tr>
+                    <tr>
+                      <th>Username</th>
+                      <td><b>{{ _authTokenService.currentUserData.nickname }}</b></td>
+                    </tr>
+                    <tr>
+                      <th>Recipe Count</th>
+                      <td><b>{{ recipeCount }}</b></td>
+                    </tr>
+                  </table>
+
+                  <div class="container">
+                    <div class="row">
+                      <div class="form-group col-3">
+                        <label class="switch">
+                          <input type="checkbox" name="contact" id="contact" [(ngModel)]="user.contact">
+                          <span class="slider round"></span>
+                        </label>
+                      </div>
+                      <div class="col-9">
+                        <label _ngcontent-c3="" class="checkbox-label" for="contact">Are you willing to receive emails from us?
+                        <br />
+                        <sub>The emails we refer to may be about site updates or promotions, not recipe reminders.</sub>
+                        </label>
+                      </div>
+
+                      <div class="form-group col-3">
+                        <label class="switch">
+                          <input type="checkbox" name="recipe_reminders" id="recipe_reminders" [(ngModel)]="user.recipe_reminders">
+                          <span class="slider round"></span>
+                        </label>
+                      </div>
+                      <div class="col-9">
+                        <label class="checkbox-label" for="recipe_reminders">Do you want to receive recipe reminder emails?
+                        <br />
+                        <sub>These are pertaining to reminders such as: when to add secondary fermentation hops, or when fermentation ends.</sub>
+                      </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button type="button" class="btn btn-primary" (click)="updateUserSettings()">Update Email Settings</button>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="tab-pane fade show" id="measurement-tab" role="tabpanel" aria-labelledby="pills-measurement-tab">
+              <h3 class="underline">Change Measurement Settings</h3>
+
+              <div *ngIf="measurement_settings_loading">
+                <p>{{ measurement_load_message }}</p>
+              </div>
+              <div class="container" *ngIf="!measurement_settings_loading">
+                <div class="row">
+                  <div class="col-12 col-md-6 col-lg-3">
+                    <label for="temperature-measurement">Temperature</label>
+                    <select id="temperature-measurement" class="item-selector form-control" [(ngModel)]="measurement_settings.temperature">
+                      <option value="us">Fahrenheit</option>
+                      <option value="metric">Celsius</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12 col-md-6 col-lg-3">
+                    <label for="liquid-measurement">Liquid</label>
+                    <select id="liquid-measurement" class="item-selector form-control" [(ngModel)]="measurement_settings['liquid']">
+                      <option value="us">Gallons</option>
+                      <option value="metric">Liters</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12 col-md-6 col-lg-3">
+                    <label for="agent-measurement">Weight (Water Agents)</label>
+                    <select id="agent-measurement" class="item-selector form-control" [(ngModel)]="measurement_settings['agents']">
+                      <option value="us">Ounces</option>
+                      <option value="metric">Grams</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12 col-md-6 col-lg-3">
+                    <label for="malt-measurement">Weight (Malts)</label>
+                    <select id="malt-measurement" class="item-selector form-control" [(ngModel)]="measurement_settings['malts']">
+                      <option value="us">Pounds</option>
+                      <option value="metric">Grams</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12 col-md-6 col-lg-3">
+                    <label for="hop-measurement">Weight (Hops)</label>
+                    <select id="hop-measurement" class="item-selector form-control pad-bottom" [(ngModel)]="measurement_settings['hops']">
+                      <option value="us">Ounces</option>
+                      <option value="metric">Grams</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row pad-bottom">
+                  <div class="col-12 col-md-6 col-lg-3">
+                    <label for="pressure-measurement">Pressure</label>
+                    <select (change)="_designer.measurementChange('pressure')" id="pressure-measurement" class="item-selector form-control" [(ngModel)]="measurement_settings['pressure']">
+                      <option value="us">PSI</option>
+                      <option value="metric">kPa</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row pad-bottom">
+                  <div class="col-12 col-md-6 col-lg-3">
+                    <label for="ibu-measurement">IBU</label>
+                    <select (change)="_designer.measurementChange('ibu')" id="ibu-measurement" class="item-selector form-control" [(ngModel)]="measurement_settings['ibu']">
+                      <option value="tinseth">Tinseth</option>
+                      <option value="rager">Rager</option>
+                      <option value="garetz">Garetz</option>
+                      <option value="daniels">Daniels</option>
+                      <option value="average">Average</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row pad-bottom">
+                  <div class="col-12 col-md-6 col-lg-3">
+                    <label for="color-measurement">Color</label>
+                    <select (change)="_designer.measurementChange('color')" id="color-measurement" class="item-selector form-control" [(ngModel)]="measurement_settings['color']">
+                      <option value="srm">SRM</option>
+                      <option value="lovibond">Lovibond</option>
+                      <option value="ebc">EBC</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12 col-md-6 col-lg-3">
+                    <button class="btn btn-primary" (click)="updateMeasurementSettings()">Save</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tab-pane fade show" id="calendar-tab" role="tabpanel" aria-labelledby="pills-calendar-tab">
+              <app-calendar></app-calendar>
+            </div>
+
+            <div class="tab-pane fade show" id="history-tab" role="tabpanel" aria-labelledby="pills-history-tab">
+              <app-history></app-history>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

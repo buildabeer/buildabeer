@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="row">
+    <form class="form-contact col-8 offset-2 col-md-6 offset-md-3 col-xl-4 offset-xl-4" (ngSubmit)="contactSubmit()" #f="ngForm">
+      <div class="container">
+        <div class="row">
+          <h2 class="contact-heading">Contact Us</h2>
+        </div>
+
+        <div class="text-danger row">
+          <p *ngFor="let error of contactErrors"> {{ error }}</p>
+        </div>
+
+        <div class="row">
+          <p class="text-danger" *ngIf="contact.email.length === 0">*</p><label for="inputEmail">Email address</label>
+          <input type="email" name="email" id="inputEmail" [(ngModel)]="contact.email" maxlength="50" class="form-control" placeholder="Email address" required autofocus>
+        </div>
+        <div class="row">
+          <label for="inputName">Name</label>
+          <input type="text" name="name" id="inputName" [(ngModel)]="contact.name" maxlength="50" class="form-control" placeholder="Name">
+        </div>
+        <div class="row">
+          <label for="inputPhone">Phone Number</label>
+          <input type="phone" name="phone" id="inputPhone" [(ngModel)]="contact.phone" maxlength="14" class="form-control" placeholder="xxx-xxx-xxxx">
+        </div>
+        <div class="row">
+          <p class="text-danger" *ngIf="contact.title.length === 0">*</p><label for="inputTitle">Subject</label>
+          <input type="text" name="subject" id="inputTitle" [(ngModel)]="contact.title" maxlength="50" class="form-control" placeholder="Subject" required>
+        </div>
+        <div class="row">
+          <p class="text-danger" *ngIf="contact.message.length === 0">*</p><label for="message">Message</label>
+          <textarea class="form-control" id="message" name="message" maxlength="1000" required [(ngModel)]="contact.message"></textarea>
+        </div>
+        <div class="row">
+          <button class="btn btn-lg btn-primary btn-block" type="submit" [disabled]="!f.valid">Send Message</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

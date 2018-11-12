@@ -1,0 +1,184 @@
+<div class="container">
+
+  <div class="table-header d-none d-md-block">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h3 class="align-left">{{ title }}</h3>
+        </div>
+        <div class="col-md-6">
+          <div class="btn-group float-right" role="group">
+            <button class="btn btn-primary" role="button" routerLink="new">New Recipe</button>
+            <button class="btn btn-primary" role="button" [disabled]="!(_authService.userSignedIn$ | async)" title="{{ (_authService.userSignedIn$ | async) ? 'Import recipes from beerxml file.' : 'You must log in before importing recipes.' }}"(click)="importXmlOpen(importXmlPopup)"><span class="fas fa-upload"></span></button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-7">
+          <div class="row">
+            <div class="col-12">
+              <form class="form-inline pad-bottom">
+                <div class="form-group">
+                  <label class="pad-right-small" for="styleCategoriesSelect">Category </label>
+                  <select id="styleCategoriesSelect" class="form-control" [(ngModel)]="selectedStyleCategoryDropdown" [ngModelOptions]="{standalone: true}" (change)="updateRecipeList()">
+                    <option [ngValue]="null">Any ({{ getTotalRecipeCount() }})</option>
+                    <option *ngFor="let category of style_list" [ngValue]="category">{{ category.style.category_number.toString() + category.style.subcategory + ' - ' + category.style.category_name }} ({{ category.count }})</option>
+                  </select>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="row align-items-end">
+            <div class="col-md-6">
+              <form class="form-inline pad-bottom">
+                <span class="align-bottom">
+                  <input class="form-control" id="search" [(ngModel)]="search" [ngModelOptions]="{standalone: true}" (keyup)="searchTyping()" placeholder="Search..." type="search">
+                </span>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-5">
+          <div class="row float-right pad-right">
+            <p class="pagination-text d-none d-lg-block">Results: {{ recipe.length }}</p>
+            <input class="form-control small-button pagination-element" type="button" value="&laquo;" (click)="page=page-1;onPageChange()" [disabled]="page<=1">
+            <p class="pagination-text">Page</p>
+            <input class="paginate-text form-control pagination-element" type="text" [(ngModel)]="pageText" [ngModelOptions]="{standalone: true}" (change)="page=pageText;onPageChange()">
+            <p class="pagination-text">of {{ pageCount }}</p>
+            <input class="form-control small-button pagination-element" type="button" value="&raquo;" (click)="page=page+1;onPageChange()" [disabled]="page>=pageCount">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-header d-md-none row">
+    <div class="container">
+      <div class="row">
+        <div class="container col-12 col-sm-6 offset-sm-3">
+          <div class="row">
+            <div class="col-9">
+              <h3 class="align-left">{{ title }}</h3>
+            </div>
+            <div class="col-3">
+              <div class="btn-group float-right" role="group">
+                <button class="btn btn-primary" role="button" routerLink="new">New</button>
+                <button class="btn btn-primary" role="button" [disabled]="!(_authService.userSignedIn$ | async)" title="{{ (_authService.userSignedIn$ | async) ? 'Import recipes from beerxml file.' : 'You must log in before importing recipes.' }}"(click)="importXmlOpen(importXmlPopup)"><span class="fas fa-upload"></span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <form class="form-inline text-center col-sm-6 offset-sm-3 pad-bottom">
+          <label class="pad-right-small" for="styleCategoriesSelectSmall">Category </label>
+          <select id="styleCategoriesSelect" class="form-control" [(ngModel)]="selectedStyleCategoryDropdown" [ngModelOptions]="{standalone: true}" (change)="updateRecipeList()">
+            <option [ngValue]="null">Any ({{ getTotalRecipeCount() }})</option>
+            <option *ngFor="let category of style_list" [ngValue]="category">{{ category.style.category_number.toString() + category.style.subcategory + ' - ' + category.style.category_name }} ({{ category.count }})</option>
+          </select>
+        </form>
+
+        <div class="col-sm-6 offset-sm-3 pad-bottom">
+          <input class="form-control" id="search2" [(ngModel)]="search" [ngModelOptions]="{standalone: true}" type="search" (keyup)="searchTyping()" placeholder="Search...">
+        </div>
+      </div>
+      <div class="row">
+        <form class=" form-inline mx-auto">
+          <input class="form-control small-button pagination-element" type="button" value="&laquo;" (click)="page=page-1;onPageChange()" [disabled]="page<=1">
+          <p class="pagination-text">Page {{ page }} of {{ pageCount }}</p>
+          <input class="form-control small-button pagination-element" type="button" value="&raquo;" (click)="page=page+1;onPageChange()" [disabled]="page>=pageCount">
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+      <a #local class="nav-link active" id="local-tab" data-toggle="tab" href="#local" role="tab" aria-controls="local" aria-selected="true" (click)='tabChange("local")'>My Recipes</a>
+    </li>
+    <li class="nav-item">
+      <a #public class="nav-link" id="public-tab" data-toggle="tab" href="#public" role="tab" aria-controls="public" aria-selected="false" (click)='tabChange("public")'>Public Recipes</a>
+    </li>
+  </ul>
+
+  <div class="row title-bar">
+    <p class="text-light offset-1 name">Name</p>
+    <p class="text-light offset-9 help-icon" title="Private items are ones that you personally created and are only available for you to use, while global items are available for all users.">&#9432;</p>
+    <p class="text-light">Status</p>
+  </div>
+
+  <div class="tab-content" id="myTabContent">
+    <div *ngFor="let recipe of recipe | slice:(page-1)*20:(page*20-1); trackBy:trackByRecipeName; let i = index ">
+
+      <div *ngIf="recipe">
+        <div class="card-header">
+          <div class="container">
+            <div class="row">
+              <div class="col-1">
+                <button type="button" class="btn btn-outline-primary expansion-button" (click)="isCollapsed[i] = !isCollapsed[i]" [attr.aria-expanded]="!isCollapsed[i]" aria-controls="collapseItem">
+                  {{ isCollapsed[i]? "-" : "+" }}
+                </button>
+              </div>
+              <div class="col-8 col-md-9">
+                <div class="container">
+                  <div class="row mini-row">
+                    <h5>{{ recipe.name }}</h5>
+                  </div>
+                  <div class="row tiny-row">
+                    <p *ngIf="currentTab == 'public'"><small>{{ recipe.user_nickname }}</small></p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-3 col-md-2">
+                <p class="short"><i>{{ (recipe.global ? "Public" : "Private") }}</i></p>
+                <p class="short"><i>{{ recipe.recipe_type }}</i></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="collapse" id="collapseItem" [ngbCollapse]="!isCollapsed[i]">
+            <div class="card row">
+
+              <app-recipe-card [recipe]="recipe" [style_name]="used_styles[i].name" [equipment]="used_equipment[i]" (onRecipeDelete)="deleteEvent($event)"></app-recipe-card>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h4 *ngIf="recipe.length == 0" >{{ errorMessage }}</h4>
+  </div>
+</div>
+
+<ng-template #importXmlPopup let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Upload XML to Import</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <div class="row" *ngIf="_designer.isLoading() && !_designer.error">
+        <div class="col-12 pad-bottom">
+          <app-loading [message]="loading_message"></app-loading>
+        </div>
+      </div>
+      <div class="row" *ngIf="_designer.error">
+        <div class="col-12 pad-bottom">
+          <h5>Error loading importer.</h5>
+        </div>
+      </div>
+      <div class="row" *ngIf="!_designer.isLoading() && !_designer.error">
+        <div class="col-12">
+          <label for="filename">Choose File</label>
+          <input type="file" id="filename" (change)="handleFileInput($event.target.files)">
+        </div>
+        <div class="col-12">
+          <button (click)="importXml()" class="btn btn-primary">Import</button>
+          <button type="button" class="btn btn-default" (click)="c('Close click')">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

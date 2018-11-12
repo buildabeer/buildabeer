@@ -1,0 +1,272 @@
+<div class="container runner-main pad-bottom">
+  <div class="row">
+    <div class="col-7">
+      <h1 class="underline">Recipe Runner    </h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 center">
+      <h3 class="text-underline">{{ getStepNumber() }}</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 center">
+      <div id="clockdiv">
+        <div>
+          <span class="hours">{{ getHours() }}</span>
+          <div class="smalltext">Hours</div>
+        </div>
+        <div>
+          <span class="minutes">{{ getMinutes() }}</span>
+          <div class="smalltext">Minutes</div>
+        </div>
+        <div>
+          <span class="seconds">{{ getSeconds() }}</span>
+          <div class="smalltext">Seconds</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 center">
+      <div class="btn-group">
+        <button class="btn btn-primary" (click)="timer = timer + 60"><i class="fas fa-plus-square"></i></button>
+        <button class="btn btn-primary" (click)="timer = timer - 60"><i class="fas fa-minus-square"></i></button>
+      </div>
+    </div>
+    <div class="col-12 center">
+      <div class="btn-group">
+        <button class="btn btn-primary" (click)="startInterval()">Start</button>
+        <button class="btn btn-primary" (click)="stopInterval()">Pause</button>
+        <button class="btn btn-primary" (click)="resetInterval()">Reset</button>
+      </div>
+    </div>
+  </div>
+  <div class="row card pad-top" *ngIf="currentStep === Step.Boiling">
+    <div class="col-12 center">
+      <h5>
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#gravityCollapse" aria-expanded="true" aria-controls="gravityCollapse" (click)="gravity_collapse=!gravity_collapse">{{ !gravity_collapse ? '+' : '-' }}
+        </button> Gravity matcher
+      </h5>
+    </div>
+  </div>
+  <div class="row card pad-top" *ngIf="currentStep === Step.Boiling">
+    <div class="col-12 collapse" id="gravityCollapse">
+      <div class="container">
+        <div class="row">
+          <div class="col-12 col-md-2 offset-md-1 center">
+            <label for="gravity">Gravity</label>
+            <input type="number" id="gravity" step=".001" class="form-control" [(ngModel)]="recalculator.og">
+          </div>
+          <div class="col-12 col-md-2 center">
+            <label for="gallons">{{ _designer.measurement.liquid === 'us' ? 'Gallons' : 'Liters' }}</label>
+            <input type="number" id="gallons" step=".01" class="form-control" [(ngModel)]="recalculator.gallons">
+          </div>
+          <div class="col-12 col-md-2 center">
+            <label for="addition_type">Addition Type</label>
+            <select id="addition_type" class="form-control" [(ngModel)]="recalculator.addition_type">
+              <option value="dme">Dried Malt Extract</option>
+              <option value="lme">Liquid Malt Extract</option>
+              <option value="sugar">Sugar</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-2 center">
+            <label for="addition_amount">Addition Quantity ({{ _designer.measurement.malts === 'us' ? 'lbs' : 'kg' }})</label>
+            <p id="addition_amount">{{ gravity_adjustment | number:'1.0-2' }}</p>
+          </div>
+          <div class="col-12 col-md-2 center extra-pad-top">
+            <button type="button" class="btn btn-primary" (click)="gravity_adjustment = _designer.checkPoundsToGrams(calculateBoilAddition())">Calculate</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 center">
+      <h5>
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#boilCollapse" aria-expanded="true" aria-controls="boilCollapse" (click)="boil_collapse=!boil_collapse">{{ !boil_collapse ? '+' : '-' }}
+        </button> Boil time matcher
+      </h5>
+    </div>
+    <div class="col-12 collapse" id="boilCollapse">
+      <div class="container">
+        <div class="row">
+          <div class="col-12 col-md-2 offset-md-4 center">
+            <label for="gallons">{{ _designer.measurement.liquid === 'us' ? 'Gallons' : 'Liters' }}</label>
+            <input type="number" id="gallons" step=".01" class="form-control" [(ngModel)]="boil_gallons">
+          </div>
+          <div class="col-12 col-md-2 center extra-pad-top">
+            <button type="button" class="btn btn-primary" (click)="recalculateBoilTime()">Calculate</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row card pad-top" *ngIf="currentStep === Step.Mashing">
+    <div class="col-12 center">
+      <h5>
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#phCollapse" aria-expanded="true" aria-controls="phCollapse" (click)="ph_collapse=!ph_collapse">{{ !ph_collapse ? '+' : '-' }}
+        </button> pH matcher
+      </h5>
+    </div>
+    <div class="col-12 collapse" id="phCollapse">
+      <div class="container">
+        <div class="row">
+          <div class="col-12 col-md-2 offset-md-1 center">
+            <label for="ph">pH</label>
+            <input type="number" id="ph" step=".01" class="form-control" [(ngModel)]="ph_recalculator.ph">
+          </div>
+          <div class="col-12 col-md-2 center">
+            <label for="ph-gallons">{{ _designer.measurement.liquid === 'us' ? 'Quarts' : 'Liters' }}</label>
+            <input type="number" id="ph-gallons" step=".01" class="form-control" [(ngModel)]="ph_recalculator.gallons">
+          </div>
+          <div class="col-12 col-md-2 center">
+            <label for="addition_type">Addition Type</label>
+            <select id="addition_type" class="form-control" [(ngModel)]="ph_recalculator.addition_type">
+              <option value="phosphoric">Phosphoric Acid</option>
+              <option value="lactic">Lactic Acid</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-2 center">
+            <label for="addition_amount">Addition ({{ _designer.measurement.agents === 'us' ? 't' : 'ml' }})</label>
+            <p id="addition_amount">{{ ph_adjustment | number:'1.0-2' }}</p>
+          </div>
+          <div class="col-12 col-md-2 center extra-pad-top">
+            <button type="button" class="btn btn-primary" (click)="calculatePhAdjust()">Calculate</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 center" *ngIf="currentStep === Step.Mashing">
+      <h5>{{ getMashStep(mashStep).step_name }}</h5>
+      <p>Temperature: {{ _designer.checkFahrenheitToCelsius(getMashStep(mashStep).step_temp) | number:'1.0-1'}}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C'}}</p>
+    </div>
+    <div class="col-8 offset-2 center">
+      <h5>Current Step</h5>
+      <div>
+        <p [innerHtml]="getStepText(currentStep, mashStep)"></p>
+        <ul *ngIf="currentStep === Step.Mashing && mashStep === 0" class="unstyled">
+          <li *ngFor="let malt of getMaltDisplay('Mash')"><input type="checkbox">
+            {{ malt.quantity | number:'1.0-1'}} {{ _designer.measurement.malts === 'us' ? 'pounds' : 'kilograms'}} of {{ malt.name }}.
+          </li>
+          <li *ngFor="let misc of _designer.getUsedMiscellaneous('Mash'); let i = index "><input type="checkbox">
+            {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity | number:'1.0-1'}} {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity_label }} of {{ misc.name }} for {{ misc.time }} {{ _designer.recipe.recipe_miscellaneous_attributes[i].time_label }}.
+          </li>
+          <li *ngFor="let water of _designer.used_waters; let i = index "><input type="checkbox">
+            {{ _designer.recipe.recipe_waters_attributes[i].quantity | number:'1.0-1'}} {{ _designer.measurement.liquid === 'us' ? 'gallons' : 'liters'}} of {{ water.name }} are required for the recipe.
+          </li>
+          <li *ngFor="let agent of _designer.getActiveAgents()"><input type="checkbox">
+            {{agent.quantity | number:'1.0-1'}} {{ _designer.measurement.agents === 'us' ? 'ounces' : 'grams'}} of {{ agent.name }} are added to the water.
+          </li>
+        </ul>
+        <ul *ngIf="currentStep === Step.Sparging" class="unstyled">
+          <li *ngFor="let malt of getMaltDisplay('Sparge')"><input type="checkbox">
+            {{ malt.quantity | number:'1.0-1'}} {{ _designer.measurement.malts === 'us' ? 'pounds' : 'kilograms'}} of {{ malt.name }}.
+          </li>
+          <li *ngFor="let hop of _designer.getHopByUsage('fwh')"><input type="checkbox">
+            {{hop.quantity | number:'1.0-1'}} {{ _designer.measurement.hops === 'us' ? 'ounces' : 'grams'}} of {{ hop.name }} ({{hop.form}}) are added during the sparge.
+          </li>
+        </ul>
+        <ul *ngIf="currentStep === Step.Boiling" class="unstyled">
+          <li *ngFor="let malt of getMaltDisplay('Boil')"><input type="checkbox">
+            {{ malt.quantity | number:'1.0-1'}} {{ _designer.measurement.malts === 'us' ? 'pounds' : 'kilograms'}} of {{ malt.name }}.
+          </li>
+          <li *ngFor="let misc of _designer.getUsedMiscellaneous('Boil'); let i = index "><input type="checkbox">
+            {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity | number:'1.0-1'}} {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity_label }} of {{ misc.name }} for {{ misc.time }} {{ _designer.recipe.recipe_miscellaneous_attributes[i].time_label }}.
+          </li>
+          <li *ngFor="let hop of _designer.getHopByUsage('boil')"><input type="checkbox">
+            {{hop.quantity | number:'1.0-1'}} {{ _designer.measurement.hops === 'us' ? 'ounces' : 'grams'}} of {{ hop.name }} ({{hop.form}}) at {{ hop.time }} minutes left.
+          </li>
+        </ul>
+        <ul *ngIf="currentStep === Step.Chilling" class="unstyled">
+          <li *ngFor="let hop of _designer.getHopByUsage('knockout')"><input type="checkbox">
+            {{hop.quantity | number:'1.0-1'}} {{ _designer.measurement.hops === 'us' ? 'ounces' : 'grams'}} of {{ hop.name }} ({{hop.form}}) are added at knockout.
+          </li>
+        </ul>
+        <ul *ngIf="currentStep === Step.Fermenting" class="unstyled">
+          <li>Fermenting at {{ _designer.recipe.primary_ferm_temp }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C'}}</li>
+          <li *ngFor="let yeast of _designer.getUsedYeast(1)"><input type="checkbox">
+            {{ yeast.quantity | number:'1.0-1' }} pkgs of {{ yeast.name }}{{ yeast.lab ? " - " + yeast.lab : "" }}.
+          </li>
+          <li *ngFor="let misc of primary_miscs; let i = index "><input type="checkbox">
+            {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity | number:'1.0-1'}} {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity_label }} of {{ misc.name }} for {{ misc.time }} {{ _designer.recipe.recipe_miscellaneous_attributes[i].time_label }}.
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-8 offset-2 unstyled" *ngIf="currentStep === Step.Reminders">
+      <div>
+        <h5>Email Reminders</h5>
+        <table>
+          <tr *ngFor="let misc of primary_miscs; let i = index ">
+            <td><input type="checkbox" [(ngModel)]="emailReminders.primary_misc[i]"></td>
+            <td>Remove {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity | number:'1.0-1'}} {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity_label }} of {{ misc.name }} from primary after {{ misc.time }} {{ _designer.recipe.recipe_miscellaneous_attributes[i].time_label }}.
+            </td>
+          </tr>
+          <tr *ngFor="let misc of secondary_miscs; let i = index ">
+            <td><input type="checkbox" [(ngModel)]="emailReminders.secondary_misc[i]"></td>
+            <td>{{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity | number:'1.0-1'}} {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity_label }} of {{ misc.name }} for {{ misc.time }} {{ _designer.recipe.recipe_miscellaneous_attributes[i].time_label }} during secondary.
+            </td>
+          </tr>
+          <tr *ngFor="let hop of dryhops; let i = index; ">
+            <td><input type="checkbox" [(ngModel)]="emailReminders.hops[i]"></td>
+            <td>{{hop.quantity | number:'1.0-1'}} {{ _designer.measurement.hops === 'us' ? 'ounces' : 'grams'}} of {{ hop.name }} ({{hop.form}}) are added during secondary fermentation for {{ hop.time }} days.</td>
+          </tr>
+          <tr *ngIf="!_designer.recipe.secondary_fermentation">
+            <td><input type="checkbox" [(ngModel)]="emailReminders.primary_fermentation"></td>
+            <td>Ferment for {{ _designer.recipe.primary_ferm_days }} days at {{ _designer.recipe.primary_ferm_temp }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C'}}.</td>
+          </tr>
+          <tr *ngIf="_designer.recipe.secondary_fermentation">
+            <td><input type="checkbox" [(ngModel)]="emailReminders.secondary_fermentation"></td>
+            <td>After primary ({{ _designer.recipe.primary_ferm_days }} days), secondary fermentation for {{ _designer.recipe.secondary_ferm_days }} days at {{ _designer.recipe.secondary_ferm_temp }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C'}}.</td>
+          </tr>
+          <tr *ngFor="let yeast of secondary_yeast; let i = index; ">
+            <td><input type="checkbox" [(ngModel)]="emailReminders.secondary_yeast[i]"></td>
+            <td>In secondary, use {{ yeast.quantity | number:'1.0-1' }} pkgs of {{ yeast.name }}{{ yeast.lab ? " - " + yeast.lab : "" }}.</td>
+          </tr>
+          <tr *ngFor="let misc of bottling_miscs; let i = index ">
+            <td><input type="checkbox" [(ngModel)]="emailReminders.bottling_misc[i]"></td>
+            <td>{{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity | number:'1.0-1'}} {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity_label }} of {{ misc.name }} for {{ misc.time }} {{ _designer.recipe.recipe_miscellaneous_attributes[i].time_label }} during bottling.
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="col-8 offset-2 center" *ngIf="currentStep != Step.Reminders">
+      <h5>Next Step: {{ getNextStepName() }}</h5>
+    </div>
+  </div>
+</div>
+<div class="container card pad-top pad-bottom">
+  <div class="row">
+    <div class="col-lg-11 col-md-11 col-sm-10 col-xs-12 pad-bottom">
+      <h5>
+        <button class="btn btn-primary collapsed" type="button" data-toggle="collapse" data-target="historyCollapse" aria-expanded="true" aria-controls="historyCollapse" (click)="history_collapse=!history_collapse">{{ !history_collapse ? '+' : '-' }}
+        </button>
+        History: {{ history.recipe_name }}
+      </h5>
+    </div>
+  </div>
+  <div class="row" id="historyCollapse">
+    <div class="col-6">
+      <label for="history_og">OG</label>
+      <input type="number" id="history_og" step=".001" class="form-control" [(ngModel)]="history.og">
+    </div>
+    <div class="col-6">
+      <label for="history_gallons">{{ _designer.measurement.liquid === 'us' ? 'Gallons' : 'Liters' }}</label>
+      <input type="number" id="history_gallons" step=".01" class="form-control" [(ngModel)]="history.gallons">
+    </div>
+    <div class="col-12">
+      <label for="notes">Notes</label>
+      <textarea class="form-control" id="notes" rows="5" name="notes" maxlength="1000" [(ngModel)]="history.notes"></textarea>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row extra-pad-bottom">
+    <div class="col-12">
+      <button type="button" class="btn btn-primary" (click)="previousStep()" [disabled]="currentStep === Step.Mashing && mashStep === 0" title="{{ getPreviousStepName() }}"><span class="fas fa-chevron-circle-left"></span> Back</button>
+      <button type="button" class="btn btn-primary float-right" (click)="nextStep()" *ngIf="currentStep !== Step.Reminders" title="{{ getNextStepName() }}">Next <span class="fas fa-chevron-circle-right"></span></button>
+      <button type="button" class="btn btn-primary float-right" (click)="finish()" *ngIf="currentStep === Step.Reminders" title="Save recipe run and exit.">Finish</button>
+    </div>
+  </div>
+</div>

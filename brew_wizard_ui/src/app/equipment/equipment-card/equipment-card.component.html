@@ -1,0 +1,98 @@
+
+<div class="card-header" *ngIf="equipment">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-11 col-md-11 col-sm-10 col-xs-12">
+        <button type="button" class="btn btn-outline-primary expansion-button" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseItem" *ngIf="_router.url === '/equipment'">
+          {{ !isCollapsed? "-" : "+" }}
+        </button>
+
+        {{ equipment.name }}
+      </div>
+      <div class="col-lg-1 col-md-1 col-sm-1">
+        <p><i>{{ (equipment.global ? "Global" : "Local") }}</i></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="collapse" id="collapseItem" [ngbCollapse]="isCollapsed">
+    <div class="card row">
+
+      <div class="col-12">
+
+        <table class="table table-sm table-striped d-none d-sm-block">
+          <tbody>
+            <tr>
+              <th colspan="4"> {{ equipment.equipment_type }}</th>
+            </tr>
+            <tr>
+              <th>Water Lost: HLT</th>
+              <td>{{ equipment.wl_hlt }} gal</td>
+              <th>Water Lost: Mash</th>
+              <td>{{ equipment.wl_mash }} gal</td>
+            </tr>
+            <tr>
+              <th>Water Lost: Boil</th>
+              <td>{{ equipment.wl_boil }} gal</td>
+              <th>Boil Rate</th>
+              <td>{{ equipment.boil_rate }} gal/hr</td>
+            </tr>
+            <tr *ngIf="equipment.equipment_type === 'All Grain'">
+              <th>Sparging</th>
+              <td>{{ equipment.fly_sparge ? (equipment.batch_sparge ? "Fly sparge, batch sparge" : "Batch sparge") : (equipment.batch_sparge ? "Batch sparge" : "None") }}</td>
+            </tr>
+            <tr>
+              <th colspan="4">Description</th>
+            </tr>
+            <tr>
+              <td colspan="4" class="wrapped">{{ equipment.description }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="table table-sm table-striped d-block d-sm-none">
+          <tbody>
+            <tr>
+              <th colspan="2"> {{ equipment.equipment_type }}</th>
+            </tr>
+            <tr>
+              <th>Water Lost: HLT</th>
+              <td>{{ equipment.wl_hlt }} gal</td>
+            </tr>
+            <tr>
+              <th>Water Lost: Mash</th>
+              <td>{{ equipment.wl_mash }} gal</td>
+            </tr>
+            <tr>
+              <th>Water Lost: Boil</th>
+              <td>{{ equipment.wl_boil }} gal</td>
+            </tr>
+            <tr>
+              <th>Boil Rate</th>
+              <td>{{ equipment.boil_rate }} gal/hr</td>
+            </tr>
+            <tr *ngIf="equipment.equipment_type === 'All Grain'">
+              <th>Sparging</th>
+              <td>{{ equipment.fly_sparge ? (equipment.batch_sparge ? "Fly sparge, batch sparge" : "Batch sparge") : (equipment.batch_sparge ? "Batch sparge" : "None") }}</td>
+            </tr>
+            <tr>
+              <th colspan="2">Description</th>
+            </tr>
+            <tr>
+              <td colspan="2" class="wrapped">{{ equipment.description }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="col-md-12">
+          <app-equipment-edit *ngIf="(_authService.currentUserMatchOrGlobal(equipment.user_id))" [originalEquipmentItem]="equipment" (onEquipmentEdit)="editEvent($event)"></app-equipment-edit>
+
+          <span *ngIf="(_authService.currentUserMatchOrGlobal(equipment.user_id))"> |</span>
+          <button *ngIf="(_authService.currentUserMatchOrGlobal(equipment.user_id))" class="btn btn-link" role="link" (click)="deleteCard()">Delete</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+

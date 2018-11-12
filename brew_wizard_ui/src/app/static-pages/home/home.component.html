@@ -1,0 +1,33 @@
+<div class="row welcome">
+  <div class="center">
+    <h1> Welcome!</h1>
+    <p>
+      Recipe design made easy.
+    </p>
+  </div>
+</div>
+<div class="row welcome">
+  <div class="center">
+    <a routerLink="register" *ngIf="!(_authService.userSignedIn$ | async)" class="reg-link btn btn-primary">
+      <i class="fas fa-users large-icon"></i>
+      <p>Register Here<br />Save recipes, equipment profiles,<br />calendar reminders</p>
+    </a>
+  </div>
+</div>
+<div class="row welcome">
+  <div class="center">
+    <a routerLink="recipes/new" class="main-link btn btn-primary">
+      <i class="fas fa-plus-square icon"></i>
+      <p>New Recipe</p>
+    </a>
+    <a routerLink="recipes" class="main-link btn btn-primary">
+      <i class="fas fa-clipboard-list icon"></i>
+      <p>Browse Recipes</p>
+    </a>
+  </div>
+</div>
+<div class="row welcome">
+  <div class="center">
+    <p><br/>Where we aim to bring centuries of trial, experience, and research to your aid.</p>
+  </div>
+</div>

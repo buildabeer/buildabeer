@@ -1,0 +1,62 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+agent1:
+  user_id: 1
+  global: true
+  name: "Antwerp, Belgium"
+  ph: 8
+  calcium: 90
+  magnesium: 11
+  sodium: 37
+  sulfate: 84
+  chloride: 57
+  bicarbonate: 76
+
+agent2:
+  user_id: 1
+  global: false
+  name: "Atlanta, GA"
+  ph: 7.2
+  calcium: 6
+  magnesium: 1
+  sodium: 3
+  sulfate: 7
+  chloride: 0
+  bicarbonate: 19
+
+agent3:
+  user_id: 2
+  global: true
+  name: "mystic_water"
+  ph: 7.2
+  calcium: 6
+  magnesium: 1
+  sodium: 3
+  sulfate: 7
+  chloride: 0
+  bicarbonate: 19
+
+agent4:
+  user_id: 2
+  global: false
+  name: "awesome_water"
+  ph: 7.2
+  calcium: 6
+  magnesium: 1
+  sodium: 3
+  sulfate: 7
+  chloride: 0
+  bicarbonate: 19
+
+agent5:
+  user_id: 1
+  global: false
+  name: "mega_water"
+  ph: 7.2
+  calcium: 6
+  magnesium: 1
+  sodium: 3
+  sulfate: 7
+  chloride: 0
+  bicarbonate: 19
+

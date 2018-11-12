@@ -1,0 +1,81 @@
+<button class="btn btn-primary" (click)="open(addYeast)">Add Yeast (Detailed View)</button>
+
+
+<ng-template #addYeast let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Add Yeast</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-10 offset-md-1">
+            <div class="container">
+              <form #f="ngForm" (ngSubmit)="addYeastSubmit(f.value)">
+
+                <div class="row">
+                  <div class="form-group">
+                    <label class="switch">
+                      <input type="checkbox" name="suggestion" id="suggestion" [(ngModel)]="suggestYeast">
+                      <span class="slider round"></span>
+                    </label>
+                    <label class="checkbox-label" for="suggestion">Suggested Yeast</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <select class="form-control col-md-4" [(ngModel)]="filterType" [ngModelOptions]="{standalone: true}">
+                    <option value="All">All (Type)</option>
+                    <option>Ale</option>
+                    <option>Lager</option>
+                    <option>Wheat</option>
+                    <option>Wine</option>
+                    <option>Champagne</option>
+                    <option>Cider</option>
+                  </select>
+                  <select class="form-control col-md-4" [(ngModel)]="filterLab" [ngModelOptions]="{standalone: true}">
+                    <option value="All">All (Lab)</option>
+                    <option *ngFor="let lab of yeastLabs" [ngValue]="lab">{{ lab }}</option>
+                  </select>
+                  <input class="form-control col-md-4" type="text" placeholder="Search..." [(ngModel)]="search" [ngModelOptions]="{standalone: true}">
+                </div>
+
+                <div class="row table-div">
+                  <table id="example" class="table tabled-bordered table-hover table-sm nowrap" cellspacing="0" width="100%">
+                    <thead class="thead-default">
+                      <tr>
+                        <th class="sort-table" (click)="sortBy('name')">Name</th>
+                        <th class="sort-table" (click)="sortBy('lab')">Lab</th>
+                        <th class="sort-table" (click)="sortBy('prod_id')">Product ID</th>
+                        <th class="sort-table" (click)="sortBy('type')">Type</th>
+                        <th class="sort-table" (click)="sortBy('form')">Form</th>
+                        <th class="sort-table" (click)="sortBy('attenuation')">Attenuation</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let y of filteredYeastOptions(); let i = index" (click)="selectRow(y)" [ngClass]="{'yeast-select': selected_yeast.includes(y)}">
+                        <td>{{ y.name }}</td>
+                        <td>{{ y.lab }}</td>
+                        <td>{{ y.product_id }}</td>
+                        <td>{{ y.yeast_type }}</td>
+                        <td>{{ y.form }}</td>
+                        <td>{{ y.min_attenuation + (y.max_attenuation - y.min_attenuation) / 2 }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="row pad-top">
+                  <button type="submit" class="btn btn-default" [disabled]="!f.valid && f.dirty">Add</button>
+                  <button type="button" class="btn btn-default" (click)="c('Close click')">Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

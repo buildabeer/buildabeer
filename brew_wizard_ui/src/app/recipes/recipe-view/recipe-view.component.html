@@ -1,0 +1,593 @@
+<app-loading *ngIf="_designer.isLoading() && !_designer.error" [message]="_designer.loading_message" ></app-loading>
+<div *ngIf="_designer.error">
+  <h2>Error occurred in loading, please try again.</h2>
+</div>
+<div *ngIf='!_designer.isLoading()'>
+  <button type="button" class="btn btn-default dropdown-toggle dropdown-toggle-split light-color tools-icon save-group float-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="fas fa-wrench icon img-responsive"></i>
+  </button>
+  <div class="dropdown-menu">
+    <a type="button" class="dropdown-item" (click)="openMeasurement(measurementPopup)">Change Measurements</a>
+    <a type="button" class="dropdown-item" [routerLink]="['/recipes/new']" [queryParams]="{ recipe_id: _designer.recipe.id }">Copy</a>
+    <a type="button" class="dropdown-item" (click)="savePdf(pdfPopup)">Save to PDF</a>
+    <a type="button" class="dropdown-item" (click)="_designer.exportXml()">Export XML</a>
+    <a type="button" class="dropdown-item" *ngIf="(_authService.currentUserMatchOrGlobal(_designer.recipe_user_id))" [routerLink]="['/recipes', _designer.recipe.id, 'edit']">Edit Recipe</a>
+    <a type="button" class="dropdown-item" *ngIf="(_authService.currentUserMatchOrGlobal(_designer.recipe_user_id))" (click)="deleteRecipe()">Delete Recipe</a>
+  </div>
+
+
+  <div id="pdf" class="size-limit">
+    <div class="card col-12">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <h1>{{ _designer.recipe.name }}</h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-9 col-12">
+            <table class="table table-sm table-striped d-none d-md-block">
+              <tbody>
+                <tr>
+                  <th colspan="2">Brewer</th>
+                  <td colspan="2">{{ _designer.recipe.brewer }}</td>
+                </tr>
+                <tr>
+                  <th>Date Created</th>
+                  <td>{{ _designer.recipe.recipe_date | date }}</td>
+                  <th>Version</th>
+                  <td>{{ _designer.recipe.version }}</td>
+                </tr>
+                <tr>
+                  <th>Style</th>
+                  <td>{{ _designer.used_style ? _designer.used_style.name : 'None selected' }}</td>
+                  <th>Batch Size</th>
+                  <td>{{ _designer.recipe.batch_size }} {{ (_designer.measurement.liquid === 'us' ? "gal" : "l") }}</td>
+                </tr>
+                <tr>
+                  <th>Equipment</th>
+                  <td>{{ _designer.used_equipment ? _designer.used_equipment.name : '' }}</td>
+                  <th>Type</th>
+                  <td>{{ _designer.used_equipment ? _designer.recipe.recipe_type : '' }}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table class="table table-sm table-striped d-block d-md-none">
+              <tbody>
+                <tr>
+                  <th colspan="2">Brewer</th>
+                </tr>
+                <tr>
+                  <td colspan="2">{{ _designer.recipe.brewer }}</td>
+                </tr>
+                <tr>
+                  <th>Date Created</th>
+                  <td>{{ _designer.recipe.recipe_date | date }}</td>
+                </tr>
+                <tr>
+                  <th>Version</th>
+                  <td>{{ _designer.recipe.version }}</td>
+                </tr>
+                <tr>
+                  <th>Style</th>
+                  <td>{{ _designer.used_style ? _designer.used_style.name : 'None selected' }}</td>
+                </tr>
+                <tr>
+                  <th>Batch Size</th>
+                  <td>{{ _designer.recipe.batch_size }} {{ (_designer.measurement.liquid === 'us' ? "gal" : "l") }}</td>
+                </tr>
+                <tr>
+                  <th>Equipment</th>
+                  <td>{{ _designer.used_equipment ? _designer.used_equipment.name : '' }}</td>
+                </tr>
+                <tr>
+                  <th>Type</th>
+                  <td>{{ _designer.used_equipment ? _designer.recipe.recipe_type : '' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="col-sm-3 col-12">
+            <img class="beer-glass" src="../../assets/images/empty_glass2.png" [ngStyle]="{'background-color': _designer.getBeerColor()}">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <p><i title="Rice or barley hulls are advised for high gravity and high adjunct beers." *ngIf="_designer.riceHullsRequired()" class="fas fa-exclamation-triangle img-responsive warning"></i><b>Ingredients</b></p>
+          </div>
+          <div class="col-12" *ngIf="_designer.used_waters.length < 1 && _designer.used_malts.length < 1 && _designer.used_hops.length < 1 && _designer.used_yeast.length < 1 && _designer.used_miscellaneous.length < 1">
+            <p><b>No ingredients have been added.</b></p>
+          </div>
+          <div class="col-12" *ngIf="_designer.used_waters.length > 0 || _designer.used_malts.length > 0 || _designer.used_hops.length > 0 || _designer.used_yeast.length > 0 || _designer.used_miscellaneous.length > 0">
+            <table class="table table-sm table-hover">
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>%/IBU/Cells</th>
+                <th>Quantity</th>
+              </tr>
+
+              <tr *ngFor="let malt of _designer.used_malts; let i = index ">
+                <td>{{ malt.name }}{{ _designer.recipe.recipe_malts_attributes[i].malt_usage === 'Mash' ? '' : ' (' + _designer.recipe.recipe_malts_attributes[i].malt_usage + ')' }}</td>
+                <td>{{ _designer.maltTypes ? _designer.maltTypes[malt.malt_type_id-1].name : '' }}</td>
+                <td>
+                  <span *ngIf="_designer.inputConversion(_designer.recipe.recipe_malts_attributes[i].quantity, 'malts') / _designer.getTotalMaltWeight() * 100 > malt.max_percent">
+                    <i title="The suggested max percent of this malt is {{ malt.max_percent }}%. The recipe is currently using a higher percent than that." class="fas fa-exclamation-triangle img-responsive warning"></i>
+                  </span>
+                  {{ _designer.inputConversion(_designer.recipe.recipe_malts_attributes[i].quantity, 'malts') / _designer.getTotalMaltWeight() * 100 | number:'1.0-1' }}%
+                </td>
+                <td>{{ _designer.recipe.recipe_malts_attributes[i].quantity | number:'1.0-1' }} {{ _designer.measurement.malts === 'us' ? 'lbs' : 'kg' }}</td>
+              </tr>
+
+              <tr *ngFor="let misc of _designer.used_miscellaneous; let i = index ">
+                <td>{{ misc.name }} ({{ misc.usage  }} {{ _designer.recipe.recipe_miscellaneous_attributes[i].time | number:'1.0-2' }})</td>
+                <td>{{ misc.miscellaneous_type }}</td>
+                <td>--</td>
+                <td>
+                  <span *ngIf="misc.quantity_label === _designer.recipe.recipe_miscellaneous_attributes[i].quantity_label && _designer.abs((_designer.recipe.recipe_miscellaneous_attributes[i].quantity / _designer.recipe.batch_size) - (misc.amount / misc.batch_size)) / (misc.amount / misc.batch_size) > .05">
+                    <i title="The suggested quantity for this ingredient is {{ misc.amount }} {{ misc.amount_label }} per {{ misc.batch_size }}." class="fas fa-exclamation-triangle img-responsive warning"></i>
+                  </span>
+                  {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity | number:'1.0-2' }} {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity_label }}</td>
+              </tr>
+
+              <tr *ngFor="let hop of _designer.used_hops; let i = index ">
+                <td>{{ hop.name }} ({{ _designer.displayHopInfo(_designer.recipe.recipe_hops_attributes[i].usage, _designer.recipe.recipe_hops_attributes[i].time) }})</td>
+                <td>{{ hop.hop_type }}</td>
+                <td>{{ _designer.individualIBU(_designer.recipe.recipe_hops_attributes[i], i, _designer.measurement['ibu']) | number:'1.1-1' }} IBUs</td>
+                <td>{{ _designer.recipe.recipe_hops_attributes[i].quantity | number:'1.0-1' }} {{ _designer.measurement.hops === 'us' ? "oz" : "g" }}</td>
+              </tr>
+
+              <tr *ngFor="let yeast of _designer.used_yeast; let i = index ">
+                <td>{{ yeast.name }}{{ yeast.lab ? " - " + yeast.lab : "" }}</td>
+                <td>Yeast - {{ yeast.form }}</td>
+                <!-- <td>{{ _designer.recipe.recipe_yeasts_attributes[i].fermentation_stage === 1 ? 'Primary' : 'Secondary' }}, {{ _designer.recipe.recipe_yeasts_attributes[i].fermentation_stage === 1 ? _designer.recipe.primary_ferm_temp : _designer.recipe.secondary_ferm_temp }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }}</td> -->
+                <td>{{ _designer.recipe.recipe_yeasts_attributes[i].quantity * yeast.cell_count }} billion</td>
+                <td>{{ _designer.recipe.recipe_yeasts_attributes[i].quantity | number:'1.0-1' }} pkgs</td>
+              </tr>
+
+              <tr *ngFor="let water of _designer.used_waters; let i = index ">
+                <td>{{ water.name }}</td>
+                <td>Water</td>
+                <td>--</td>
+                <td>{{ _designer.recipe.recipe_waters_attributes[i].quantity | number:'1.0-1' }} {{ (_designer.measurement.liquid === 'us' ? "gallons" : "liters") }}</td>
+              </tr>
+
+              <tr *ngFor="let agent of _designer.getActiveAgents()">
+                <td>{{ agent.name }}</td>
+                <td>Water Agent</td>
+                <td>--</td>
+                <td>{{ agent.quantity | number:'1.0-1' }} {{ _designer.measurement.agents === 'us' ? "ounces" : "grams" }}</td>
+              </tr>
+
+              <tr *ngFor="let acid of _designer.used_acids; let i = index ">
+                <td>{{ acid.name }}</td>
+                <td>Mash Acid</td>
+                <td>--</td>
+                <td>{{ _designer.recipe.recipe_acids_attributes[i].quantity | number:'1.0-1' }} {{ _designer.measurement.agents === 'us' ? "teaspoons" : "milliliters" }}</td>
+              </tr>
+
+              <tr *ngFor="let acid of _designer.used_sparge_acids; let i = index ">
+                <td>{{ acid.name }}</td>
+                <td>Sparge Acid</td>
+                <td>--</td>
+                <td>{{ _designer.recipe.recipe_acids_attributes[i].quantity | number:'1.0-1' }} {{ _designer.measurement.agents === 'us' ? "teaspoons" : "milliliters" }}</td>
+              </tr>
+            </table>
+            <div>Total malt: {{ _designer.checkPoundsToGrams(_designer.getTotalMaltWeight(), 'malts') | number:'1.1-2' }} {{ _designer.measurement.malts === 'us' ? 'lbs' : 'kg' }}</div>
+            <div>Total hops:
+              <span *ngIf="_designer.getTotalHopWeight() > (8 * _designer.inputConversion(_designer.recipe.batch_size, 'liquid') / 5)">
+                <i title="It is suggested to use at most {{_designer.checkPoundsToGrams(8, 'hops')}} {{ _designer.measurement.hops === 'us' ? 'oz' : 'g' }} of hops per {{_designer.checkGallonsToLiters(5)}} {{ (_designer.measurement.liquid === 'us' ? 'gallons' : 'liters') }} in the batch ({{8 * _designer.inputConversion(_designer.recipe.batch_size, 'liquid') / 5}} oz)." class="fas fa-exclamation-triangle img-responsive warning"></i>
+              </span>{{ _designer.checkPoundsToGrams(_designer.getTotalHopWeight(), 'hops') | number:'1.1-2' }} {{ _designer.measurement.hops === 'us' ? 'oz' : 'g' }}
+            </div>
+            <div>Total yeast: {{ _designer.getTotalYeast() | number:'1.1-2' }} pkgs - {{ _designer.getTotalYeastCells() | number:'1.1-1' }} billion cells</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <p><b>Notes</b></p>
+          </div>
+          <div class="col-12">
+            <p>{{ _designer.recipe.notes }}</p>
+          </div>
+
+          <div class="col-12">
+            <p><b>Description</b></p>
+          </div>
+          <div class="col-12">
+            <p>{{ _designer.recipe.description }}</p>
+          </div>
+
+          <div class="col-12">
+            <p><b>Taste Notes</b></p>
+          </div>
+          <div class="col-12">
+            <p>{{ _designer.recipe.taste_notes }}</p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-9">
+            <table class="table table-sm table-hover">
+              <tr>
+                <th></th>
+                <th>Current</th>
+                <th *ngIf="_designer.used_style"></th>
+                <th *ngIf="_designer.used_style">Style</th>
+              </tr>
+
+              <tr>
+                <th>Original Gravity</th>
+                <td>{{ _designer.getEstimatedOG() | number:'1.1-3' }}</td>
+                <td *ngIf="_designer.used_style && _designer.getEstimatedOG() >= _designer.used_style.min_og && _designer.getEstimatedOG() <= _designer.used_style.max_og"><i class="fas fa-check correct"></i></td>
+                <td *ngIf="_designer.used_style && (_designer.getEstimatedOG() < _designer.used_style.min_og || _designer.getEstimatedOG() > _designer.used_style.max_og)"><i class="fas fa-times-circle error"></i></td>
+                <td *ngIf="_designer.used_style">{{ _designer.used_style.min_og }} - {{ _designer.used_style.max_og }}</td>
+              </tr>
+
+              <tr>
+                <th>Bitterness (IBU)</th>
+                <td>{{ _designer.calculateIBU(_designer.measurement.ibu) | number:'1.1-1' }}</td>
+                <td *ngIf="_designer.used_style && _designer.calculateIBU(_designer.measurement.ibu) >= _designer.used_style.min_ibu && _designer.calculateIBU(_designer.measurement.ibu) <= _designer.used_style.max_ibu"><i class="fas fa-check correct"></i></td>
+                <td *ngIf="_designer.used_style && (_designer.calculateIBU(_designer.measurement.ibu) < _designer.used_style.min_ibu || _designer.calculateIBU(_designer.measurement.ibu) > _designer.used_style.max_ibu)"><i class="fas fa-times-circle error"></i></td>
+                <td *ngIf="_designer.used_style"> {{ _designer.used_style.min_ibu }} - {{ _designer.used_style.max_ibu }}</td>
+              </tr>
+
+              <tr>
+                <th>Color ({{ _designer.getColorString() }})</th>
+                <td>{{ _designer.getBeerColorValue() | number:'1.1-1'}}</td>
+                <td *ngIf="_designer.used_style && _designer.getBeerColorValue() >= _designer.checkColor(_designer.used_style.min_color) && _designer.getBeerColorValue() <= _designer.checkColor(_designer.used_style.max_color)"><i class="fas fa-check correct"></i></td>
+                <td *ngIf="_designer.used_style && (_designer.getBeerColorValue() < _designer.checkColor(_designer.used_style.min_color) || _designer.getBeerColorValue() > _designer.checkColor(_designer.used_style.max_color))"><i class="fas fa-times-circle error"></i></td>
+                <td *ngIf="_designer.used_style">{{ _designer.checkColor(_designer.used_style.min_color) | number:'1.0-2' }} - {{ _designer.checkColor(_designer.used_style.max_color) | number:'1.0-2' }}</td>
+              </tr>
+
+              <tr>
+                <th>Final Gravity (%)</th>
+                <td>{{ _designer.getEstimatedFG() | number:'1.1-3' }}</td>
+                <td *ngIf="_designer.used_style && _designer.getEstimatedFG() >= _designer.used_style.min_fg && _designer.getEstimatedFG() <= _designer.used_style.max_fg"><i class="fas fa-check correct"></i></td>
+                <td *ngIf="_designer.used_style && (_designer.getEstimatedFG() < _designer.used_style.min_fg || _designer.getEstimatedFG() > _designer.used_style.max_fg)"><i class="fas fa-times-circle error"></i></td>
+                <td *ngIf="_designer.used_style">{{ _designer.used_style.min_fg }} - {{ _designer.used_style.max_fg }}</td>
+              </tr>
+
+              <tr>
+                <th>ABV (%)</th>
+                <td>{{ _designer.getEstimatedABV() | number:'1.0-1' }}</td>
+                <td *ngIf="_designer.used_style && _designer.getEstimatedABV() >= _designer.used_style.min_abv && _designer.getEstimatedABV() <= _designer.used_style.max_abv"><i class="fas fa-check correct"></i></td>
+                <td *ngIf="_designer.used_style && (_designer.getEstimatedABV() < _designer.used_style.min_abv || _designer.getEstimatedABV() > _designer.used_style.max_abv)"><i class="fas fa-times-circle error"></i></td>
+                <td *ngIf="_designer.used_style">{{ _designer.used_style.min_abv }} - {{ _designer.used_style.max_abv }}</td>
+              </tr>
+
+            </table>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <span class="help-icon" title="Note: The ratio here is calculated using raw, unrounded numbers for the purpose of accuracy.">&#9432; </span>
+            <span>Bitterness ratio: {{ _designer.calculateIBU(_designer.measurement.ibu) / (_designer.getEstimatedOG() - 1) / 1000 | number:'1.0-3' }} IBU/SG</span>
+          </div>
+        </div>
+
+
+
+
+        <div class="row">
+          <p class="col-12">Batch size: {{ _designer.recipe.batch_size| number:'1.0-1' }} {{ (_designer.measurement.liquid === 'us' ? "gallons" : "liters") }}</p>
+          <p class="col-12">Estimated {{ (_designer.measurement.liquid === 'us' ? "gallons" : "liters") }} required: {{ _designer.checkGallonsToLiters(_designer.estimateGallonsNeeded()) | number:'1.0-1' }}</p>
+          <p class="col-12">Estimated pre-boil volume: {{ _designer.checkGallonsToLiters(_designer.estimatePreGallons()) | number:'1.0-1' }}</p>
+        </div>
+
+        <div class="row">
+          <table class="table table-sm table-hover">
+            <tr *ngIf="_designer.water_profile_select && _designer.currentWater() && _designer.used_water_profile">
+              <th class="text-center"><span class="help-icon" title="{{_designer.agentTitle('main')}}">&#9432; </span></th>
+              <th class="text-right">
+                <span *ngIf="_designer.agentPortion('ph')" class="help-icon" title="{{_designer.agentTitle('ph')}}">&#9432; </span>
+                <span *ngIf="!_designer.agentPortion('ph')"><i title="{{_designer.agentTitle('ph')}}" class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                pH
+              </th>
+              <th class="text-right">
+                <span *ngIf="_designer.currentWater().calcium >= _designer.used_water_profile.calcium_min && _designer.currentWater().calcium <= _designer.used_water_profile.calcium_max" class="help-icon" title="{{_designer.agentTitle('ca')}}\n\nThe desired quantity for the current profile is between {{ _designer.used_water_profile.calcium_min }} and {{ _designer.used_water_profile.calcium_max }} ppm.">&#9432; </span>
+                <span *ngIf="_designer.currentWater().calcium > _designer.used_water_profile.calcium_max || _designer.currentWater().calcium < _designer.used_water_profile.calcium_min"><i title="{{_designer.agentTitle('ca')}}" class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                Ca
+              </th>
+              <th class="text-right">
+                <span *ngIf="_designer.currentWater().magnesium >= _designer.used_water_profile.magnesium_min && _designer.currentWater().magnesium <= _designer.used_water_profile.magnesium_max" class="help-icon" title="{{_designer.agentTitle('ca')}}\n\nThe desired quantity for the current profile is between {{ _designer.used_water_profile.magnesium_min }} and {{ _designer.used_water_profile.magnesium_max }} ppm.">&#9432; </span>
+                <span *ngIf="_designer.currentWater().magnesium > _designer.used_water_profile.magnesium_max || _designer.currentWater().magnesium < _designer.used_water_profile.magnesium_min"><i title="{{_designer.agentTitle('mg')}}" class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                Mg
+              </th>
+              <th class="text-right">
+                <span *ngIf="_designer.currentWater().sodium >= 0 && _designer.currentWater().sodium <= 150" class="help-icon" title="{{_designer.agentTitle('ca')}}\n\nThe desired quantity for the current profile is between 0 and 150 ppm.">&#9432; </span>
+                <span *ngIf="_designer.currentWater().sodium > 150 || _designer.currentWater().sodium < 0"><i title="{{_designer.agentTitle('na')}}" class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                Na
+              </th>
+              <th class="text-right">
+                <span *ngIf="_designer.currentWater().sulfate >= _designer.used_water_profile.sulfate_min && _designer.currentWater().sulfate <= _designer.used_water_profile.sulfate_max" class="help-icon" title="{{_designer.agentTitle('ca')}}\n\nThe desired quantity for the current profile is between {{ _designer.used_water_profile.sulfate_min }} and {{ _designer.used_water_profile.sulfate_max }} ppm.">&#9432; </span>
+                <span *ngIf="_designer.currentWater().sulfate > _designer.used_water_profile.sulfate_max || _designer.currentWater().sulfate < _designer.used_water_profile.sulfate_min"><i title="{{_designer.agentTitle('so4')}}" class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                SO4
+              </th>
+              <th class="text-right">
+                <span *ngIf="_designer.currentWater().chloride >= _designer.used_water_profile.chloride_min && _designer.currentWater().chloride <= _designer.used_water_profile.chloride_max" class="help-icon" title="{{_designer.agentTitle('ca')}}\n\nThe desired quantity for the current profile is between {{ _designer.used_water_profile.chloride_min }} and {{ _designer.used_water_profile.chloride_max }} ppm.">&#9432; </span>
+                <span *ngIf="_designer.currentWater().chloride > _designer.used_water_profile.chloride_max || _designer.currentWater().chloride < _designer.used_water_profile.chloride_min"><i title="{{_designer.agentTitle('cl')}}" class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                Cl
+              </th>
+              <th class="text-right">
+                <span *ngIf="_designer.currentWater().bicarbonate >= _designer.used_water_profile.alkalinity_min && _designer.currentWater().bicarbonate <= _designer.used_water_profile.alkalinity_max" class="help-icon" title="{{_designer.agentTitle('ca')}}\n\nThe desired quantity for the current profile is between {{ _designer.used_water_profile.alkalinity_min }} and {{ _designer.used_water_profile.alkalinity_max }} ppm.">&#9432; </span>
+                <span *ngIf="_designer.currentWater().bicarbonate > _designer.used_water_profile.alkalinity_max || _designer.currentWater().bicarbonate < _designer.used_water_profile.alkalinity_min"><i title="{{_designer.agentTitle('hco3')}}" class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                HCO3
+              </th>
+            </tr>
+            <tr *ngIf="!_designer.water_profile_select">
+              <th class="text-center"><span class="help-icon" title="{{_designer.agentTitle('main')}}">&#9432; </span></th>
+              <th class="text-right">
+                <span *ngIf="_designer.agentPortion('ph')" class="help-icon" title="{{_designer.agentTitle('ph')}}">&#9432; </span>
+                <span *ngIf="!_designer.agentPortion('ph')"><i title="{{_designer.agentTitle('ph')}}" class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                pH
+              </th>
+              <th class="text-right">
+                <span *ngIf="_designer.agentPortion('ca')" class="help-icon" title="{{_designer.agentTitle('ca')}}">&#9432; </span>
+                <span *ngIf="!_designer.agentPortion('ca')"><i title="{{_designer.agentTitle('ca')}}" class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                Ca
+              </th>
+              <th class="text-right">
+                <span *ngIf="_designer.agentPortion('mg')" class="help-icon" title="{{_designer.agentTitle('mg')}}">&#9432; </span>
+                <span *ngIf="!_designer.agentPortion('mg')" [ngClass]="{'error': (_designer.currentWater() && _designer.currentWater().magnesium >= 125), 'warning': (_designer.currentWater() && _designer.currentWater().magnesium < 125)}"><i title="{{_designer.agentTitle('mg')}}" class="fas fa-exclamation-triangle img-responsive"></i></span>
+                Mg
+              </th>
+              <th class="text-right">
+                <span *ngIf="_designer.agentPortion('na')" class="help-icon" title="{{_designer.agentTitle('na')}}">&#9432; </span>
+                <span *ngIf="!_designer.agentPortion('na')"><i title="{{_designer.agentTitle('na')}}" class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                Na
+              </th>
+              <th class="text-right">
+                <span *ngIf="_designer.agentPortion('so4')" class="help-icon" title="{{_designer.agentTitle('so4')}}">&#9432; </span>
+                <span *ngIf="!_designer.agentPortion('so4')"><i title="{{_designer.agentTitle('so4')}}" class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                SO4
+              </th>
+              <th class="text-right">
+                <span *ngIf="_designer.agentPortion('cl')" class="help-icon" title="{{_designer.agentTitle('cl')}}">&#9432; </span>
+                <span *ngIf="!_designer.agentPortion('cl')"><i title="{{_designer.agentTitle('cl')}}" class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                Cl
+              </th>
+              <th class="text-right">
+                <span *ngIf="_designer.agentPortion('hco3')" class="help-icon" title="{{_designer.agentTitle('hco3')}}">&#9432; </span>
+                <span *ngIf="!_designer.agentPortion('hco3')"><i title="{{_designer.agentTitle('hco3')}}" class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                HCO3
+              </th>
+            </tr>
+            <tr>
+              <td>Current Water</td>
+              <td class="text-right">{{(_designer.currentWater() && _designer.addWaterGallons() !== 0) ? _designer.currentWater().ph.toFixed(1) : '--'}}</td>
+              <td class="text-right">{{(_designer.currentWater() && _designer.addWaterGallons() !== 0) ? _designer.currentWater().calcium.toFixed(1) : '--'}}</td>
+              <td class="text-right">{{(_designer.currentWater() && _designer.addWaterGallons() !== 0) ? _designer.currentWater().magnesium.toFixed(1) : '--'}}</td>
+              <td class="text-right">{{(_designer.currentWater() && _designer.addWaterGallons() !== 0) ? _designer.currentWater().sodium.toFixed(1) : '--'}}</td>
+              <td class="text-right">{{(_designer.currentWater() && _designer.addWaterGallons() !== 0) ? _designer.currentWater().sulfate.toFixed(1) : '--'}}</td>
+              <td class="text-right">{{(_designer.currentWater() && _designer.addWaterGallons() !== 0) ? _designer.currentWater().chloride.toFixed(1) : '--'}}</td>
+              <td class="text-right">{{(_designer.currentWater() && _designer.addWaterGallons() !== 0) ? _designer.currentWater().bicarbonate.toFixed(1) : '--'}}</td>
+            </tr>
+            <tr *ngIf="!_designer.water_profile_select">
+              <td>Target Water</td>
+              <td class="text-right">{{_designer.target_water ? _designer.target_water.ph.toFixed(1) : '--'}}</td>
+              <td class="text-right">{{_designer.target_water ? _designer.target_water.calcium.toFixed(1) : '--'}}</td>
+              <td class="text-right">{{_designer.target_water ? _designer.target_water.magnesium.toFixed(1) : '--'}}</td>
+              <td class="text-right">{{_designer.target_water ? _designer.target_water.sodium.toFixed(1) : '--'}}</td>
+              <td class="text-right">{{_designer.target_water ? _designer.target_water.sulfate.toFixed(1) : '--'}}</td>
+              <td class="text-right">{{_designer.target_water ? _designer.target_water.chloride.toFixed(1) : '--'}}</td>
+              <td class="text-right">{{_designer.target_water ? _designer.target_water.bicarbonate.toFixed(1) : '--'}}</td>
+            </tr>
+            <tr class="difference" *ngIf="!_designer.water_profile_select">
+              <td>Difference</td>
+              <td class="text-right">{{_designer.waterDifference() ? _designer.waterDifference().ph.toFixed(1) : '--'}}</td>
+              <td class="text-right">{{_designer.waterDifference() ? _designer.waterDifference().calcium.toFixed(1) : '--'}}</td>
+              <td class="text-right">{{_designer.waterDifference() ? _designer.waterDifference().magnesium.toFixed(1) : '--'}}</td>
+              <td class="text-right">{{_designer.waterDifference() ? _designer.waterDifference().sodium.toFixed(1) : '--'}}</td>
+              <td class="text-right">{{_designer.waterDifference() ? _designer.waterDifference().sulfate.toFixed(1) : '--'}}</td>
+              <td class="text-right">{{_designer.waterDifference() ? _designer.waterDifference().chloride.toFixed(1) : '--'}}</td>
+              <td class="text-right">{{_designer.waterDifference() ? _designer.waterDifference().bicarbonate.toFixed(1) : '--'}}</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="row" *ngIf="_designer.used_water_profile && _designer.used_waters[0] && _designer.water_profile_select">
+          <app-radar-chart [canvas_id]="'profileChart'" [boundary]="_designer.used_water_profile" [current_water]="_designer.currentWater()"></app-radar-chart>
+        </div>
+        <div class="row">
+
+          <div class="col-4" *ngIf="!_designer.water_profile_select">
+            <div class="container">
+              <div class="row">
+                <div class="col-12">
+
+                  <span *ngIf="_designer.ra >= -60 && _designer.ra <= 200" class="help-icon" title="RA is the amount of alkalinity left after a chemical reaction occurs between calcium, magnesium and malt phosphate. A positive value results in a higher mash pH, while a negative value results in a lower mash pH. Typical values lie in the range of -60 to 200.">&#9432; </span>
+                  <span *ngIf="_designer.ra < -60 || _designer.ra > 200"><i title="RA is the amount of alkalinity left after a chemical reaction occurs between calcium, magnesium and malt phosphate. A positive value results in a higher mash pH, while a negative value results in a lower mash pH. Typical values lie in the range of -60 to 200." class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+
+                  <label for="ra_slider">RA:</label>
+                  <label for="ra_slider">{{ _designer.ra }}</label>
+                </div>
+                <div class="col-12 slider-div">
+                  <input id="ra_slider" type="range" min="-60" max="200" [disabled]='true' class="slider helper-icon" [value]="_designer.ra" step="1">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-4" *ngIf="_designer.water_profile_select">
+            <div class="container">
+              <div class="row">
+                <div class="col-12">
+
+                  <span *ngIf="_designer.ra >= _designer.used_water_profile.ra_min && _designer.ra <= _designer.used_water_profile.ra_max" class="help-icon" title="The desired RA range for this profile is {{ _designer.used_water_profile.ra_min }} to {{ _designer.used_water_profile.ra_max }}.\n\nRA is the amount of alkalinity left after a chemical reaction occurs between calcium, magnesium and malt phosphate. A positive value results in a higher mash pH, while a negative value results in a lower mash pH. Typical values lie in the range of -60 to 200.">&#9432; </span>
+                  <span *ngIf="_designer.ra < _designer.used_water_profile.ra_min || _designer.ra > _designer.used_water_profile.ra_max"><i title="The desired RA range for this profile is {{ _designer.used_water_profile.ra_min }} to {{ _designer.used_water_profile.ra_max }}.&#013;&#013;RA is the amount of alkalinity left after a chemical reaction occurs between calcium, magnesium and malt phosphate. A positive value results in a higher mash pH, while a negative value results in a lower mash pH. Typical values lie in the range of -60 to 200." class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+
+                  <label for="ra_slider">RA:</label>
+                  <label for="ra_slider">{{ _designer.ra }}</label>
+                </div>
+                <div class="col-12 slider-div">
+                  <input id="ra_slider" type="range" min="-60" max="200" [disabled]='true' class="slider helper-icon" [value]="_designer.ra" step="1">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-4">
+            <div class="container">
+              <div class="row">
+                <div class="col-12">
+
+                  <span *ngIf="_designer.so4_cl_ratio >= 0.5 && _designer.so4_cl_ratio <= 9" class="help-icon" title="The ratio of sulfate to chloride effects the maltiness of the beer. A ratio less than 1 will accentuate the maltiness, while a ratior greater than 1 will accentuate bitterness. The typical range for this ratio is from 0.5 to 9, however it only really has an effect with ppms greater than 50.">&#9432; </span>
+                  <span *ngIf="(_designer.so4_cl_ratio < 0.5 || _designer.so4_cl_ratio > 9) && (_designer.currentWater().sulfate + _designer.currentWater().chloride > 50)"><i title="The ratio of sulfate to chloride effects the maltiness of the beer. A ratio less than 1 will accentuate the maltiness, while a ratior greater than 1 will accentuate bitterness. The typical range for this ratio is from 0.5 to 9, however it only really has an effect with ppms greater than 50." class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                  <label for="so4cl-slider">SO4:Cl</label>
+                  <label for="so4cl-slider">{{ _designer.so4_cl_ratio }}</label>
+                </div>
+                <div class="col-12 slider-div">
+                  <input id="so4cl-slider" type="range" min=".5" max="9" [disabled]='true' class="slider helper-icon" [value]="_designer.so4_cl_ratio" step=".1">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-4">
+            <div class="container">
+              <div class="row">
+                <div class="col-12">
+                  <span *ngIf="_designer.getEstimatedPh() > 5.6 || _designer.getEstimatedPh() < 5.2"><i title="Mash pH should be between 5.2 and 5.6 in order to promote maximum enzyme efficiency and improve potential yeast health. Check the pH 10-15 minutes into the mash on a room temperature sample." class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                  <label for="mashph-slider">Mash pH:</label>
+                  <label for="mashph-slider">{{ _designer.getEstimatedPh() | number:'1.1-2' }}</label>
+                </div>
+                <div class="col-12 slider-div">
+                  <input id="mashph-slider" type="range" min="5.2" max="5.6" [disabled]='true' class="slider helper-icon" [value]="_designer.getEstimatedPh()" step=".05">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <p><b>Mash</b></p>
+          </div>
+
+          <div class="col-12">
+            <p>Sparge strategy: {{ _designer.getSpargeType() }}</p>
+            <p>Sparge quantity ({{ (_designer.measurement.liquid === 'us' ? "gallons" : "liters") }}): {{ _designer.checkGallonsToLiters(_designer.getMashWaterInfo()["sparge_amount"]) | number:'1.1-2' }}</p>
+          </div>
+
+          <div class="col-12">
+            <p>Mash type: {{ _designer.getMashType() }}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <p><b>Mash Steps</b></p>
+          </div>
+          <div class="col-12" *ngIf="_designer.getUsedMashSteps().length === 0">
+            <p><b>No mash steps have been added.</b></p>
+          </div>
+          <div class="col-12" *ngIf="_designer.getUsedMashSteps().length > 0">
+            <table class="table table-sm table-hover">
+              <tr>
+                <th>Name</th>
+                <th>Step Temp (&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }})</th>
+                <th>Time (min)</th>
+                <th *ngIf='_designer.recipe.mash_type !== "decoction"'>Water Addition Amount ({{(_designer.measurement.liquid === 'us' ? "quarts" : "liters")}})</th>
+                <th *ngIf='_designer.recipe.mash_type === "decoction"'>Water Addition Amount ({{(_designer.measurement.liquid === 'us' ? "quarts/% mash" : "liters/% mash")}})</th>
+                <th>Water Addition Temp (&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }})</th>
+              </tr>
+              <tr *ngFor="let step of _designer.getMashWaterInfo()['step_info']; let i = index ">
+                <td><span *ngIf="step.step_name === 'Steeping'" class="help-icon" title="Steeping is done with extract brewing, generally beginning when the water temperature reaches 140 degrees, and lasting for about 20 minutes as the temperature reaches 170 degrees.">&#9432; </span>{{ step.step_name }}</td>
+                <td>{{ _designer.checkFahrenheitToCelsius(step.step_temp) | number:'1.1-2' }}</td>
+                <td>{{ step.step_time }}</td>
+                <td *ngIf="i === 0 || _designer.recipe.mash_type !== 'decoction'">{{ step.water_amount | number:'1.1-2' }}</td>
+                <td *ngIf="i !== 0 && _designer.recipe.mash_type === 'decoction'">{{ step.water_amount | number:'1.1-1' }}%</td>
+                <td>{{ _designer.checkFahrenheitToCelsius(step.water_temp) | number:'1.1-2' }}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <p><b>Yeast</b></p>
+          </div>
+
+          <div class="col-12">
+            <p>Finish strategy: {{ _designer.recipe.storage_type }} at {{ _designer.recipe.storage_temperature | number:'1.0-1' }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }} with {{ _designer.recipe.carbonation_with }} ({{ _designer.getVolumesQuantity() | number:'1.1-2' }} {{ _designer.volumesLabel() }})</p>
+          </div>
+
+          <div class="col-12">
+            <p>Primary fermentation: {{ _designer.recipe.primary_ferm_temp | number:'1.0-1' }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }} for {{ _designer.recipe.primary_ferm_days }} days</p>
+            <ul>
+              <li *ngFor="let yeast of _designer.getUsedYeast(1)">{{ yeast.name }}{{ yeast.lab ? " - " + yeast.lab : "" }}</li>
+            </ul>
+          </div>
+
+          <div class="col-12" *ngIf="_designer.recipe.secondary_fermentation">
+            <p>Secondary fermentation: {{ _designer.recipe.secondary_ferm_temp | number:'1.0-1' }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }} for {{ _designer.recipe.secondary_ferm_days }} days</p>
+            <ul>
+              <li *ngFor="let yeast of _designer.getUsedYeast(2)">{{ yeast.name }}{{ yeast.lab ? " - " + yeast.lab : "" }}</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #measurementPopup let-c="close" let-d="dismiss">
+  <button type="button" class="runner-close float-right" aria-label="Close" (click)="d('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="container">
+    <div class="row">
+      <div class="col-10">
+        <h2 class="item-name">Measurements</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <label for="temperature-measurement">Temperature</label>
+        <select (change)="_designer.measurementChange('temperature')" id="temperature-measurement" class="item-selector form-control" [(ngModel)]="_designer.measurement.temperature">
+          <option value="us">Fahrenheit</option>
+          <option value="metric">Celsius</option>
+        </select>
+      </div>
+      <div class="col-12">
+        <label for="liquid-measurement">Liquid</label>
+        <select (change)="_designer.measurementChange('liquid')" id="liquid-measurement" class="item-selector form-control" [(ngModel)]="_designer.measurement['liquid']">
+          <option value="us">Gallons</option>
+          <option value="metric">Liters</option>
+        </select>
+      </div>
+      <div class="col-12">
+        <label for="agent-measurement">Weight (Water Agents)</label>
+        <select (change)="_designer.measurementChange('agent')" id="agent-measurement" class="item-selector form-control" [(ngModel)]="_designer.measurement['agents']">
+          <option value="us">Ounces</option>
+          <option value="metric">Grams</option>
+        </select>
+      </div>
+      <div class="col-12">
+        <label for="malt-measurement">Weight (Malts)</label>
+        <select (change)="_designer.measurementChange('malt')" id="malt-measurement" class="item-selector form-control" [(ngModel)]="_designer.measurement['malts']">
+          <option value="us">Pounds</option>
+          <option value="metric">Grams</option>
+        </select>
+      </div>
+      <div class="col-12">
+        <label for="hop-measurement">Weight (Hops)</label>
+        <select (change)="_designer.measurementChange('hop')" id="hop-measurement" class="item-selector form-control pad-bottom" [(ngModel)]="_designer.measurement['hops']">
+          <option value="us">Ounces</option>
+          <option value="metric">Grams</option>
+        </select>
+      </div>
+      <div class="col-12 pad-bottom">
+        <label for="pressure-measurement">Pressure</label>
+        <select (change)="_designer.measurementChange('pressure')" id="pressure-measurement" class="item-selector form-control" [(ngModel)]="_designer.measurement['pressure']">
+          <option value="us">PSI</option>
+          <option value="metric">kPa</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</ng-template>

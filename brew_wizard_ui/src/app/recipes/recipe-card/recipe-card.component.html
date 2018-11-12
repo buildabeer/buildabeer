@@ -1,0 +1,111 @@
+<div class="col-12 card" *ngIf="recipe">
+
+  <table class="table table-sm table-striped d-none d-sm-block">
+    <tbody>
+      <tr>
+        <th colspan="2">Brewer</th>
+        <td colspan="2">{{ recipe.brewer }}</td>
+      </tr>
+      <tr>
+        <th>Date Created</th>
+        <td>{{ recipe.recipe_date | date }}</td>
+        <th>Version</th>
+        <td>{{ recipe.version }}</td>
+      </tr>
+      <tr>
+        <th>Style</th>
+        <td>{{ style_name }}</td>
+        <th>Batch Size</th>
+        <td>{{ recipe.batch_size }} gal</td>
+      </tr>
+      <tr>
+        <th>Equipment</th>
+        <td>{{ equipment ? equipment.name : '' }}</td>
+        <th>Type</th>
+        <td>{{ equipment ? equipment.equipment_type : '' }}</td>
+      </tr>
+      <tr>
+        <th colspan="4">Notes</th>
+      </tr>
+      <tr>
+        <td colspan="4" class="wrapped">{{ recipe.notes }}</td>
+      </tr>
+      <tr>
+        <th colspan="4">Description</th>
+      </tr>
+      <tr>
+        <td colspan="4" class="wrapped">{{ recipe.description }}</td>
+      </tr>
+      <tr>
+        <th colspan="4">Taste Notes</th>
+      </tr>
+      <tr>
+        <td colspan="4" class="wrapped">{{ recipe.taste_notes }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table table-sm table-striped d-block d-sm-none">
+    <tbody>
+      <tr>
+        <th colspan="2">Brewer</th>
+      </tr>
+      <tr>
+        <td colspan="2">{{ recipe.brewer }}</td>
+      </tr>
+      <tr>
+        <th>Date Created</th>
+        <td>{{ recipe.recipe_date | date }}</td>
+      </tr>
+      <tr>
+        <th>Version</th>
+        <td>{{ recipe.version }}</td>
+      </tr>
+      <tr>
+        <th>Style</th>
+        <td>{{ style_name }}</td>
+      </tr>
+      <tr>
+        <th>Batch Size</th>
+        <td>{{ recipe.batch_size }} gal</td>
+      </tr>
+      <tr>
+        <th>Equipment</th>
+        <td>{{ equipment ? equipment.name : '' }}</td>
+      </tr>
+      <tr>
+        <th>Type</th>
+        <td>{{ equipment ? equipment.equipment_type : '' }}</td>
+      </tr>
+      <tr>
+        <th colspan="2">Notes</th>
+      </tr>
+      <tr>
+        <td colspan="2" class="wrapped">{{ recipe.notes }}</td>
+      </tr>
+      <tr>
+        <th colspan="2">Description</th>
+      </tr>
+      <tr>
+        <td colspan="2" class="wrapped">{{ recipe.description }}</td>
+      </tr>
+      <tr>
+        <th colspan="2">Taste Notes</th>
+      </tr>
+      <tr>
+        <td colspan="2" class="wrapped">{{ recipe.taste_notes }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="col-md-12">
+    <a *ngIf="_router.url === '/recipes'" [routerLink]="['/recipes', recipe.id]">View Details</a>
+  </div>
+  <div class="col-md-12">
+    <a *ngIf="(_authService.currentUserMatchOrGlobal(recipe.user_id))" [routerLink]="['/recipes', recipe.id, 'edit']">Open</a>
+    <span *ngIf="(_authService.currentUserMatchOrGlobal(recipe.user_id))"> |</span>
+    <a [routerLink]="['/recipes/new']" [queryParams]="{ recipe_id: recipe.id }">Copy</a>
+    <span *ngIf="(_authService.currentUserMatchOrGlobal(recipe.user_id))"> |</span>
+    <button *ngIf="(_authService.currentUserMatchOrGlobal(recipe.user_id))" class="btn btn-link" role="link" (click)="deleteCard()">Delete</button>
+  </div>
+</div>

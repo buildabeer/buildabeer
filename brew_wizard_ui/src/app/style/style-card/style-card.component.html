@@ -1,0 +1,190 @@
+
+<div class="card-header" *ngIf="style">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-11 col-md-11 col-sm-10 col-xs-12">
+        <button type="button" class="btn btn-outline-primary expansion-button" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseItem" *ngIf="_router.url === '/styles'">
+          {{ !isCollapsed? "-" : "+" }}
+        </button>
+
+        {{ style.name }}
+      </div>
+      <div class="col-lg-1 col-md-1 col-sm-1">
+        <p><i>{{ (style.global ? "Global" : "Local") }}</i></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="collapse" id="collapseItem" [ngbCollapse]="isCollapsed">
+    <div class="card row">
+
+      <div class="col-12">
+
+        <table class="table table-sm table-striped d-none d-sm-block">
+          <tbody>
+            <tr>
+              <th>Category Name</th>
+              <td>{{ style.category_name }}</td>
+              <th>Category</th>
+              <td>{{ style.category_number + style.subcategory }}</td>
+            </tr>
+            <tr>
+              <th>Min OG</th>
+              <td>{{ style.min_og }}</td>
+              <th>Max OG</th>
+              <td>{{ style.max_og }}</td>
+            </tr>
+            <tr>
+              <th>Min FG</th>
+              <td>{{ style.min_fg }}</td>
+              <th>Max FG</th>
+              <td>{{ style.max_fg }}</td>
+            </tr>
+            <tr>
+              <th>Min IBU</th>
+              <td>{{ style.min_ibu }}</td>
+              <th>Max IBU</th>
+              <td>{{ style.max_ibu }}</td>
+            </tr>
+            <tr>
+              <th>Min Color (SRM)</th>
+              <td>{{ style.min_color }}</td>
+              <th>Max Color (SRM)</th>
+              <td>{{ style.max_color }}</td>
+            </tr>
+            <tr>
+              <th>Min Carbonation</th>
+              <td>{{ style.min_carb }}</td>
+              <th>Max Carbonation</th>
+              <td>{{ style.max_carb }}</td>
+            </tr>
+            <tr>
+              <th>Min ABV</th>
+              <td>{{ style.min_abv }}</td>
+              <th>Max ABV</th>
+              <td>{{ style.max_abv }}</td>
+            </tr>
+            <tr>
+              <th colspan="4">Description</th>
+            </tr>
+            <tr>
+              <td colspan="4" class="wrapped">{{ style.description }}</td>
+            </tr>
+            <tr>
+              <th colspan="4">Profile</th>
+            </tr>
+            <tr>
+              <td colspan="4" class="wrapped">{{ style.profile }}</td>
+            </tr>
+            <tr>
+              <th colspan="4">Ingredients</th>
+            </tr>
+            <tr>
+              <td colspan="4" class="wrapped">{{ style.ingredients }}</td>
+            </tr>
+            <tr>
+              <th colspan="4">Examples</th>
+            </tr>
+            <tr>
+              <td colspan="4" class="wrapped">{{ style.examples }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="table table-sm table-striped d-block d-sm-none">
+          <tbody>
+            <tr>
+              <th>Category Name</th>
+              <td>{{ style.category_name }}</td>
+            </tr>
+            <tr>
+              <th>Category</th>
+              <td>{{ style.category_number + style.subcategory }}</td>
+            </tr>
+
+            <tr>
+              <th>Min OG</th>
+              <td>{{ style.min_og }}</td>
+            </tr>
+            <tr>
+              <th>Max OG</th>
+              <td>{{ style.max_og }}</td>
+            </tr>
+            <tr>
+              <th>Min FG</th>
+              <td>{{ style.min_fg }}</td>
+            </tr>
+            <tr>
+              <th>Max FG</th>
+              <td>{{ style.max_fg }}</td>
+            </tr>
+            <tr>
+              <th>Min IBU</th>
+              <td>{{ style.min_ibu }}</td>
+            </tr>
+            <tr>
+              <th>Max IBU</th>
+              <td>{{ style.max_ibu }}</td>
+            </tr>
+            <tr>
+              <th>Min Color (SRM)</th>
+              <td>{{ style.min_color }}</td>
+            </tr>
+            <tr>
+              <th>Max Color (SRM)</th>
+              <td>{{ style.max_color }}</td>
+            </tr>
+            <tr>
+              <th>Min Carbonation</th>
+              <td>{{ style.min_carb }}</td>
+            </tr>
+            <tr>
+              <th>Max Carbonation</th>
+              <td>{{ style.max_carb }}</td>
+            </tr>
+            <tr>
+              <th>Min ABV</th>
+              <td>{{ style.min_abv }}</td>
+            </tr>
+            <tr>
+              <th>Max ABV</th>
+              <td>{{ style.max_abv }}</td>
+            </tr>
+            <tr>
+              <th colspan="2">Description</th>
+            </tr>
+            <tr>
+              <td colspan="2" class="wrapped">{{ style.description }}</td>
+            </tr>
+            <tr>
+              <th colspan="2">Profile</th>
+            </tr>
+            <tr>
+              <td colspan="2" class="wrapped">{{ style.profile }}</td>
+            </tr>
+            <tr>
+              <th colspan="2">Ingredients</th>
+            </tr>
+            <tr>
+              <td colspan="2" class="wrapped">{{ style.ingredients }}</td>
+            </tr>
+            <tr>
+              <th colspan="2">Examples</th>
+            </tr>
+            <tr>
+              <td colspan="2" class="wrapped">{{ style.examples }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="col-md-12">
+          <app-style-edit *ngIf="(_authService.currentUserMatchOrGlobal(style.user_id))" [originalStyle]="style" (onStyleEdit)="editEvent($event)"></app-style-edit>
+
+          <span *ngIf="(_authService.currentUserMatchOrGlobal(style.user_id))"> |</span>
+          <button *ngIf="(_authService.currentUserMatchOrGlobal(style.user_id))" class="btn btn-link" role="link" (click)="deleteCard()">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

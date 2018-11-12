@@ -1,0 +1,201 @@
+<button type="button" class="btn btn-primary float-right d-none d-md-block" *ngIf="(_authService.userSignedIn())" (click)="open(newStyle)">+ Add Style</button>
+<button type="button" class="btn btn-primary float-right d-md-none" *ngIf="(_authService.userSignedIn())" (click)="open(newStyle)">+</button>
+
+<ng-template #newStyle let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">New Style</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <form #f="ngForm" (ngSubmit)="creationSubmit(f.value)">
+          <div class="form-group" *ngIf="_authService.isAdmin()">
+            <label class="switch">
+              <input type="checkbox" name="global" id="global" [(ngModel)]="newStyleItem.global">
+              <span class="slider round"></span>
+            </label>
+            <label class="checkbox-label" for="global">Global</label>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-lg-6 col-12">
+              <label for="name">Name</label>
+              <span class="text-danger" *ngIf="name.errors && name.errors.required && (name.dirty || name.touched)"> *required</span>
+              <input type="text" class="form-control" id="name" name="name" required maxlength="40" [(ngModel)]="newStyleItem.name" #name="ngModel">
+            </div>
+
+            <div class="form-group col-lg-6 col-12">
+              <label for="category">Category Name</label>
+              <input type="text" class="form-control" id="category" name="category" maxlength="40" [(ngModel)]="newStyleItem.category_name" #category="ngModel">
+            </div>
+
+            <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+              <label for="category_number">Category Number</label>
+              <input type="number" class="form-control" id="category_number" name="category_number" min="1" max="99" pattern="^\d{1,2}$" [(ngModel)]="newStyleItem.category_number" #category_number="ngModel">
+            </div>
+
+            <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+              <label for="subcategory">Subcategory</label>
+              <input type="text" class="form-control" id="subcategory" name="subcategory" maxlength="1" [(ngModel)]="newStyleItem.subcategory" #subcategory="ngModel">
+            </div>
+
+            <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+              <label for="type">Type</label>
+              <select class="form-control" [(ngModel)]="newStyleItem.style_type" required id="type" name="type">
+                <option>Ale</option>
+                <option>Lager</option>
+                <option>Wheat</option>
+                <option>Wine</option>
+                <option>Champagne</option>
+                <option>Cider</option>
+              </select>
+            </div>
+
+            <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+              <label for="min_og">Min OG</label>
+              <span class="text-danger" *ngIf="min_og.errors && (min_og.dirty || min_og.touched)">
+                <span *ngIf="min_og.errors.required"> *required</span>
+                <span *ngIf="min_og.errors.pattern"> *invalid input</span>
+              </span>
+              <input type="number" class="form-control" id="min_og" name="min_og" required min="0" max="1.999" step=".001" pattern="^[0-1]?(.\d{0,3})?$" [(ngModel)]="newStyleItem.min_og" #min_og="ngModel">
+            </div>
+
+            <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+              <label for="max_og">Max OG</label>
+              <span class="text-danger" *ngIf="max_og.errors && (max_og.dirty || max_og.touched)">
+                <span *ngIf="max_og.errors.required"> *required</span>
+                <span *ngIf="max_og.errors.pattern"> *invalid input</span>
+              </span>
+              <input type="number" class="form-control" id="max_og" name="max_og" required min="0" max="1.999" step=".001" pattern="^[0-1]?(.\d{0,3})?$" [(ngModel)]="newStyleItem.max_og" #max_og="ngModel">
+            </div>
+
+            <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+              <label for="min_fg">Min FG</label>
+              <span class="text-danger" *ngIf="min_fg.errors && (min_fg.dirty || min_fg.touched)">
+                <span *ngIf="min_fg.errors.required"> *required</span>
+                <span *ngIf="min_fg.errors.pattern"> *invalid input</span>
+              </span>
+              <input type="number" class="form-control" id="min_fg" name="min_fg" required min="0" max="1.999" step=".001" pattern="^[0-1]?(.\d{0,3})?$" [(ngModel)]="newStyleItem.min_fg" #min_fg="ngModel">
+            </div>
+
+            <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+              <label for="max_fg">Max FG</label>
+              <span class="text-danger" *ngIf="max_fg.errors && (max_fg.dirty || max_fg.touched)">
+                <span *ngIf="max_fg.errors.required"> *required</span>
+                <span *ngIf="max_fg.errors.pattern"> *invalid input</span>
+              </span>
+              <input type="number" class="form-control" id="max_fg" name="max_fg" required min="0" max="1.999" step=".001" pattern="^[0-1]?(.\d{0,3})?$" [(ngModel)]="newStyleItem.max_fg" #max_fg="ngModel">
+            </div>
+
+            <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+              <label for="min_ibu">Min IBU</label>
+              <span class="text-danger" *ngIf="min_ibu.errors && (min_ibu.dirty || min_ibu.touched)">
+                <span *ngIf="min_ibu.errors.required"> *required</span>
+                <span *ngIf="min_ibu.errors.pattern"> *invalid input</span>
+              </span>
+              <input type="number" class="form-control" id="min_ibu" name="min_ibu" required min="0" max="199.9" step="0.1" pattern="^[0-1]?\d{0,2}(\.\d)?$" [(ngModel)]="newStyleItem.min_ibu" #min_ibu="ngModel">
+            </div>
+
+            <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+              <label for="max_ibu">Max IBU</label>
+              <span class="text-danger" *ngIf="max_ibu.errors && (max_ibu.dirty || max_ibu.touched)">
+                <span *ngIf="max_ibu.errors.required"> *required</span>
+                <span *ngIf="max_ibu.errors.pattern"> *invalid input</span>
+              </span>
+              <input type="number" class="form-control" id="max_ibu" name="max_ibu" required min="0" max="199.9" step="0.1" pattern="[0-1]?\d{0,2}(\.\d)?" [(ngModel)]="newStyleItem.max_ibu" #max_ibu="ngModel">
+            </div>
+
+            <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+              <label for="min_color">Min Color (SRM)</label>
+              <span class="text-danger" *ngIf="min_color.errors && (min_color.dirty || min_color.touched)">
+                <span *ngIf="min_color.errors.required"> *required</span>
+                <span *ngIf="min_color.errors.pattern"> *invalid input</span>
+              </span>
+              <input type="number" class="form-control" id="min_color" name="min_color" required min="0" max="99.9" step="0.1" pattern="^\d{0,2}(\.\d{0,1})?$" [(ngModel)]="newStyleItem.min_color" #min_color="ngModel">
+            </div>
+
+            <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+              <label for="max_color">Max Color (SRM)</label>
+              <span class="text-danger" *ngIf="max_color.errors && (max_color.dirty || max_color.touched)">
+                <span *ngIf="max_color.errors.required"> *required</span>
+                <span *ngIf="max_color.errors.pattern"> *invalid input</span>
+              </span>
+              <input type="number" class="form-control" id="max_color" name="max_color" required min="0" max="99.9" step="0.1" pattern="^\d{0,2}(\.\d{0,1})?$" [(ngModel)]="newStyleItem.max_color" #max_color="ngModel">
+            </div>
+
+            <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+              <label for="min_carb">Min Carbonation</label>
+              <span class="text-danger" *ngIf="min_carb.errors && (min_carb.dirty || min_carb.touched)">
+                <span *ngIf="min_carb.errors.required"> *required</span>
+                <span *ngIf="min_carb.errors.pattern"> *invalid input</span>
+              </span>
+              <input type="number" class="form-control" id="min_carb" name="min_carb" required min="0" step=".1" max="4.9" pattern="^[0-4]?\d{0,2}(\.\d)?$" [(ngModel)]="newStyleItem.min_carb" #min_carb="ngModel">
+            </div>
+
+            <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+              <label for="max_carb">Max Carbonation</label>
+              <span class="text-danger" *ngIf="max_carb.errors && (max_carb.dirty || max_carb.touched)">
+                <span *ngIf="max_carb.errors.required"> *required</span>
+                <span *ngIf="max_carb.errors.pattern"> *invalid input</span>
+              </span>
+              <input type="number" class="form-control" id="max_carb" name="max_carb" required min="0" step=".1" max="4.9" pattern="^[0-4]?\d{0,2}(\.\d)?$" [(ngModel)]="newStyleItem.max_carb" #max_carb="ngModel">
+            </div>
+
+            <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+              <label for="min_abv">Min ABV</label>
+              <span class="text-danger" *ngIf="min_abv.errors && (min_abv.dirty || min_abv.touched)">
+                <span *ngIf="min_abv.errors.required"> *required</span>
+                <span *ngIf="min_abv.errors.pattern"> *invalid input</span>
+              </span>
+              <input type="number" class="form-control" id="min_abv" name="min_abv" required min="0" step=".1" max="19.9" step="0.1" pattern="^[0-1]?\d?(\.\d)?$" [(ngModel)]="newStyleItem.min_abv" #min_abv="ngModel">
+            </div>
+
+            <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+              <label for="max_abv">Max ABV</label>
+              <span class="text-danger" *ngIf="max_abv.errors && (max_abv.dirty || max_abv.touched)">
+                <span *ngIf="max_abv.errors.required"> *required</span>
+                <span *ngIf="max_abv.errors.pattern"> *invalid input</span>
+              </span>
+              <input type="number" class="form-control" id="max_abv" name="max_abv" required min="0" step=".1" max="19.9" step="0.1" pattern="^[0-1]?\d?(\.\d)?$" [(ngModel)]="newStyleItem.max_abv" #max_abv="ngModel">
+            </div>
+
+            <div class="form-group col-md-12">
+              <label for="description">Description</label>
+              <textarea class="form-control" id="description" name="description" maxlength="5000" [(ngModel)]="newStyleItem.description"></textarea>
+            </div>
+
+            <div class="form-group col-md-12">
+              <label for="profile">Profile</label>
+              <textarea class="form-control" id="profile" name="profile" maxlength="5000" [(ngModel)]="newStyleItem.profile"></textarea>
+            </div>
+
+            <div class="form-group col-md-12">
+              <label for="ingredients">Ingredients</label>
+              <textarea class="form-control" id="ingredients" name="ingredients" maxlength="2500" [(ngModel)]="newStyleItem.ingredients"></textarea>
+            </div>
+
+            <div class="form-group col-md-12">
+              <label for="examples">Examples</label>
+              <textarea class="form-control" id="examples" name="examples" maxlength="1000" [(ngModel)]="newStyleItem.examples"></textarea>
+            </div>
+
+            <div class="form-group col-md-12">
+              <label for="water_profile">Ideal Water Profile</label>
+              <select id="hop-water_profile" class="item-selector form-control" [(ngModel)]="newStyleItem.water_profile_id" [ngModelOptions]="{standalone: true}">
+                <option *ngFor="let profile of water_profiles" [ngValue]="profile.id">{{ profile.strength }} {{ profile.profile_type }}, {{ profile.color }}, {{ profile.bitterness }}</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" [disabled]="!f.valid">Create</button>
+          <button type="button" class="btn btn-default" (click)="c('Close click')">Close</button>
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+</ng-template>

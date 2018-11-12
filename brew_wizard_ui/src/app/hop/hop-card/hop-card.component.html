@@ -1,0 +1,96 @@
+
+<div class="card-header" *ngIf="hop">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-11 col-md-11 col-sm-10 col-xs-12">
+        <button type="button" class="btn btn-outline-primary expansion-button" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseItem" *ngIf="_router.url === '/hops'">
+          {{ !isCollapsed? "-" : "+" }}
+        </button>
+
+        {{ hop.name }}
+      </div>
+      <div class="col-lg-1 col-md-1 col-sm-1">
+        <p><i>{{ (hop.global ? "Global" : "Local") }}</i></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="collapse" id="collapseItem" [ngbCollapse]="isCollapsed">
+    <div class="card row">
+
+      <div class="col-12">
+
+        <table class="table table-sm table-striped d-none d-sm-block">
+          <tbody>
+            <tr>
+              <th>Origin</th>
+              <td>{{ hop.origin }}</td>
+              <th>Type</th>
+              <td>{{ hop.hop_type }}</td>
+            </tr>
+            <tr>
+              <th>Alpha</th>
+              <td>{{ hop.alpha }}%</td>
+              <th>Beta</th>
+              <td>{{ hop.beta }}%</td>
+            </tr>
+            <tr>
+              <th colspan="4">Aromas</th>
+            </tr>
+            <tr>
+              <td colspan="4" class="wrapped">{{ hop.aromas }}</td>
+            </tr>
+            <tr>
+              <th colspan="4">Description</th>
+            </tr>
+            <tr>
+              <td colspan="4" class="wrapped">{{ hop.description }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="table table-sm table-striped d-block d-sm-none">
+          <tbody>
+            <tr>
+              <th>Origin</th>
+              <td>{{ hop.origin }}</td>
+            </tr>
+            <tr>
+              <th>Type</th>
+              <td>{{ hop.hop_type }}</td>
+            </tr>
+            <tr>
+              <th>Alpha</th>
+              <td>{{ hop.alpha }}</td>
+            </tr>
+            <tr>
+              <th>Beta</th>
+              <td>{{ hop.beta }}%</td>
+            </tr>
+            <tr>
+              <th colspan="2">Aromas</th>
+            </tr>
+            <tr>
+              <td colspan="2" class="wrapped">{{ hop.aromas }}</td>
+            </tr>
+            <tr>
+              <th colspan="2">Description</th>
+            </tr>
+            <tr>
+              <td colspan="2" class="wrapped">{{ hop.description }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="col-md-12">
+          <app-hop-edit *ngIf="(_authService.currentUserMatchOrGlobal(hop.user_id))" [originalHopItem]="hop" (onHopEdit)="editEvent($event)"></app-hop-edit>
+
+          <span *ngIf="(_authService.currentUserMatchOrGlobal(hop.user_id))"> |</span>
+          <button *ngIf="(_authService.currentUserMatchOrGlobal(hop.user_id))" class="btn btn-link" role="link" (click)="deleteCard()">Delete</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+

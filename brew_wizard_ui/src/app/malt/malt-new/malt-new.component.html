@@ -1,0 +1,129 @@
+<button type="button" class="btn btn-primary float-right d-none d-md-block" *ngIf="(_authService.userSignedIn())" (click)="open(newMalt)">+ Add Malt</button>
+<button type="button" class="btn btn-primary float-right d-md-none" *ngIf="(_authService.userSignedIn())" (click)="open(newMalt)">+</button>
+
+<ng-template #newMalt let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">New Malt</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-8 offset-md-2">
+            <p *ngIf="!newMaltItem">
+            {{ errorMessage }}
+            </p>
+            <div class="container" *ngIf="newMaltItem">
+              <form #f="ngForm" (ngSubmit)="creationSubmit(f.value)">
+                <div class="form-group" *ngIf="(_authService.isAdmin())">
+                  <label class="switch">
+                    <input type="checkbox" name="global" id="global" [(ngModel)]="newMaltItem.global">
+                    <span class="slider round"></span>
+                  </label>
+                  <label class="checkbox-label" for="global">Global</label>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-md-12">
+                    <label for="name">Name</label>
+                    <span class="text-danger" *ngIf="name.errors && name.errors.required && (name.dirty || name.touched)"> *required</span>
+                    <input type="text" class="form-control" id="name" name="name" required maxlength="40" [(ngModel)]="newMaltItem.name" #name="ngModel">
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-lg-6 col-12">
+                    <label for="origin">Origin</label>
+                    <input type="text" class="form-control" id="origin" name="origin" maxlength="50" [(ngModel)]="newMaltItem.origin" #origin="ngModel">
+                  </div>
+
+                  <div class="form-group col-lg-6 col-12">
+                    <label for="type">Type</label>
+                    <select class="form-control" [(ngModel)]="newMaltItem.malt_type_id" id="type" name="type">
+                      <option *ngFor="let type of maltTypes" [value]="type.id">{{ type.name }}</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="row align-items-end">
+
+                  <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+                    <label for="color">Color</label>
+                    <span class="text-danger" *ngIf="color.errors && (color.dirty || color.touched)">
+                      <span *ngIf="color.errors.required"> *required</span>
+                      <span *ngIf="color.errors.pattern"> *invalid input</span>
+                    </span>
+                    <input type="number" step="0.1" class="form-control" id="color" name="color" required min="0" max="999.9" pattern="^\d{0,3}(\.\d?)?$" [(ngModel)]="newMaltItem.color" #color="ngModel">
+                  </div>
+
+                  <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+                    <label for="malt_yield">% Yield</label>
+                    <span class="text-danger" *ngIf="malt_yield.errors && (malt_yield.dirty || malt_yield.touched)">
+                      <span *ngIf="malt_yield.errors.required"> *required</span>
+                      <span *ngIf="malt_yield.errors.pattern"> *invalid input</span>
+                    </span>
+                    <input type="number" class="form-control" id="malt_yield" name="malt_yield" required min="0" max="100" step="0.1" pattern="^(100|(\d){0,2}((\.)(\d){0,1})?)$" [(ngModel)]="newMaltItem.malt_yield" #malt_yield="ngModel">
+                  </div>
+
+                  <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+                    <label for="potential_gravity">Potential</label>
+                    <p class="in-line" id="potential_gravity" name="potential_gravity">{{ .046 * newMaltItem.malt_yield / 100 + 1 | number:'.3' }}</p>
+                  </div>
+
+                  <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+                    <label for="max_percent">Max mash %</label>
+                    <span class="text-danger" *ngIf="max_percent.errors && (max_percent.dirty || max_percent.touched)">
+                      <span *ngIf="max_percent.errors.required"> *required</span>
+                      <span *ngIf="max_percent.errors.pattern"> *invalid input</span>
+                    </span>
+                    <input type="number" class="form-control" id="max_percent" name="max_percent" required min="0" max="100" step="0.1" pattern="^(100|(\d){0,2}((\.)(\d){0,1})?)$" [(ngModel)]="newMaltItem.max_percent" #max_percent="ngModel">
+                  </div>
+
+                  <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+                    <label for="protein">Protein</label>
+                    <span class="text-danger" *ngIf="protein.errors && (protein.dirty || protein.touched)">
+                      <span *ngIf="protein.errors.required"> *required</span>
+                      <span *ngIf="protein.errors.pattern"> *invalid input</span>
+                    </span>
+                    <input type="number" class="form-control" id="protein" name="protein" required min="0" max="999.9" step="0.1" pattern="^\d{0,3}(\.\d{0,1})?$" [(ngModel)]="newMaltItem.protein" #protein="ngModel">
+                  </div>
+
+                  <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+                    <label for="protein">Diastatic</label>
+                    <span class="text-danger" *ngIf="protein.errors && (protein.dirty || protein.touched)">
+                      <span *ngIf="protein.errors.required"> *required</span>
+                      <span *ngIf="protein.errors.pattern"> *invalid input</span>
+                    </span>
+                    <input type="number" class="form-control" id="protein" name="protein" required min="0" max="999.9" step="0.1" pattern="^\d{0,3}(\.\d{0,1})?$" [(ngModel)]="newMaltItem.protein" #protein="ngModel">
+                  </div>
+
+                  <div class="form-group col-lg-6 col-12 hard-pad-top">
+                    <label class="switch">
+                      <input type="checkbox" name="must_mash" id="must_mash" [(ngModel)]="newMaltItem.must_mash">
+                      <span class="slider round"></span>
+                    </label>
+                    <label class="checkbox-label" for="must_mash">Must be mashed?</label>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-md-12">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" id="description" name="description" maxlength="500" [(ngModel)]="newMaltItem.description"></textarea>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" [disabled]="!f.valid && f.dirty">Create</button>
+                <button type="button" class="btn btn-default" (click)="c('Close click')">Close</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ng-template>

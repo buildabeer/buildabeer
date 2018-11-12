@@ -1,0 +1,31 @@
+<div class="container">
+
+  <form class="form-signin" (ngSubmit)="onSignInSubmit()" #f="ngForm" >
+
+    <h2 class="form-signin-heading">Please sign in</h2>
+
+    <span class="text-danger">
+      <p *ngFor="let error of signInErrors"> {{ error }}</p>
+    </span>
+
+    <label for="inputEmail" class="sr-only">Email address</label>
+    <input type="email" name="email" id="inputEmail" [(ngModel)]="signInUser.email" class="form-control" placeholder="Email address" required autofocus>
+
+    <label for="password" class="sr-only">Password</label>
+    <input type="password" name="password" [(ngModel)]="signInUser.password" id="password" class="form-control" placeholder="Password" required>
+
+    <!-- <div class="checkbox">
+      <label>
+        <input type="checkbox" value="remember-me"> Remember me
+      </label>
+    </div> -->
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit" [disabled]="!f.valid">Sign in</button>
+    <div>
+      <a routerLink="../password_reset">Forgot password?</a>
+    </div>
+
+    <p>Don't have an account? <a routerLink="../register">Register.</a></p>
+  </form>
+
+</div>

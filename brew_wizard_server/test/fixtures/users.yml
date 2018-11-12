@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+admin:
+  email: 'test@example.com'
+  nickname: 'UOne'
+  name: 'User One'
+  encrypted_password: <%= User.new.send(:password_digest, 'superp4ss') %>
+  admin: true
+  uid: "test@example.com"
+
+joe:
+  email: 'unique@very.com'
+  nickname: 'unq'
+  name: 'Unique One'
+  encrypted_password: <%= User.new.send(:password_digest, 'superp4ss2') %>
+  admin: false
+  uid: 'unique@very.com'

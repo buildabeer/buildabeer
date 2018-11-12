@@ -1,0 +1,74 @@
+@import "../../../styles.scss";
+
+.underline {
+  border-bottom: 1px solid;
+}
+
+.float-right {
+  float: right;
+}
+
+.pad-bottom {
+  padding-bottom: 10px;
+}
+
+.pad-top {
+  padding-top: 10px;
+}
+
+.extra-pad-bottom {
+  padding-bottom: 20px;
+}
+
+.extra-pad-top {
+  padding-top: 20px;
+}
+
+.text-underline {
+  text-decoration: underline;
+}
+
+.runner-main {
+  min-height: 90vh;
+}
+
+.center {
+  text-align: center;
+}
+
+#clockdiv{
+  font-family: sans-serif;
+  color: #fff;
+  display: inline-block;
+  font-weight: 100;
+  text-align: center;
+  font-size: 30px;
+  padding: 5px;
+}
+
+#clockdiv > div{
+  padding: 10px;
+  border-radius: 3px;
+  background: $primary;
+  display: inline-block;
+}
+
+#clockdiv div > span{
+  padding: 15px;
+  border-radius: 3px;
+  background: $dark;
+  display: inline-block;
+}
+
+.smalltext{
+  padding-top: 5px;
+  font-size: 16px;
+}
+
+.light-color {
+  background-color: $light;
+}
+
+ul.unstyled {
+  list-style-type: none;
+}

@@ -1,0 +1,120 @@
+<button type="button" class="btn btn-primary float-right d-none d-md-block" *ngIf="(_authService.userSignedIn())" (click)="open(newMiscellaneous)">+ Add Miscellaneous</button>
+<button type="button" class="btn btn-primary float-right d-md-none" *ngIf="(_authService.userSignedIn())" (click)="open(newMiscellaneous)">+</button>
+
+<ng-template #newMiscellaneous let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">New Miscellaneous</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-8 offset-md-2">
+            <p *ngIf="!newMiscellaneousItem">
+            {{ errorMessage }}
+            </p>
+            <div class="container" *ngIf="newMiscellaneousItem">
+              <form #f="ngForm" (ngSubmit)="newSubmit(f.value)">
+                <div class="form-group" *ngIf="(_authService.isAdmin())">
+                  <label class="switch">
+                    <input type="checkbox" name="global" id="global" [(ngModel)]="newMiscellaneousItem.global">
+                    <span class="slider round"></span>
+                  </label>
+                  <label class="checkbox-label" for="global">Global</label>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-md-12">
+                    <label for="name">Name</label>
+                    <span class="text-danger" *ngIf="name.errors && name.errors.required && (name.dirty || name.touched)"> *required</span>
+                    <input type="text" class="form-control" id="name" name="name" required maxlength="40" [(ngModel)]="newMiscellaneousItem.name" #name="ngModel">
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-lg-6 col-12">
+                    <label for="use_for">Used For</label>
+                    <input type="text" class="form-control" id="use_for" name="use_for" maxlength="50" [(ngModel)]="newMiscellaneousItem.use_for" #use_for="ngModel">
+                  </div>
+
+                  <div class="form-group col-lg-6 col-12">
+                    <label for="misc_type">Type</label>
+                    <select class="form-control" [(ngModel)]="newMiscellaneousItem.miscellaneous_type" id="misc_type" name="misc_type">
+                      <option *ngFor="let m_type of misc_types" [ngValue]="m_type">{{ m_type }}</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-lg-3 col-6">
+                    <label for="amount">Amount</label>
+                    <span class="text-danger" *ngIf="amount.errors && (amount.dirty || amount.touched)">
+                      <span *ngIf="amount.errors.required"> *required</span>
+                      <span *ngIf="amount.errors.pattern"> *invalid input</span>
+                    </span>
+                    <input type="number" step="0.01" class="form-control" id="amount" name="amount" required min="0" max="99.99" pattern="^\d{0,2}(\.\d{0,2})?$" [(ngModel)]="newMiscellaneousItem.amount" #amount="ngModel">
+                  </div>
+
+                  <div class="form-group col-lg-3 col-6">
+                    <label for="amount_label">Units</label>
+                    <input type="text" class="form-control" id="amount_label" name="amount_label" maxlength="10" [(ngModel)]="newMiscellaneousItem.amount_label" #amount_label="ngModel">
+                  </div>
+
+                  <div class="form-group col-lg-6 col-12">
+                    <label for="batch_size">Amount for Batch Size (gallons)</label>
+                    <span class="text-danger" *ngIf="batch_size.errors && (batch_size.dirty || batch_size.touched)">
+                      <span *ngIf="batch_size.errors.required"> *required</span>
+                      <span *ngIf="batch_size.errors.pattern"> *invalid input</span>
+                    </span>
+                    <input type="number" step="0.01" class="form-control" id="batch_size" name="batch_size" required min="0" max="99.99" pattern="^\d{0,2}(\.\d{0,2})?$" [(ngModel)]="newMiscellaneousItem.batch_size" #batch_size="ngModel">
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-lg-6 col-12">
+                    <label for="time">Time Used</label>
+                    <span class="text-danger" *ngIf="time.errors && (time.dirty || time.touched)">
+                      <span *ngIf="time.errors.required"> *required</span>
+                      <span *ngIf="time.errors.pattern"> *invalid input</span>
+                    </span>
+                    <input type="number" step="0.01" class="form-control" id="time" name="time" required min="0" max="99.99" pattern="^\d{0,2}(\.\d{0,2})?$" [(ngModel)]="newMiscellaneousItem.time" #time="ngModel">
+                  </div>
+
+                  <div class="form-group col-lg-6 col-12">
+                    <label for="type">Time Label</label>
+                    <select class="form-control" [(ngModel)]="misc_time_label" id="type" name="type">
+                      <option [ngValue]="1">Minutes</option>
+                      <option [ngValue]="60">Hours</option>
+                      <option [ngValue]="60 * 24">Days</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group col-lg-6 col-12">
+                    <label for="usage">Usage</label>
+                    <select class="form-control" [(ngModel)]="newMiscellaneousItem.usage" id="usage" name="usage">
+                      <option *ngFor="let usage of misc_usages" [ngValue]="usage">{{ usage }}</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-md-12">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" id="description" name="description" maxlength="500" [(ngModel)]="newMiscellaneousItem.description"></textarea>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" [disabled]="!f.valid && f.dirty">Create</button>
+                <button type="button" class="btn btn-default" (click)="c('Close click')">Close</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ng-template>

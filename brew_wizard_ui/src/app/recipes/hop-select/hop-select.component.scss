@@ -1,0 +1,37 @@
+@import "../../../styles.scss";
+
+.pad-top {
+  padding-top: 5px;
+}
+
+.pad-bottom {
+  padding-bottom: 5px;
+}
+
+.sort-table {
+  cursor: pointer;
+}
+
+.hop-select {
+  background-color: $primary !important;
+  color: $white;
+}
+
+.hop-select:hover {
+  background-color: $primary !important;
+  opacity: .6;
+}
+
+.table-div {
+  height: 500px;
+  overflow: auto;
+}
+
+.dropdown-menu {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.small {
+  height: 8px;
+}

@@ -1,0 +1,122 @@
+
+
+
+<div class="card-header" *ngIf="malt">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-11 col-md-11 col-sm-10 col-xs-12">
+        <button type="button" class="btn btn-outline-primary expansion-button" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseItem" *ngIf="_router.url === '/malts'">
+          {{ !isCollapsed? "-" : "+" }}
+        </button>
+
+        {{ malt.name }}
+      </div>
+      <div class="col-lg-1 col-md-1 col-sm-1">
+        <p><i>{{ (malt.global ? "Global" : "Local") }}</i></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="collapse" id="collapseItem" [ngbCollapse]="isCollapsed">
+    <div class="card row">
+
+      <div class="col-12">
+
+        <table class="table table-sm table-striped d-none d-sm-block">
+          <tbody>
+            <tr>
+              <th>Origin</th>
+              <td>{{ malt.origin }}</td>
+              <th>Type</th>
+              <td>{{ malt_type }}</td>
+            </tr>
+            <tr>
+              <th>Potential Gravity</th>
+              <td>{{ .046 * malt.malt_yield / 100 + 1 | number:'.3' }}</td>
+              <th>% Yield</th>
+              <td>{{ malt.malt_yield }}%</td>
+            </tr>
+            <tr>
+              <th>Color</th>
+              <td>{{ malt.color }}</td>
+              <th>Max in Batch</th>
+              <td>{{ malt.max_percent }}%</td>
+            </tr>
+            <tr>
+              <th>Protein</th>
+              <td>{{ malt.protein }}</td>
+              <th>Diastatic Power</th>
+              <td>{{ malt.diastatic_power }}%</td>
+            </tr>
+            <tr>
+              <th>Must Mash</th>
+              <td>{{ malt.must_mash }}</td>
+              <th></th>
+              <td></td>
+            </tr>
+            <tr>
+              <th colspan="4">Description</th>
+            </tr>
+            <tr>
+              <td colspan="4" class="wrapped">{{ malt.description }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="table table-sm table-striped d-block d-sm-none">
+          <tbody>
+            <tr>
+              <th>Origin</th>
+              <td>{{ malt.origin }}</td>
+            </tr>
+            <tr>
+              <th>Type</th>
+              <td>{{ malt_type }}</td>
+            </tr>
+            <tr>
+              <th>Potential Gravity</th>
+              <td>{{ .046 * malt.malt_yield / 100 + 1 | number:'.3' }}</td>
+            </tr>
+            <tr>
+              <th>% Yield</th>
+              <td>{{ malt.malt_yield }}%</td>
+            </tr>
+            <tr>
+              <th>Color</th>
+              <td>{{ malt.color }}</td>
+            </tr>
+            <tr>
+              <th>Max in Batch</th>
+              <td>{{ malt.max_percent }}%</td>
+            </tr>
+            <tr>
+              <th>Protein</th>
+              <td>{{ malt.protein }}</td>
+            </tr>
+            <tr>
+              <th>Diastatic Power</th>
+              <td>{{ malt.diastatic_power }}%</td>
+            </tr>
+            <tr>
+              <th>Must Mash</th>
+              <td>{{ malt.must_mash }}</td>
+            </tr>
+            <tr>
+              <th colspan="2">Description</th>
+            </tr>
+            <tr>
+              <td colspan="2" class="wrapped">{{ malt.description }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="col-md-12">
+          <app-malt-edit *ngIf="(_authService.currentUserMatchOrGlobal(malt.user_id))" [originalMaltItem]="malt" (onMaltEdit)="editEvent($event)"></app-malt-edit>
+
+          <span *ngIf="(_authService.currentUserMatchOrGlobal(malt.user_id))"> |</span>
+          <button *ngIf="(_authService.currentUserMatchOrGlobal(malt.user_id))" class="btn btn-link" role="link" (click)="deleteCard()">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

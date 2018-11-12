@@ -1,0 +1,183 @@
+<div class="row text-center">
+  <div class="col-md-12">
+    <button class="btn btn-primary" (click)="openAddEvent(addEvent)">New Event</button>
+  </div>
+  <div class="col-md-4">
+    <div class="btn-group">
+      <div
+        class="btn btn-primary"
+        mwlCalendarPreviousView
+        [view]="view"
+        [(viewDate)]="viewDate"
+        (viewDateChange)="getEvents(); activeDayIsOpen = false ">
+        Previous
+      </div>
+      <div
+        class="btn btn-outline-secondary"
+        mwlCalendarToday
+        [(viewDate)]="viewDate" (viewDateChange)="getEvents();">
+        Today
+      </div>
+      <div
+        class="btn btn-primary"
+        mwlCalendarNextView
+        [view]="view"
+        [(viewDate)]="viewDate"
+        (viewDateChange)="getEvents(); activeDayIsOpen = false ">
+        Next
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+  </div>
+  <div class="col-md-4">
+    <div class="btn-group">
+      <div
+        class="btn btn-primary"
+        (click)="view = 'month'; getEvents()"
+        [class.active]="view === 'month'">
+        Month
+      </div>
+      <div
+        class="btn btn-primary"
+        (click)="view = 'week'; getEvents()"
+        [class.active]="view === 'week'">
+        Week
+      </div>
+      <div
+        class="btn btn-primary"
+        (click)="view = 'day'; getEvents()"
+        [class.active]="view === 'day'">
+        Day
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+<div [ngSwitch]="view">
+  <mwl-calendar-month-view
+    *ngSwitchCase="'month'"
+    [viewDate]="viewDate"
+    [events]="events"
+    [refresh]="refresh"
+    [activeDayIsOpen]="activeDayIsOpen"
+    (dayClicked)="dayClicked($event.day)"
+    (eventClicked)="clickEvent($event.event)"
+    (eventTimesChanged)="eventTimesChanged($event)">
+  </mwl-calendar-month-view>
+  <mwl-calendar-week-view
+    *ngSwitchCase="'week'"
+    [viewDate]="viewDate"
+    [events]="events"
+    [refresh]="refresh"
+    (eventClicked)="clickEvent($event.event)"
+    (eventTimesChanged)="eventTimesChanged($event)">
+  </mwl-calendar-week-view>
+  <mwl-calendar-day-view
+    *ngSwitchCase="'day'"
+    [viewDate]="viewDate"
+    [events]="events"
+    [refresh]="refresh"
+    (eventClicked)="clickEvent($event.event)"
+    (eventTimesChanged)="eventTimesChanged($event)">
+  </mwl-calendar-day-view>
+</div>
+
+<ng-template #modalContent let-close="close">
+  <div class="modal-header">
+    <h5 class="modal-title">{{ modalData.event.title }}</h5>
+    <button type="button" class="close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h6>Description:</h6>
+          <p>{{ modalData.event.meta['description'] }}</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <span><h6>Start:</h6>
+          <p>{{ modalData.event.calendar_start.toDateString() }}, {{ modalData.event.calendar_start.toLocaleTimeString() }}</p></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <h6>End:</h6>
+          <p>{{ modalData.event.calendar_end.toDateString() }}, {{ modalData.event.calendar_end.toLocaleTimeString() }}</p>
+        </div>
+      </div>
+      <div class="row">
+        <h6>Reminders:</h6>
+        <div class="col-md-12" *ngFor="let reminder of modalData.event.meta['calendar_reminders_attributes']">
+          <p>{{ getDateString(reminder.reminder_time) }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="close()">OK</button>
+  </div>
+</ng-template>
+
+<ng-template #addEvent let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">{{ newEvent.id === null ? 'Add' : 'Edit' }} Calendar Event</h4>
+    <button type="button" class="close" (click)="c('Close click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #f="ngForm" (ngSubmit)="newEvent.id === null ? createEvent(f.value) : editEvent(f.value)">
+      <div class="row">
+        <div class="col-12">
+          <label for="name">Name</label>
+          <input type="text" class="form-control" id="name" name="name" required maxlength="50" [(ngModel)]="newEvent.name" #name="ngModel">
+        </div>
+        <div class="col-12">
+          <label for="description">Description</label>
+          <textarea class="form-control" id="description" name="description" maxlength="500" [(ngModel)]="newEvent.description" #description="ngModel"></textarea>
+        </div>
+        <div class="col-4">
+          <label for="calendar_start">Start</label>
+          <input type="datetime-local" class="form-control" id="calendar_start" name="calendar_start" required [(ngModel)]="newEvent.calendar_start" #calendar_start="ngModel">
+        </div>
+        <div class="col-4">
+          <label for="calendar_end">End</label>
+          <input type="datetime-local" class="form-control" id="calendar_end" name="calendar_end" [(ngModel)]="newEvent.calendar_end" #calendar_end="ngModel">
+        </div>
+        <div class="col-4">
+          <label for="color">Color</label>
+          <input type="color" class="form-control" id="color" name="color" required [(ngModel)]="newEvent.color" #color="ngModel">
+        </div>
+      </div>
+      <div class="row pad-top">
+        <div class="col-12">
+          <p for="color">Reminders</p>
+        </div>
+        <div class="col-12">
+          <button type="button" class="btn btn-primary" (click)="addReminder()">Add</button>
+        </div>
+      </div>
+      <div class="row pad-top" *ngFor="let reminder of newEvent.calendar_reminders_attributes; let i = index ">
+        <div class="col-1">
+          <button (click)="clearReminder(reminder)"><i class="fa fa-fw fa-times"></i></button>
+        </div>
+        <div class="col-11">
+          <input type="datetime-local" class="form-control" [(ngModel)]="newEvent.calendar_reminders_attributes[i].reminder_time" [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+      <br><br>
+      <div class="row pad-top">
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary" [disabled]="!f.valid">Save</button>
+          <button type="button" class="btn btn-default" (click)="c('Close click')">Close</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>

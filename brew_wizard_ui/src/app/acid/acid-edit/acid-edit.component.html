@@ -1,0 +1,79 @@
+<button class="btn btn-link" role="link" (click)="open(editAcid)">Edit</button>
+
+
+<ng-template #editAcid let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Edit Acid</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-8 offset-md-2">
+            <p *ngIf="!editAcid">
+            {{ errorMessage }}
+            </p>
+            <div class="container" *ngIf="editAcid">
+              <form #f="ngForm" (ngSubmit)="editSubmit(f.value)">
+                <div class="row">
+                  <div class="form-group col-12">
+                    <label for="name">Name</label>
+                    <span class="text-danger" *ngIf="name.errors && name.errors.required && (name.dirty || name.touched)"> *required</span>
+                    <input type="text" class="form-control" id="name" name="name" required maxlength="40" [(ngModel)]="editAcid.name" #name="ngModel">
+                  </div>
+
+                  <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+                    <label for="strength">Acid Strength</label>
+                    <span class="text-danger" *ngIf="strength.errors && (strength.dirty || strength.touched)">
+                      <span *ngIf="strength.errors.required"> *required</span>
+                    </span>
+                    <input type="number" step="1" class="form-control" id="strength" name="strength" required min="0" max="100" [(ngModel)]="editAcid.strength" #strength="ngModel">
+                  </div>
+
+                  <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+                    <label for="molecular_weight">Molecular Weight</label>
+                    <span class="text-danger" *ngIf="molecular_weight.errors && (molecular_weight.dirty || molecular_weight.touched)">
+                      <span *ngIf="molecular_weight.errors.required"> *required</span>
+                      <span *ngIf="molecular_weight.errors.pattern"> *invalid input</span>
+                    </span>
+                    <input type="number" class="form-control" id="molecular_weight" name="molecular_weight" required min="0" max="999.999" step="0.001" pattern="^\d{0,3}(\.\d{1,3})?$" [(ngModel)]="newAcidItem.molecular_weight" #molecular_weight="ngModel">
+                  </div>
+
+                  <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+                    <label for="density">Density</label>
+                    <span class="text-danger" *ngIf="density.errors && (density.dirty || density.touched)">
+                      <span *ngIf="density.errors.required"> *required</span>
+                      <span *ngIf="density.errors.pattern"> *invalid input</span>
+                    </span>
+                    <input type="number" class="form-control" id="density" name="density" required min="0" max="999.999" step="0.001" pattern="^\d{0,3}(\.\d{1,3})?$" [(ngModel)]="newAcidItem.density" #density="ngModel">
+                  </div>
+
+                  <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
+                    <label for="quantity_for_normal">Quantity to product 1L of 1N Solution</label>
+                    <span class="text-danger" *ngIf="quantity_for_normal.errors && (quantity_for_normal.dirty || quantity_for_normal.touched)">
+                      <span *ngIf="quantity_for_normal.errors.required"> *required</span>
+                      <span *ngIf="quantity_for_normal.errors.pattern"> *invalid input</span>
+                    </span>
+                    <input type="number" class="form-control" id="quantity_for_normal" name="quantity_for_normal" required min="0" max="999.9" step="0.1" pattern="^\d{0,3}(\.\d)?$" [(ngModel)]="editAcid.quantity_for_normal" #quantity_for_normal="ngModel">
+                  </div>
+
+                  <div class="form-group col-12">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" id="description" name="description" maxlength="500" [(ngModel)]="editAcid.description"></textarea>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" [disabled]="!f.valid && f.dirty">Update</button>
+                <button type="button" class="btn btn-default" (click)="c('Close click')">Close</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ng-template>
