@@ -11,11 +11,51 @@ BuildA.Beer is written using Ruby on Rails and Angular2+, published through Hero
 Installation
 1. Create an empty folder named 'opensource', navigate to it
 2. Clone the repo though 'git clone https://github.com/buildabeer/buildabeer.git'
-3. More instruction is certainly needed here, however my computer is in the process of being rebuilt and refuses to let me go through the steps... Sorry!
-4. Overall: You will have to install the latest ruby and rails, alone w/ the angular 5.
-5. Then you will have to run through bundle updates on the rails server and angular front end to pull the latest gems/packages.
-6. If all of that goes well, you can run 'rails s' to start the rails server and 'ng s' to start the angular front end.
-7. The front end will run on localhost:4200, the rails server will run on localhost:3000
+3. Pick you favorite editor, personally I use sublime text https://www.sublimetext.com.
+Sublime has a lot of plugin packages you can install, the more important ones are:
+Rails: sublimelinter, sublimelinter-ruby, sublimelinter-rubocop
+Angular: typescript, sublime-tslinter
+
+More options:
+Generic: https://www.shopify.com/partners/blog/sublime-text-plugins-2018
+Rails: https://mattbrictson.com/sublime-text-3-recommendations
+Angular: https://www.sitepoint.com/top-angular-plugins-sublime-text/
+
+Sublime has a lot of optional plugins, here is a sample of useful ones.
+https://www.shopify.com/partners/blog/sublime-text-plugins-2018
+
+4. Install git
+https://git-scm.com/
+sudo apt-get install git
+5. Install npm (angular side)
+sudo apt-get install npm
+sudo apt install ng-common
+6. Install angular cli
+npm install -g @angular/cli
+7. Install npm
+cd brew_wizard_ui
+npm install
+8. Make sure server starts (let us know if any issues arrise)
+ng s
+access at localhost:4200 (remember, backend not running yet)
+9. Install rvm (rails side)
+https://rvm.io/rvm/install
+Ubuntu: https://github.com/rvm/ubuntu_rvm
+10. Install ruby
+rvm install ruby-2.4.1
+11. Install libs
+sudo apt install libpq-dev
+12. Install gems
+cd brew_wizard_server
+bundle install
+13. Setup DB
+rake db:create
+rake db:migrate
+rake db:seed
+14. Make sure server starts (let us know if any issues arrise)
+rails s
+access at localhost:3000
+
 
 Contributing
 BuildA.Beer is built by the community for the community. We welcome contribution from everyone, especially new contributors.
