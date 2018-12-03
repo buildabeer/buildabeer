@@ -10,7 +10,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class RegisterComponent implements OnInit {
 
   signUpUser = {
-    email: '',
+    login: '',
     nickname: '',
     password: '',
     passwordConfirmation: ''

@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
 
   signInUser = {
-    email: '',
+    login: '',
     password: ''
   }
 
@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
       },
       err => {
         this.signInUser = {
-          email: '',
+          login: '',
           password: ''
         }
         this.signInErrors = err.json().errors;

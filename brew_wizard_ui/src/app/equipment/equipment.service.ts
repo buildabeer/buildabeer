@@ -4,36 +4,37 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
-import { Angular2TokenService } from 'angular2-token';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Response } from '@angular/http';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class EquipmentService {
 
-  constructor(private _angularTokenService: Angular2TokenService) { }
+  constructor(private http: HttpClient) { }
 
   getEquipments(): Observable<IEquipment[]> {
-    return this._angularTokenService.get("equipment")
-      .map((response: Response) => <IEquipment[]>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/equipment`)
+      .map((response: IEquipment[]) => response)
       .catch(this.handleError);
   }
 
   getEquipment(equipmentId: number): Observable<IEquipment> {
-    return this._angularTokenService.get("equipment/" + equipmentId)
-      .map((response: Response) => <IEquipment>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/equipment/` + equipmentId)
+      .map((response: IEquipment) => response)
       .catch(this.handleError);
   }
 
   createEquipment(equipment: IEquipment): any {
-    return this._angularTokenService.post("equipment/", {equipment})
+    return this.http.post("equipment/", {equipment})
   }
 
   editEquipment(equipmentId: number, equipment: IEquipment): any {
-    return this._angularTokenService.put("equipment/" + equipmentId, {equipment})
+    return this.http.put("equipment/" + equipmentId, {equipment})
   }
 
   deleteEquipment(equipmentId: number): any {
-    return this._angularTokenService.delete("equipment/" + equipmentId)
+    return this.http.delete("equipment/" + equipmentId)
   }
 
   handleError(error: Response) {

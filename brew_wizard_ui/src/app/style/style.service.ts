@@ -4,42 +4,43 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
-import { Angular2TokenService } from 'angular2-token';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Response } from '@angular/http';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class StyleService {
 
-  constructor(private _angularTokenService: Angular2TokenService) { }
+  constructor(private http: HttpClient) { }
 
   getStyles(): Observable<IStyle[]> {
-    return this._angularTokenService.get("styles")
-      .map((response: Response) => <IStyle[]>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/styles`)
+      .map((response: IStyle[]) => response)
       .catch(this.handleError);
   }
 
   getWaterProfiles(): Observable<any[]> {
-    return this._angularTokenService.get("water_profiles")
-      .map((response: Response) => <any[]>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/water_profiles`)
+      .map((response: any[]) => response)
       .catch(this.handleError);
   }
 
   getStyleById(styleId: number): Observable<IStyle> {
-    return this._angularTokenService.get("styles/" + styleId)
-      .map((response: Response) => <IStyle>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/styles/` + styleId)
+      .map((response: IStyle) => response)
       .catch(this.handleError);
   }
 
   createStyle(style: IStyle): any {
-    return this._angularTokenService.post("styles/", {style})
+    return this.http.post("styles/", {style})
   }
 
   editStyle(styleId: number, style: IStyle): any {
-    return this._angularTokenService.put("styles/" + styleId, {style})
+    return this.http.put("styles/" + styleId, {style})
   }
 
   deleteStyle(styleId: number): any {
-    return this._angularTokenService.delete("styles/" + styleId)
+    return this.http.delete("styles/" + styleId)
   }
 
   handleError(error: Response) {

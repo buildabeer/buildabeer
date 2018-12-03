@@ -3926,12 +3926,12 @@ export class DesignerService {
 
   importXml(xml_file: File): void {
     //upload file
-    let fileReader = new FileReader();
+    const fileReader = new FileReader();
     fileReader.onloadend = (e) => {
 
       //parse xml
       let parser = new DOMParser();
-      let xml_output = parser.parseFromString(fileReader.result, "text/xml");
+      let xml_output = parser.parseFromString(<string>fileReader.result, "text/xml");
       var recipe = xml_output.getElementsByTagName('RECIPE')[0]
 
       if(recipe === undefined) {
@@ -3952,7 +3952,7 @@ export class DesignerService {
 
       //parse xml
       let parser = new DOMParser();
-      let xml_output = parser.parseFromString(fileReader.result, "text/xml");
+      let xml_output = parser.parseFromString(<string>fileReader.result, "text/xml");
       var recipes = xml_output.getElementsByTagName('RECIPE')
 
       if(recipes.length === 0) {

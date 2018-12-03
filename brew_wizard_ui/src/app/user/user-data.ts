@@ -1,4 +1,4 @@
-import { UserData } from 'angular2-token'
+import { UserData } from 'angular-token'
 
 export interface IUserData extends UserData {
   admin: boolean;

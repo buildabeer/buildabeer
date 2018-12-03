@@ -4,17 +4,18 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
-import { Angular2TokenService } from 'angular2-token';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Response } from '@angular/http';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class RecipeService {
 
-  constructor(private _angularTokenService: Angular2TokenService) { }
+  constructor(private http: HttpClient) { }
 
   // getRecipes(): any {
-  //   return this._angularTokenService.get("recipes")
-  //     .map((response: Response) => response.json())
+  //   return this.http.get(`${environment.token_auth_config.apiBase}/recipes`)
+  //     .map((response: any) => response)
   //     .catch(this.handleError);
   // }
 
@@ -37,27 +38,27 @@ export class RecipeService {
     if(query_string_array.length > 0) {
       query_string = '?' + query_string_array.join("&")
     }
-    return this._angularTokenService.get("recipes" + query_string)
-      .map((response: Response) => response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/recipes` + query_string)
+      .map((response: any) => response)
       .catch(this.handleError);
   }
 
   getRecipe(recipeId: number): Observable<any> {
-    return this._angularTokenService.get("recipes/" + recipeId)
-      .map((response: Response) => response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/recipes/` + recipeId)
+      .map((response: any) => response)
       .catch(this.handleError);
   }
 
   createRecipe(recipe: any): any {
-    return this._angularTokenService.post("recipes/", {recipe})
+    return this.http.post("recipes/", {recipe})
   }
 
   editRecipe(recipe: any): any {
-    return this._angularTokenService.put("recipes/" + recipe.id, {recipe})
+    return this.http.put("recipes/" + recipe.id, {recipe})
   }
 
   deleteRecipe(recipeId: number): any {
-    return this._angularTokenService.delete("recipes/" + recipeId)
+    return this.http.delete("recipes/" + recipeId)
   }
 
   handleError(error: Response) {
@@ -66,8 +67,8 @@ export class RecipeService {
   }
 
   getRecipeCount(): Observable<any> {
-    return this._angularTokenService.get("recipes/count")
-      .map((response: Response) => response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/recipes/count`)
+      .map((response: any) => response)
       .catch(this.handleError);
   }
 }

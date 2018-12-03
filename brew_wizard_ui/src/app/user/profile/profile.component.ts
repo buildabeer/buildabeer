@@ -1,5 +1,5 @@
 import { UserService } from '../user.service';
-import { Angular2TokenService } from 'angular2-token'
+import { AngularTokenService } from 'angular-token'
 import { AuthService } from '../auth.service'
 import { Component, OnInit } from '@angular/core';
 import { RecipeService } from '../../recipes/recipe.service';
@@ -33,7 +33,7 @@ export class ProfileComponent implements OnInit {
     contact: (<IUserData>this._authTokenService.currentUserData).contact
   }
 
-  constructor(private _userService: UserService, public _authTokenService: Angular2TokenService,
+  constructor(private _userService: UserService, public _authTokenService: AngularTokenService,
     private _recipeService: RecipeService, private _authService: AuthService) { }
 
   ngOnInit() {

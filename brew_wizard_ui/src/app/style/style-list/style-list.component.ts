@@ -41,7 +41,7 @@ export class StyleListComponent implements OnInit {
       })
       .subscribe(styleData => {
           this.styles = styleData;
-          this.displayedStyles = styleData;
+          this.displayedStyles = styleData;          
           var found = [];
 
           styleData.forEach((style) => {
@@ -79,7 +79,6 @@ export class StyleListComponent implements OnInit {
     }
 
     this.displayedStyles = this.styles;
-
     if(this.selectedStyleCountDropdown !== "All") {
       this.displayedStyles =  this.displayedStyles.filter(m => (m.global &&
         this.selectedStyleCountDropdown === "Global") || (!m.global &&

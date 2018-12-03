@@ -1,5 +1,5 @@
 import { AuthService } from '../../user/auth.service';
-import { Angular2TokenService } from 'angular2-token'
+import { AngularTokenService } from 'angular-token'
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { Title } from '@angular/platform-browser';
@@ -12,7 +12,7 @@ import { Title } from '@angular/platform-browser';
 export class AppHeaderComponent implements OnInit {
 
   headerSignIn = {
-    email: '',
+    login: '',
     password: ''
   }
   navbarCollapsed: boolean;
@@ -20,7 +20,7 @@ export class AppHeaderComponent implements OnInit {
   signInErrors: string[] = [];
 
   constructor(private _title: Title, public _authService: AuthService, private _router: Router,
-    public _authTokenService: Angular2TokenService) {
+    public _authTokenService: AngularTokenService) {
     this._title.setTitle('My Homebrew Recipes');
   }
 
@@ -36,17 +36,17 @@ export class AppHeaderComponent implements OnInit {
       .subscribe((res) => {
         if (res.status == 200) {
           this.headerSignIn = {
-            email: '',
+            login: '',
             password: ''
           }
-          if (this._router.url !== '/recipes/new') {
-            window.location.reload();
-          }
+          // if (this._router.url !== '/recipes/new') {
+          //   window.location.reload();
+          // }
         }
       },
       err => {
         this.headerSignIn = {
-          email: '',
+          login: '',
           password: ''
         }
         this.signInErrors = err.json().errors;

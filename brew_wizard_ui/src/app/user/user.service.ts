@@ -3,65 +3,66 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
-import { Angular2TokenService } from 'angular2-token';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Response } from '@angular/http';
 import { IMeasurementSetting } from "./measurement-setting";
 import { ICalendarEvent } from "./calendar-event";
 import { IHistory } from "./history";
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class UserService {
 
-  constructor(private _authService: Angular2TokenService) { }
+  constructor(private http: HttpClient) { }
 
   getSettings(): Observable<IMeasurementSetting> {
-    return this._authService.get("measurement_settings/")
-      .map((response: Response) => <IMeasurementSetting>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/measurement_settings/`)
+      .map((response: IMeasurementSetting) => response)
       .catch(this.handleError);
   }
 
   editSettings(measurement_setting: IMeasurementSetting): any {
-    return this._authService.put("measurement_settings/", {measurement_setting})
+    return this.http.put("measurement_settings/", {measurement_setting})
   }
 
   getEvents(start: Date, end: Date): Observable<any[]> {
-    return this._authService.get("calendar_events?calendar_start=" + start.toString()+"&calendar_end=" + end.toString())
-      .map((response: Response) => <any[]>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/calendar_events?calendar_start=" + start.toString()+"&calendar_end=` + end.toString())
+      .map((response: any[]) => response)
       .catch(this.handleError);
   }
 
   createEvent(calendar_event: ICalendarEvent): any {
-    return this._authService.post("calendar_events/", { calendar_event });
+    return this.http.post("calendar_events/", { calendar_event });
   }
 
   createEvents(calendar_events: ICalendarEvent[]): any {
-    return this._authService.post("calendar_events/multi_create/", { calendar_events });
+    return this.http.post("calendar_events/multi_create/", { calendar_events });
   }
 
   editEvent(calendar_event: ICalendarEvent): any {
-    return this._authService.put("calendar_events/" + calendar_event.id, { calendar_event })
+    return this.http.put("calendar_events/" + calendar_event.id, { calendar_event })
   }
 
   deleteEvent(eventId: number): any {
-    return this._authService.delete("calendar_events/" + eventId)
+    return this.http.delete("calendar_events/" + eventId)
   }
 
   getHistory(): Observable<IHistory[]> {
-    return this._authService.get("histories")
-      .map((response: Response) => <any[]>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/histories`)
+      .map((response: any[]) => response)
       .catch(this.handleError);
   }
 
   createHistory(history: IHistory): any {
-    return this._authService.post("histories/", { history });
+    return this.http.post("histories/", { history });
   }
 
   editHistory(history: IHistory): any {
-    return this._authService.put("histories/" + history.id, { history })
+    return this.http.put("histories/" + history.id, { history })
   }
 
   deleteHistory(historyId: number): any {
-    return this._authService.delete("histories/" + historyId)
+    return this.http.delete("histories/" + historyId)
   }
 
   handleError(error: Response) {
