@@ -10,6 +10,35 @@ User.create!([
   { email: 'admin@example.com', nickname: 'UOne', name: 'User One', password: "superp4ss", admin: true, confirmed_at: DateTime.now },
   { email: 'user@example.com', nickname: 'UTwo', name: 'User One', password: "superp4ss", admin: false, confirmed_at: DateTime.now }
 ])
+Acid.create!([
+  {name: "Hydrochloric 10%", strength: 10, quantity_for_normal: 348.0, molecular_weight: 36.46, density: 1.048, description: "Adds chloride to the water, but has no effect on hardness."},
+  {name: "Hydrochloric 37%", strength: 37, quantity_for_normal: 83.5, molecular_weight: 36.46, density: 1.18, description: "Adds chloride to the water, but has no effect on hardness."},
+  {name: "Lactic", strength: 88, quantity_for_normal: 84.7, molecular_weight: 90.09, density: 1.209, description: "Adds lactate to the water, which may affect the flavor. No effect on hardness."},
+  {name: "Sulfuric 10%", strength: 10, quantity_for_normal: 458.3, molecular_weight: 98.079, density: 1.07, description: "Adds sulfate to the water, but has no effect on the hardness."},
+  {name: "Sulfuric 98%", strength: 98, quantity_for_normal: 27.2, molecular_weight: 98.079, density: 1.84, description: "Adds sulfate to the water, but has no effect on the hardness."},
+  {name: "Phosphoric 10%", strength: 10, quantity_for_normal: 935.0, molecular_weight: 97.994, density: 1.05, description: "Adds phosphate to the water with minimal effect on flavor. It can reduce calcium in the water depending on the final pH."},
+  {name: "Phosphoric 85%", strength: 85, quantity_for_normal: 68.0, molecular_weight: 97.994, density: 1.69, description: "Adds phosphate to the water with minimal effect on flavor. It can reduce calcium in the water depending on the final pH."}
+])
+CalendarEvent.create!([
+  {user_id: 1, name: "Brown IPA", description: "Do stuff w/ brown ipa", calendar_start: "2018-07-27 13:30:00", calendar_end: "2018-07-27 14:00:00", color: "#ad2121"},
+  {user_id: 1, name: "Brown IPA 2", description: "wtf brownie!", calendar_start: "2018-07-27 13:20:00", calendar_end: "2018-07-27 13:30:00", color: "#ad2121"},
+  {user_id: 1, name: "test reminder", description: "This is to test the email reminder\n", calendar_start: "2018-07-27 20:30:31", calendar_end: "2018-07-27 20:39:25", color: "#ad2121"},
+  {user_id: 1, name: "Miscellaneous addition to  brewed on 2018-08-13", description: "For bottling, add 6.5 oz of Apricot Extract for 5 Minutes", calendar_start: "2018-08-27 11:59:02", calendar_end: "2018-08-27 11:59:02", color: "#D84d38"},
+  {user_id: 1, name: "Miscellaneous addition to  brewed on 2018-08-13", description: "In secondary, add 0.6 tsp of Amylase Enzyme for 3 Days", calendar_start: "2018-08-13 11:59:02", calendar_end: "2018-08-16 11:59:02", color: "#D84d38"},
+  {user_id: 1, name: "Primary fermentation for  brewed on 2018-08-13", description: "Ferment for 14 days at 50&deg;F.", calendar_start: "2018-08-13 11:59:02", calendar_end: "2018-08-27 11:59:02", color: "#D84d38"},
+  {user_id: 1, name: "Miscellaneous addition to  brewed on 2018-08-13", description: "In secondary, add 0.3 oz of Clearfine for 1 Days", calendar_start: "2018-08-27 11:59:02", calendar_end: "2018-08-28 11:59:02", color: "#D84d38"},
+  {user_id: 1, name: "Miscellaneous addition to  brewed on 2018-08-13", description: "In secondary, add 0.6 tsp of Amylase Enzyme for 3 Days", calendar_start: "2018-08-13 11:59:18", calendar_end: "2018-08-16 11:59:18", color: "#D84d38"},
+  {user_id: 1, name: "Miscellaneous addition to  brewed on 2018-08-13", description: "For bottling, add 6.5 oz of Apricot Extract for 5 Minutes", calendar_start: "2018-08-27 11:59:18", calendar_end: "2018-08-27 11:59:18", color: "#D84d38"},
+  {user_id: 1, name: "Primary fermentation for  brewed on 2018-08-13", description: "Ferment for 14 days at 50&deg;F.", calendar_start: "2018-08-13 11:59:18", calendar_end: "2018-08-27 11:59:18", color: "#D84d38"},
+  {user_id: 1, name: "Miscellaneous addition to  brewed on 2018-08-13", description: "In secondary, add 0.3 oz of Clearfine for 1 Days", calendar_start: "2018-08-27 11:59:18", calendar_end: "2018-08-28 11:59:18", color: "#D84d38"},
+  {user_id: 1, name: "awefawef", description: "wef", calendar_start: "2018-08-13 22:27:30", calendar_end: "2018-08-13 22:36:07", color: "#ad2121"},
+  {user_id: 1, name: "awef", description: "dszf", calendar_start: "2018-08-13 22:27:42", calendar_end: "2018-08-13 22:42:30", color: "#ad2121"},
+  {user_id: 1, name: "Primary fermentation for Extra Witty - Copy brewed on 2018-09-03", description: "Ferment for 14 days at 72&deg;F.", calendar_start: "2018-09-03 23:01:07", calendar_end: "2018-09-17 23:01:07", color: "#D84d38"},
+  {user_id: 1, name: "Primary fermentation for Extra Witty brewed on 2018-09-13", description: "Ferment for 14 days at 72&deg;F.", calendar_start: "2018-09-13 21:54:52", calendar_end: "2018-09-27 21:54:52", color: "#D84d38"},
+  {user_id: 1, name: "Primary fermentation for American IPA brewed on 2018-10-05", description: "Ferment for 14 days at 70&deg;F.", calendar_start: "2018-10-05 10:24:55", calendar_end: "2018-10-19 10:24:55", color: "#D84d38"},
+  {user_id: 1, name: "Primary fermentation for American IPA brewed on 2018-10-05", description: "Ferment for 14 days at 70&deg;F.", calendar_start: "2018-10-05 23:30:10", calendar_end: "2018-10-19 23:30:10", color: "#D84d38"},
+  {user_id: 1, name: "Primary fermentation for American IPA brewed on 2018-10-05", description: "Ferment for 14 days at 70&deg;F.", calendar_start: "2018-10-05 23:34:10", calendar_end: "2018-10-19 23:34:10", color: "#D84d38"},
+])
 CalendarReminder.create!([
   {calendar_event_id: 1, reminder_time: "2018-07-27 13:45:00", sent: false},
   {calendar_event_id: 1, reminder_time: "2018-07-27 13:23:00", sent: false},
@@ -30,41 +59,6 @@ CalendarReminder.create!([
   {calendar_event_id: 12, reminder_time: "2018-08-28 11:59:18", sent: true},
   {calendar_event_id: 15, reminder_time: "2018-09-17 23:01:07", sent: false},
   {calendar_event_id: 16, reminder_time: "2018-09-27 21:54:52", sent: false},
-  {calendar_event_id: 18, reminder_time: "2018-10-06 00:04:21", sent: true},
-  {calendar_event_id: 19, reminder_time: "2018-10-06 12:07:21", sent: true},
-  {calendar_event_id: 17, reminder_time: "2018-10-19 10:24:55", sent: true},
-  {calendar_event_id: 20, reminder_time: "2018-10-20 19:41:52", sent: true}
-])
-Acid.create!([
-  {name: "Hydrochloric 10%", strength: 10, quantity_for_normal: 348.0, molecular_weight: 36.46, density: 1.048, description: "Adds chloride to the water, but has no effect on hardness."},
-  {name: "Hydrochloric 37%", strength: 37, quantity_for_normal: 83.5, molecular_weight: 36.46, density: 1.18, description: "Adds chloride to the water, but has no effect on hardness."},
-  {name: "Lactic", strength: 88, quantity_for_normal: 84.7, molecular_weight: 90.09, density: 1.209, description: "Adds lactate to the water, which may affect the flavor. No effect on hardness."},
-  {name: "Sulfuric 10%", strength: 10, quantity_for_normal: 458.3, molecular_weight: 98.079, density: 1.07, description: "Adds sulfate to the water, but has no effect on the hardness."},
-  {name: "Sulfuric 98%", strength: 98, quantity_for_normal: 27.2, molecular_weight: 98.079, density: 1.84, description: "Adds sulfate to the water, but has no effect on the hardness."},
-  {name: "Phosphoric 10%", strength: 10, quantity_for_normal: 935.0, molecular_weight: 97.994, density: 1.05, description: "Adds phosphate to the water with minimal effect on flavor. It can reduce calcium in the water depending on the final pH."},
-  {name: "Phosphoric 85%", strength: 85, quantity_for_normal: 68.0, molecular_weight: 97.994, density: 1.69, description: "Adds phosphate to the water with minimal effect on flavor. It can reduce calcium in the water depending on the final pH."}
-])
-CalendarEvent.create!([
-  {user_id: 53, name: "test", description: "This is just to test calendar events!", calendar_start: "2018-07-27 13:50:00", calendar_end: "2018-07-27 13:55:00", color: "#ad2121"},
-  {user_id: 1, name: "Brown IPA", description: "Do stuff w/ brown ipa", calendar_start: "2018-07-27 13:30:00", calendar_end: "2018-07-27 14:00:00", color: "#ad2121"},
-  {user_id: 1, name: "Brown IPA 2", description: "wtf brownie!", calendar_start: "2018-07-27 13:20:00", calendar_end: "2018-07-27 13:30:00", color: "#ad2121"},
-  {user_id: 1, name: "test reminder", description: "This is to test the email reminder\n", calendar_start: "2018-07-27 20:30:31", calendar_end: "2018-07-27 20:39:25", color: "#ad2121"},
-  {user_id: 1, name: "Miscellaneous addition to  brewed on 2018-08-13", description: "For bottling, add 6.5 oz of Apricot Extract for 5 Minutes", calendar_start: "2018-08-27 11:59:02", calendar_end: "2018-08-27 11:59:02", color: "#D84d38"},
-  {user_id: 1, name: "Miscellaneous addition to  brewed on 2018-08-13", description: "In secondary, add 0.6 tsp of Amylase Enzyme for 3 Days", calendar_start: "2018-08-13 11:59:02", calendar_end: "2018-08-16 11:59:02", color: "#D84d38"},
-  {user_id: 1, name: "Primary fermentation for  brewed on 2018-08-13", description: "Ferment for 14 days at 50&deg;F.", calendar_start: "2018-08-13 11:59:02", calendar_end: "2018-08-27 11:59:02", color: "#D84d38"},
-  {user_id: 1, name: "Miscellaneous addition to  brewed on 2018-08-13", description: "In secondary, add 0.3 oz of Clearfine for 1 Days", calendar_start: "2018-08-27 11:59:02", calendar_end: "2018-08-28 11:59:02", color: "#D84d38"},
-  {user_id: 1, name: "Miscellaneous addition to  brewed on 2018-08-13", description: "In secondary, add 0.6 tsp of Amylase Enzyme for 3 Days", calendar_start: "2018-08-13 11:59:18", calendar_end: "2018-08-16 11:59:18", color: "#D84d38"},
-  {user_id: 1, name: "Miscellaneous addition to  brewed on 2018-08-13", description: "For bottling, add 6.5 oz of Apricot Extract for 5 Minutes", calendar_start: "2018-08-27 11:59:18", calendar_end: "2018-08-27 11:59:18", color: "#D84d38"},
-  {user_id: 1, name: "Primary fermentation for  brewed on 2018-08-13", description: "Ferment for 14 days at 50&deg;F.", calendar_start: "2018-08-13 11:59:18", calendar_end: "2018-08-27 11:59:18", color: "#D84d38"},
-  {user_id: 1, name: "Miscellaneous addition to  brewed on 2018-08-13", description: "In secondary, add 0.3 oz of Clearfine for 1 Days", calendar_start: "2018-08-27 11:59:18", calendar_end: "2018-08-28 11:59:18", color: "#D84d38"},
-  {user_id: 1, name: "awefawef", description: "wef", calendar_start: "2018-08-13 22:27:30", calendar_end: "2018-08-13 22:36:07", color: "#ad2121"},
-  {user_id: 1, name: "awef", description: "dszf", calendar_start: "2018-08-13 22:27:42", calendar_end: "2018-08-13 22:42:30", color: "#ad2121"},
-  {user_id: 1, name: "Primary fermentation for Extra Witty - Copy brewed on 2018-09-03", description: "Ferment for 14 days at 72&deg;F.", calendar_start: "2018-09-03 23:01:07", calendar_end: "2018-09-17 23:01:07", color: "#D84d38"},
-  {user_id: 1, name: "Primary fermentation for Extra Witty brewed on 2018-09-13", description: "Ferment for 14 days at 72&deg;F.", calendar_start: "2018-09-13 21:54:52", calendar_end: "2018-09-27 21:54:52", color: "#D84d38"},
-  {user_id: 1, name: "Primary fermentation for American IPA brewed on 2018-10-05", description: "Ferment for 14 days at 70&deg;F.", calendar_start: "2018-10-05 10:24:55", calendar_end: "2018-10-19 10:24:55", color: "#D84d38"},
-  {user_id: 1, name: "Primary fermentation for American IPA brewed on 2018-10-05", description: "Ferment for 14 days at 70&deg;F.", calendar_start: "2018-10-05 23:30:10", calendar_end: "2018-10-19 23:30:10", color: "#D84d38"},
-  {user_id: 1, name: "Primary fermentation for American IPA brewed on 2018-10-05", description: "Ferment for 14 days at 70&deg;F.", calendar_start: "2018-10-05 23:34:10", calendar_end: "2018-10-19 23:34:10", color: "#D84d38"},
-  {user_id: 55, name: "Primary fermentation for Cocky Bastard (Arrogant Clone) brewed on 2018-10-06", description: "Ferment for 14 days at 50&deg;F.", calendar_start: "2018-10-06 19:41:52", calendar_end: "2018-10-20 19:41:52", color: "#D84d38"}
 ])
 Contact.create!([
   {email: "jdwyant8@gmail.com", phone: "3333", name: "jdwyant8@gmail.com", title: "jdwyant8@gmail.com", message: "Soup.", user_id: nil},
