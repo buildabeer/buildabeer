@@ -4,52 +4,52 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
-import { Angular2TokenService } from 'angular2-token';
+import { HttpClient } from '@angular/common/http';
 import { Response } from '@angular/http';
 
 @Injectable()
 export class MaltService {
 
-  constructor(private _angularTokenService: Angular2TokenService) { }
+  constructor(private http: HttpClient) { }
 
   getMalts(): Observable<IMalt[]> {
-    return this._angularTokenService.get("malts")
+    return this.http.get("malts")
       .map((response: Response) => <IMalt[]>response.json())
       .catch(this.handleError);
   }
 
   getMalt(maltId: number): Observable<IMalt> {
-    return this._angularTokenService.get("malts/" + maltId)
+    return this.http.get("malts/" + maltId)
       .map((response: Response) => <IMalt>response.json())
       .catch(this.handleError);
   }
 
   createMalt(malt: IMalt): any {
-    return this._angularTokenService.post("malts/", {malt})
+    return this.http.post("malts/", {malt})
   }
 
   editMalt(maltId: number, malt: IMalt): any {
-    return this._angularTokenService.put("malts/" + maltId, {malt})
+    return this.http.put("malts/" + maltId, {malt})
   }
 
   deleteMalt(maltId: number): any {
-    return this._angularTokenService.delete("malts/" + maltId)
+    return this.http.delete("malts/" + maltId)
   }
 
   getMashSteps(): any {
-    return this._angularTokenService.get("mash_steps/")
+    return this.http.get("mash_steps/")
       .map((response: Response) => response.json())
       .catch(this.handleError);
   }
 
   getTypes(): any {
-    return this._angularTokenService.get("malt_types/")
+    return this.http.get("malt_types/")
       .map((response: Response) => response.json())
       .catch(this.handleError);
   }
 
   getTypeById(typeId: number): any {
-    return this._angularTokenService.get("malt_types/" + typeId)
+    return this.http.get("malt_types/" + typeId)
       .map((response: Response) => response.json())
       .catch(this.handleError);
   }

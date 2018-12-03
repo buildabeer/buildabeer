@@ -1,24 +1,28 @@
 import { Injectable } from '@angular/core';
-import { Angular2TokenService } from "angular2-token";
+import { AngularTokenService } from "angular-token";
 import { Subject, Observable } from "rxjs";
 import { Response } from "@angular/http";
 import 'rxjs/add/operator/map';
 import { IUserData } from "./user-data";
 import { IMeasurementSetting } from "./measurement-setting";
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class AuthService {
 
   userSignedIn$:Subject<boolean> = new Subject();
 
-  constructor(private _authService: Angular2TokenService) {
+  constructor(
+    private _authService: AngularTokenService,
+    private http: HttpClient
+    ) {
     this._authService.validateToken().subscribe(
       res => res.status == 200 ? this.userSignedIn$.next(res.json().success) : this.userSignedIn$.next(false)
     );
   }
 
   updateUserInfo(user: { contact: boolean, recipe_reminders: boolean }): any {
-    return this._authService.put("users/" + this._authService.currentUserData.id, {user})
+    return this.http.put("users/" + this._authService.currentUserData.id, {user})
   }
 
   logOutUser(): Observable<Response> {
@@ -30,7 +34,7 @@ export class AuthService {
     );
   }
 
-  registerUser(signUpData: {email: string, nickname: string, password: string, passwordConfirmation: string}): Observable<Response> {
+  registerUser(signUpData: {login: string, nickname: string, password: string, passwordConfirmation: string}): Observable<Response> {
     return this._authService.registerAccount(signUpData).map(
       res => {
         this.userSignedIn$.next(true);
@@ -39,8 +43,8 @@ export class AuthService {
     );
   }
 
-  resetPassword(email: {email: string}): Observable<Response> {
-    return this._authService.resetPassword(email).map(
+  resetPassword(login: {login: string}): Observable<Response> {
+    return this._authService.resetPassword(login).map(
       res => {
         return res;
       }
@@ -57,7 +61,7 @@ export class AuthService {
     );
   }
 
-  loginUser(signInData: {email: string, password: string}): Observable<Response> {
+  loginUser(signInData: {login: string, password: string}): Observable<Response> {
     return this._authService.signIn(signInData).map(
       res => {
         this.userSignedIn$.next(true);
@@ -84,13 +88,13 @@ export class AuthService {
   }
 
   getSettings(): Observable<IMeasurementSetting> {
-    return this._authService.get("measurement_settings/")
+    return this.http.get("measurement_settings/")
       .map((response: Response) => <IMeasurementSetting>response.json())
       .catch(this.handleError);
   }
 
   editSettings(measurement_setting: IMeasurementSetting): any {
-    return this._authService.put("measurement_settings/", {measurement_setting})
+    return this.http.put("measurement_settings/", {measurement_setting})
   }
 
   handleError(error: Response) {
@@ -99,7 +103,7 @@ export class AuthService {
   }
 
   getEvents(start: Date, end: Date) {
-    return this._authService.get("calendar_events?start=" + start.toString()+"&end=" + end.toString())
+    return this.http.get("calendar_events?start=" + start.toString()+"&end=" + end.toString())
       .map((response: Response) => <any[]>response.json())
       .catch(this.handleError);
   }

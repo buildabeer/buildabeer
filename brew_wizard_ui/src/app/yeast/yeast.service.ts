@@ -4,22 +4,22 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
-import { Angular2TokenService } from 'angular2-token';
 import { Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class YeastService {
 
-  constructor(private _angularTokenService: Angular2TokenService) { }
+  constructor(private http: HttpClient) { }
 
   getYeasts(): Observable<IYeast[]> {
-    return this._angularTokenService.get("yeasts")
+    return this.http.get("yeasts")
       .map((response: Response) => <IYeast[]>response.json())
       .catch(this.handleError);
   }
 
   getYeast(yeastId: number): Observable<IYeast> {
-    return this._angularTokenService.get("yeasts/" + yeastId)
+    return this.http.get("yeasts/" + yeastId)
       .map((response: Response) => <IYeast>response.json())
       .catch(this.handleError);
   }
@@ -28,28 +28,28 @@ export class YeastService {
     var yeast = Object.assign({}, send_yeast)
     yeast.style_yeasts_attributes = yeast.style_yeasts
     delete yeast.style_yeasts
-    return this._angularTokenService.post("yeasts/", {yeast})
+    return this.http.post("yeasts/", {yeast})
   }
 
   editYeast(yeastId: number, send_yeast: any): any {
     var yeast = Object.assign({}, send_yeast)
     yeast.style_yeasts_attributes = yeast.style_yeasts
     delete yeast.style_yeasts
-    return this._angularTokenService.put("yeasts/" + yeastId, {yeast})
+    return this.http.put("yeasts/" + yeastId, {yeast})
   }
 
   deleteYeast(yeastId: number): any {
-    return this._angularTokenService.delete("yeasts/" + yeastId)
+    return this.http.delete("yeasts/" + yeastId)
   }
 
   getTypes(): any {
-    return this._angularTokenService.get("yeast_types/")
+    return this.http.get("yeast_types/")
       .map((response: Response) => response.json())
       .catch(this.handleError);
   }
 
   getTypeById(typeId: number): any {
-    return this._angularTokenService.get("yeast_types/" + typeId)
+    return this.http.get("yeast_types/" + typeId)
       .map((response: Response) => response.json())
       .catch(this.handleError);
   }

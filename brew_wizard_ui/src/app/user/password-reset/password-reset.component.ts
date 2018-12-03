@@ -41,7 +41,7 @@ export class PasswordResetComponent implements OnInit {
 
   onResetSubmit() {
     this._authService.resetPassword({
-      email: this.resetUser
+      login: this.resetUser
     }).subscribe ((res) => {
         if (res.status == 200) {
           this._router.navigate(['']);

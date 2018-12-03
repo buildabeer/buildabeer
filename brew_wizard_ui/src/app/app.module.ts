@@ -1,4 +1,4 @@
-import { Angular2TokenService } from 'angular2-token';
+import { AngularTokenService, AngularTokenModule } from 'angular-token';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
@@ -199,9 +199,10 @@ import { SourcesComponent } from './static-pages/sources/sources.component';
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory
-    })
+    }),
+    AngularTokenModule.forRoot({})
   ],
-  providers: [Angular2TokenService, AuthGuard, AuthService, WaterProfileService,
+  providers: [AngularTokenModule, AuthGuard, AuthService, WaterProfileService,
                 AgentService, MaltService, StyleService, HopService,
                 YeastService, EquipmentService, RecipeService, DesignerService,
                 CanDeactivateGuard, SaveDialogService, UserService, MiscellaneousService,

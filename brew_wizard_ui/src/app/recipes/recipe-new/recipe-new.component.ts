@@ -19,7 +19,7 @@ import { Observable } from 'rxjs/Rx';
 })
 export class RecipeNewComponent implements OnInit {
   signIn = {
-          email: '',
+          login: '',
           password: ''
         }
   signInErrors: string[] = [];
@@ -81,7 +81,7 @@ export class RecipeNewComponent implements OnInit {
       .subscribe((res) => {
         if (res.status == 200) {
           this.signIn = {
-            email: '',
+            login: '',
             password: ''
           }
           this.loginModal.close();
@@ -90,7 +90,7 @@ export class RecipeNewComponent implements OnInit {
       },
       err => {
         this.signIn = {
-          email: '',
+          login: '',
           password: ''
         }
         this.signInErrors = err.json().errors;
