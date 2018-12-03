@@ -34,7 +34,7 @@ import { UserService } from './user/user.service';
 import { AuthService } from './user/auth.service';
 import { AuthGuard } from './user/auth.guard';
 
-import { RecipeNewComponent } from './recipes/recipe-new/recipe-new.component'
+import { RecipeNewComponent } from './recipes/recipe-new/recipe-new.component';
 import { RecipeService } from './recipes/recipe.service';
 import { DesignerService } from './recipes/designer.service';
 
@@ -93,7 +93,8 @@ import { SaveDialogService } from './recipes/save-dialog.service';
 import { RecipeRunnerComponent } from './recipes/recipe-runner/recipe-runner.component';
 import { CalendarComponent } from './user/calendar/calendar.component';
 
-import { CalendarModule } from 'angular-calendar';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { MiscellaneousComponent } from './miscellaneous/miscellaneous/miscellaneous.component';
 import { MiscellaneousCardComponent } from './miscellaneous/miscellaneous-card/miscellaneous-card.component';
 import { MiscellaneousEditComponent } from './miscellaneous/miscellaneous-edit/miscellaneous-edit.component';
@@ -195,7 +196,10 @@ import { SourcesComponent } from './static-pages/sources/sources.component';
     HttpModule,
     NgbModule.forRoot(),
     BrowserAnimationsModule,
-    CalendarModule.forRoot()
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory
+    })
   ],
   providers: [Angular2TokenService, AuthGuard, AuthService, WaterProfileService,
                 AgentService, MaltService, StyleService, HopService,
