@@ -4,8 +4,9 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Response } from '@angular/http';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class RecipeService {
@@ -13,8 +14,8 @@ export class RecipeService {
   constructor(private http: HttpClient) { }
 
   // getRecipes(): any {
-  //   return this.http.get("recipes")
-  //     .map((response: Response) => response.json())
+  //   return this.http.get(`${environment.token_auth_config.apiBase}/recipes`)
+  //     .map((response: any) => response)
   //     .catch(this.handleError);
   // }
 
@@ -37,14 +38,14 @@ export class RecipeService {
     if(query_string_array.length > 0) {
       query_string = '?' + query_string_array.join("&")
     }
-    return this.http.get("recipes" + query_string)
-      .map((response: Response) => response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/recipes` + query_string)
+      .map((response: any) => response)
       .catch(this.handleError);
   }
 
   getRecipe(recipeId: number): Observable<any> {
-    return this.http.get("recipes/" + recipeId)
-      .map((response: Response) => response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/recipes/` + recipeId)
+      .map((response: any) => response)
       .catch(this.handleError);
   }
 
@@ -66,8 +67,8 @@ export class RecipeService {
   }
 
   getRecipeCount(): Observable<any> {
-    return this.http.get("recipes/count")
-      .map((response: Response) => response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/recipes/count`)
+      .map((response: any) => response)
       .catch(this.handleError);
   }
 }

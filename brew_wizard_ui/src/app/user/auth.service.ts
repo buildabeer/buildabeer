@@ -5,7 +5,8 @@ import { Response } from "@angular/http";
 import 'rxjs/add/operator/map';
 import { IUserData } from "./user-data";
 import { IMeasurementSetting } from "./measurement-setting";
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class AuthService {
@@ -88,8 +89,8 @@ export class AuthService {
   }
 
   getSettings(): Observable<IMeasurementSetting> {
-    return this.http.get("measurement_settings/")
-      .map((response: Response) => <IMeasurementSetting>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/measurement_settings/`)
+      .map((response: IMeasurementSetting) => response)
       .catch(this.handleError);
   }
 
@@ -103,8 +104,8 @@ export class AuthService {
   }
 
   getEvents(start: Date, end: Date) {
-    return this.http.get("calendar_events?start=" + start.toString()+"&end=" + end.toString())
-      .map((response: Response) => <any[]>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/calendar_events?start=" + start.toString()+"&end=` + end.toString())
+      .map((response: any[]) => response)
       .catch(this.handleError);
   }
 }

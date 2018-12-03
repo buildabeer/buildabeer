@@ -39,9 +39,9 @@ export class AppHeaderComponent implements OnInit {
             login: '',
             password: ''
           }
-          if (this._router.url !== '/recipes/new') {
-            window.location.reload();
-          }
+          // if (this._router.url !== '/recipes/new') {
+          //   window.location.reload();
+          // }
         }
       },
       err => {

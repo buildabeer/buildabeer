@@ -4,8 +4,9 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Response } from '@angular/http';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class HopService {
@@ -13,14 +14,14 @@ export class HopService {
   constructor(private http: HttpClient) { }
 
   getHops(): Observable<IHop[]> {
-    return this.http.get("hops")
-      .map((response: Response) => <IHop[]>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/hops`)
+      .map((response: IHop[]) => response)
       .catch(this.handleError);
   }
 
   getHop(hopId: number): Observable<IHop> {
-    return this.http.get("hops/" + hopId)
-      .map((response: Response) => <IHop>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/hops/` + hopId)
+      .map((response: IHop) => response)
       .catch(this.handleError);
   }
 
@@ -43,14 +44,14 @@ export class HopService {
   }
 
   getTypes(): any {
-    return this.http.get("hop_types/")
-      .map((response: Response) => response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/hop_types/`)
+      .map((response: any) => response)
       .catch(this.handleError);
   }
 
   getTypeById(typeId: number): any {
-    return this.http.get("hop_types/" + typeId)
-      .map((response: Response) => response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/hop_types/` + typeId)
+      .map((response: any) => response)
       .catch(this.handleError);
   }
 

@@ -4,8 +4,9 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Response } from '@angular/http';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class AgentService {
@@ -13,14 +14,14 @@ export class AgentService {
   constructor(private http: HttpClient) { }
 
   getAgents(): Observable<IWaterAgent[]> {
-    return this.http.get("water_agents")
-      .map((response: Response) => <IWaterAgent[]>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/water_agents`)
+      .map((response: IWaterAgent[]) => response)
       .catch(this.handleError);
   }
 
   getAgent(agentId: number): Observable<IWaterAgent> {
-    return this.http.get("water_agents/" + agentId)
-      .map((response: Response) => <IWaterAgent>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/water_agents/` + agentId)
+      .map((response: IWaterAgent) => response)
       .catch(this.handleError);
   }
 

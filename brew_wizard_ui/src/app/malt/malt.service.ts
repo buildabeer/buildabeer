@@ -4,8 +4,9 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Response } from '@angular/http';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class MaltService {
@@ -13,14 +14,14 @@ export class MaltService {
   constructor(private http: HttpClient) { }
 
   getMalts(): Observable<IMalt[]> {
-    return this.http.get("malts")
-      .map((response: Response) => <IMalt[]>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/malts`)
+      .map((response: IMalt[]) => response)
       .catch(this.handleError);
   }
 
   getMalt(maltId: number): Observable<IMalt> {
-    return this.http.get("malts/" + maltId)
-      .map((response: Response) => <IMalt>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/malts/` + maltId)
+      .map((response: IMalt) => response)
       .catch(this.handleError);
   }
 
@@ -37,20 +38,20 @@ export class MaltService {
   }
 
   getMashSteps(): any {
-    return this.http.get("mash_steps/")
-      .map((response: Response) => response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/mash_steps/`)
+      .map((response: any) => response)
       .catch(this.handleError);
   }
 
   getTypes(): any {
-    return this.http.get("malt_types/")
-      .map((response: Response) => response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/malt_types/`)
+      .map((response: any) => response)
       .catch(this.handleError);
   }
 
   getTypeById(typeId: number): any {
-    return this.http.get("malt_types/" + typeId)
-      .map((response: Response) => response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/malt_types/` + typeId)
+      .map((response: any) => response)
       .catch(this.handleError);
   }
 

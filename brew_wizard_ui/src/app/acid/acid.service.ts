@@ -4,23 +4,23 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Response } from '@angular/http';
-
+import { environment } from '../../environments/environment';
 @Injectable()
 export class AcidService {
 
   constructor(private http: HttpClient) { }
 
   getAcids(): Observable<IAcid[]> {
-    return this.http.get("acids")
-      .map((response: Response) => <IAcid[]>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/acids`)
+      .map((response: IAcid[]) => response)
       .catch(this.handleError);
   }
 
   getAcid(acidId: number): Observable<IAcid> {
-    return this.http.get("acids/" + acidId)
-      .map((response: Response) => <IAcid>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/acids/` + acidId)
+      .map((response: IAcid) => response)
       .catch(this.handleError);
   }
 

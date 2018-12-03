@@ -3,11 +3,12 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Response } from '@angular/http';
 import { IMeasurementSetting } from "./measurement-setting";
 import { ICalendarEvent } from "./calendar-event";
 import { IHistory } from "./history";
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class UserService {
@@ -15,8 +16,8 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   getSettings(): Observable<IMeasurementSetting> {
-    return this.http.get("measurement_settings/")
-      .map((response: Response) => <IMeasurementSetting>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/measurement_settings/`)
+      .map((response: IMeasurementSetting) => response)
       .catch(this.handleError);
   }
 
@@ -25,8 +26,8 @@ export class UserService {
   }
 
   getEvents(start: Date, end: Date): Observable<any[]> {
-    return this.http.get("calendar_events?calendar_start=" + start.toString()+"&calendar_end=" + end.toString())
-      .map((response: Response) => <any[]>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/calendar_events?calendar_start=" + start.toString()+"&calendar_end=` + end.toString())
+      .map((response: any[]) => response)
       .catch(this.handleError);
   }
 
@@ -47,8 +48,8 @@ export class UserService {
   }
 
   getHistory(): Observable<IHistory[]> {
-    return this.http.get("histories")
-      .map((response: Response) => <any[]>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/histories`)
+      .map((response: any[]) => response)
       .catch(this.handleError);
   }
 

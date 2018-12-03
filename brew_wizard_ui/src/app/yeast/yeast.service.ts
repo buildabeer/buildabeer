@@ -5,7 +5,8 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
 import { Response } from '@angular/http';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class YeastService {
@@ -13,14 +14,14 @@ export class YeastService {
   constructor(private http: HttpClient) { }
 
   getYeasts(): Observable<IYeast[]> {
-    return this.http.get("yeasts")
-      .map((response: Response) => <IYeast[]>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/yeasts`)
+      .map((response: IYeast[]) => response)
       .catch(this.handleError);
   }
 
   getYeast(yeastId: number): Observable<IYeast> {
-    return this.http.get("yeasts/" + yeastId)
-      .map((response: Response) => <IYeast>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/yeasts/` + yeastId)
+      .map((response: IYeast) => response)
       .catch(this.handleError);
   }
 
@@ -43,14 +44,14 @@ export class YeastService {
   }
 
   getTypes(): any {
-    return this.http.get("yeast_types/")
-      .map((response: Response) => response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/yeast_types/`)
+      .map((response: any) => response)
       .catch(this.handleError);
   }
 
   getTypeById(typeId: number): any {
-    return this.http.get("yeast_types/" + typeId)
-      .map((response: Response) => response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/yeast_types/` + typeId)
+      .map((response: any) => response)
       .catch(this.handleError);
   }
 

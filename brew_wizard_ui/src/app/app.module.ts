@@ -6,7 +6,7 @@ import { HttpModule } from '@angular/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import {HttpClientModule} from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { AppHeaderComponent } from './components/app-header/app-header.component';
@@ -112,6 +112,7 @@ import { AcidComponent } from './acid/acid/acid.component';
 import { AcidService } from './acid/acid.service';
 import { RadarChartComponent } from './recipes/radar-chart/radar-chart.component';
 import { SourcesComponent } from './static-pages/sources/sources.component';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -200,7 +201,8 @@ import { SourcesComponent } from './static-pages/sources/sources.component';
       provide: DateAdapter,
       useFactory: adapterFactory
     }),
-    AngularTokenModule.forRoot({})
+    AngularTokenModule.forRoot(environment.token_auth_config),
+    HttpClientModule
   ],
   providers: [AngularTokenModule, AuthGuard, AuthService, WaterProfileService,
                 AgentService, MaltService, StyleService, HopService,

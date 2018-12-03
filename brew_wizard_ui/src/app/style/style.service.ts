@@ -4,8 +4,9 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Response } from '@angular/http';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class StyleService {
@@ -13,20 +14,20 @@ export class StyleService {
   constructor(private http: HttpClient) { }
 
   getStyles(): Observable<IStyle[]> {
-    return this.http.get("styles")
-      .map((response: Response) => <IStyle[]>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/styles`)
+      .map((response: IStyle[]) => response)
       .catch(this.handleError);
   }
 
   getWaterProfiles(): Observable<any[]> {
-    return this.http.get("water_profiles")
-      .map((response: Response) => <any[]>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/water_profiles`)
+      .map((response: any[]) => response)
       .catch(this.handleError);
   }
 
   getStyleById(styleId: number): Observable<IStyle> {
-    return this.http.get("styles/" + styleId)
-      .map((response: Response) => <IStyle>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/styles/` + styleId)
+      .map((response: IStyle) => response)
       .catch(this.handleError);
   }
 

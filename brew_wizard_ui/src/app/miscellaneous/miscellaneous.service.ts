@@ -4,8 +4,9 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Response } from '@angular/http';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class MiscellaneousService {
@@ -13,14 +14,14 @@ export class MiscellaneousService {
   constructor(private http: HttpClient) { }
 
   getMiscellanies(): Observable<IMiscellaneous[]> {
-    return this.http.get("miscellaneous")
-      .map((response: Response) => <IMiscellaneous[]>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/miscellaneous`)
+      .map((response: IMiscellaneous[]) => response)
       .catch(this.handleError);
   }
 
   getMiscellaneous(miscellaneousId: number): Observable<IMiscellaneous> {
-    return this.http.get("miscellaneous/" + miscellaneousId)
-      .map((response: Response) => <IMiscellaneous>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/miscellaneous/` + miscellaneousId)
+      .map((response: IMiscellaneous) => response)
       .catch(this.handleError);
   }
 
@@ -37,14 +38,14 @@ export class MiscellaneousService {
   }
 
   getTypes(): any {
-    return this.http.get("miscellaneous_types/")
-      .map((response: Response) => response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/miscellaneous_types/`)
+      .map((response: any) => response)
       .catch(this.handleError);
   }
 
   getTypeById(typeId: number): any {
-    return this.http.get("miscellaneous_types/" + typeId)
-      .map((response: Response) => response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/miscellaneous_types/` + typeId)
+      .map((response: any) => response)
       .catch(this.handleError);
   }
 

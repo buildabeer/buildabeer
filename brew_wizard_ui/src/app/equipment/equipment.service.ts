@@ -4,8 +4,9 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Response } from '@angular/http';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class EquipmentService {
@@ -13,14 +14,14 @@ export class EquipmentService {
   constructor(private http: HttpClient) { }
 
   getEquipments(): Observable<IEquipment[]> {
-    return this.http.get("equipment")
-      .map((response: Response) => <IEquipment[]>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/equipment`)
+      .map((response: IEquipment[]) => response)
       .catch(this.handleError);
   }
 
   getEquipment(equipmentId: number): Observable<IEquipment> {
-    return this.http.get("equipment/" + equipmentId)
-      .map((response: Response) => <IEquipment>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/equipment/` + equipmentId)
+      .map((response: IEquipment) => response)
       .catch(this.handleError);
   }
 
