@@ -6,7 +6,7 @@
         <h3 class="align-left">{{ title }}</h3>
       </div>
       <div class="col-md-6">
-        <app-agent-new (onAgentCreate)="createEvent($event)"></app-agent-new>
+        <app-agent-new (uponAgentCreate)="createEvent($event)"></app-agent-new>
       </div>
     </div>
     <div class="row">
@@ -57,7 +57,7 @@
               <h3 class="align-left">{{ title }}</h3>
             </div>
             <div class="col-3">
-              <app-agent-new (onStyleCreate)="createEvent($event)"></app-agent-new>
+              <app-agent-new (uponStyleCreate)="createEvent($event)"></app-agent-new>
             </div>
           </div>
         </div>
@@ -95,10 +95,10 @@
   <div class="pre-scrollable">
     <div *ngFor="let agent of searchedAgents() | slice:(page-1)*20:(page*20-1); trackBy:trackByAgentName;">
 
-      <app-agent-card [agent]="agent" (onAgentEdit)="editEvent($event)" (onAgentDelete)="deleteEvent($event)"></app-agent-card>
+      <app-agent-card [agent]="agent" (uponAgentEdit)="editEvent($event)" (uponAgentDelete)="deleteEvent($event)"></app-agent-card>
 
     </div>
-    <h4 *ngIf="agents.length == 0" >{{ errorMessage }}</h4>
+    <h4 *ngIf="agents.length === 0" >{{ errorMessage }}</h4>
   </div>
 </div>
 

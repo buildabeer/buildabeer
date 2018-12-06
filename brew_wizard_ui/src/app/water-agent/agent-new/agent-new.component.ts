@@ -16,7 +16,7 @@ export class AgentNewComponent implements OnInit {
   newAgentItem: IWaterAgent = {
         id: 0,
         user_id: 0,
-        name: "",
+        name: '',
         ph: 7,
         calcium: 0,
         magnesium: 0,
@@ -24,13 +24,13 @@ export class AgentNewComponent implements OnInit {
         sulfate: 0,
         chloride: 0,
         bicarbonate: 0,
-        description: "",
+        description: '',
         global: false,
         recipe_count: 0
       };
 
   @Output()
-  onAgentCreate = new EventEmitter();
+  uponAgentCreate = new EventEmitter();
 
   createModal: NgbModalRef;
 
@@ -46,13 +46,13 @@ export class AgentNewComponent implements OnInit {
       .subscribe((res) => {
         this.newAgentItem.id = JSON.parse(res._body).id;
         this.newAgentItem.user_id = JSON.parse(res._body).user_id;
-        this.onAgentCreate.emit({agent: this.newAgentItem});
+        this.uponAgentCreate.emit({agent: this.newAgentItem});
         this.createModal.close();
 
         this.newAgentItem = {
             id: 0,
             user_id: 0,
-            name: "",
+            name: '',
             ph: 7,
             calcium: 0,
             magnesium: 0,
@@ -60,15 +60,15 @@ export class AgentNewComponent implements OnInit {
             sulfate: 0,
             chloride: 0,
             bicarbonate: 0,
-            description: "",
+            description: '',
             global: false,
             recipe_count: 0
           };
       }, (error) => {
-        if (error.status == "401") {
-          window.alert("You must log in first.");
+        if (error.status === 401) {
+          window.alert('You must log in first.');
         } else {
-          window.alert("There was an error adding the agent profile, please try again later.");
+          window.alert('There was an error adding the agent profile, please try again later.');
         }
         console.error(error);
       });

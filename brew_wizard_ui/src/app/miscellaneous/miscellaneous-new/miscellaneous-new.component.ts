@@ -8,12 +8,11 @@ import { AuthService } from '../../user/auth.service';
 @Component({
   selector: 'app-miscellaneous-new',
   templateUrl: './miscellaneous-new.component.html',
-  styleUrls: ['./miscellaneous-new.component.scss'],
-  outputs: ['onMiscellaneousCreate']
+  styleUrls: ['./miscellaneous-new.component.scss']
 })
 export class MiscellaneousNewComponent implements OnInit {
 
-  errorMessage: string = "Loading..."
+  errorMessage = 'Loading...';
 
   @Input()
   originalMiscellaneousItem: IMiscellaneous;
@@ -21,14 +20,14 @@ export class MiscellaneousNewComponent implements OnInit {
   newMiscellaneousItem: IMiscellaneous;
 
   @Output()
-  onMiscellaneousCreate = new EventEmitter();
+  uponMiscellaneousCreate = new EventEmitter();
 
   newModal: NgbModalRef;
 
-  misc_types: string[] = ["Spice", "Fining", "Herb", "Flavor", "Other"]
-  misc_usages: string[] = ["Boil", "Mash", "Primary", "Secondary", "Bottling"]
+  misc_types: string[] = ['Spice', 'Fining', 'Herb', 'Flavor', 'Other'];
+  misc_usages: string[] = ['Boil', 'Mash', 'Primary', 'Secondary', 'Bottling'];
 
-  misc_time_label: number = 1;
+  misc_time_label = 1;
 
   constructor(private _router: Router, private _miscellaneousService:
     MiscellaneousService, private _activatedRoute: ActivatedRoute,
@@ -42,20 +41,20 @@ export class MiscellaneousNewComponent implements OnInit {
       .subscribe((res) => {
         this.newMiscellaneousItem.id = JSON.parse(res._body).id;
         this.newMiscellaneousItem.user_id = JSON.parse(res._body).user_id;
-        this.onMiscellaneousCreate.emit({miscellaneous: this.newMiscellaneousItem});
+        this.uponMiscellaneousCreate.emit({miscellaneous: this.newMiscellaneousItem});
         this.newModal.close();
       }, (error) => {
-        if (error.status == "401") {
-          window.alert("You must log in first.");
+        if (error.status === 401) {
+          window.alert('You must log in first.');
         } else {
-          window.alert("There was an error processing your request, please try again later.");
+          window.alert('There was an error processing your request, please try again later.');
         }
         console.error(error);
       });
   }
 
   open(newMiscellaneous) {
-    this.newMiscellaneousItem = Object.assign({}, this.originalMiscellaneousItem)
+    this.newMiscellaneousItem = Object.assign({}, this.originalMiscellaneousItem);
     this.newModal = this._modalService.open(newMiscellaneous, { size: 'lg' });
   }
 }

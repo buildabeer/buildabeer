@@ -92,7 +92,7 @@
         </table>
 
         <div class="col-md-12">
-          <app-agent-edit *ngIf="(_authService.currentUserMatchOrGlobal(agent.user_id))" [originalWaterAgent]="agent" (onAgentEdit)="editEvent($event)"></app-agent-edit>
+          <app-agent-edit *ngIf="(_authService.currentUserMatchOrGlobal(agent.user_id))" [originalWaterAgent]="agent" (uponAgentEdit)="editEvent($event)"></app-agent-edit>
 
           <span *ngIf="(_authService.currentUserMatchOrGlobal(agent.user_id))"> |</span>
           <button *ngIf="(_authService.currentUserMatchOrGlobal(agent.user_id))" class="btn btn-link" role="link" (click)="deleteCard()">Delete</button>

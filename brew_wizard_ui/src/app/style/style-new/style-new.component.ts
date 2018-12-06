@@ -13,16 +13,16 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 })
 export class StyleNewComponent implements OnInit {
 
-  water_profiles: any[] = []
+  water_profiles: any[] = [];
 
   newStyleItem: IStyle = {
         id: 0,
         user_id: 0,
-        name: "",
-        category_name: "",
+        name: '',
+        category_name: '',
         category_number: 0,
         subcategory: 'A',
-        style_type: "",
+        style_type: '',
         min_og: 0,
         max_og: 0,
         min_fg: 0,
@@ -35,17 +35,17 @@ export class StyleNewComponent implements OnInit {
         max_color: 0,
         min_abv: 0,
         max_abv: 0,
-        description: "",
-        profile: "",
-        ingredients: "",
-        examples: "",
+        description: '',
+        profile: '',
+        ingredients: '',
+        examples: '',
         global: false,
         recipe_count: 0,
         water_profile_id: null
       };
 
   @Output()
-  onStyleCreate = new EventEmitter();
+  uponStyleCreate = new EventEmitter();
 
   createModal: NgbModalRef;
 
@@ -61,17 +61,17 @@ export class StyleNewComponent implements OnInit {
       .subscribe((res) => {
         this.newStyleItem.id = JSON.parse(res._body).id;
         this.newStyleItem.user_id = JSON.parse(res._body).user_id;
-        this.onStyleCreate.emit({style: this.newStyleItem});
+        this.uponStyleCreate.emit({style: this.newStyleItem});
         this.createModal.close();
 
         this.newStyleItem = {
           id: 0,
           user_id: 0,
-          name: "",
-          category_name: "",
+          name: '',
+          category_name: '',
           category_number: 0,
           subcategory: 'A',
-          style_type: "",
+          style_type: '',
           min_og: 0,
           max_og: 0,
           min_fg: 0,
@@ -84,19 +84,19 @@ export class StyleNewComponent implements OnInit {
           max_color: 0,
           min_abv: 0,
           max_abv: 0,
-          description: "",
-          profile: "",
-          ingredients: "",
-          examples: "",
+          description: '',
+          profile: '',
+          ingredients: '',
+          examples: '',
           global: false,
           recipe_count: 0,
           water_profile_id: null
         };
       }, (error) => {
-        if (error.status == "401") {
-          window.alert("You must log in first.");
+        if (error.status === 401) {
+          window.alert('You must log in first.');
         } else {
-          window.alert("There was an error adding the style, please try again later.");
+          window.alert('There was an error adding the style, please try again later.');
         }
         console.error(error);
       });
@@ -109,12 +109,12 @@ export class StyleNewComponent implements OnInit {
       .retryWhen((err) => {
         return err.scan((retryCount) => {
           retryCount++;
-          if(retryCount < 3) {
+          if (retryCount < 3) {
             return retryCount;
           } else {
             throw(err);
           }
-        }, 0).delay(1000)
+        }, 0).delay(1000);
       })
       .subscribe(waterProfileData => {
           this.water_profiles = waterProfileData;

@@ -6,7 +6,7 @@
         <h3 class="align-left">{{ title }}</h3>
       </div>
       <div class="col-md-6">
-        <app-miscellaneous-new (onMiscellaneousCreate)="createEvent($event)"></app-miscellaneous-new>
+        <app-miscellaneous-new (uponMiscellaneousCreate)="createEvent($event)"></app-miscellaneous-new>
       </div>
     </div>
     <div class="row">
@@ -79,7 +79,7 @@
               <h3 class="align-left">{{ title }}</h3>
             </div>
             <div class="col-3">
-              <app-miscellaneous-new (onStyleCreate)="createEvent($event)"></app-miscellaneous-new>
+              <app-miscellaneous-new (uponStyleCreate)="createEvent($event)"></app-miscellaneous-new>
             </div>
           </div>
         </div>
@@ -133,9 +133,9 @@
   <div class="pre-scrollable">
     <div *ngFor="let miscellaneous of searchedMiscellaneous() | slice:(page-1)*20:(page*20-1); trackBy:trackByMiscellaneousName;">
 
-      <app-miscellaneous-card [miscellaneous]="miscellaneous" (onMiscellaneousDelete)="deleteEvent($event)" (onMiscellaneousEdit)="editEvent($event)"></app-miscellaneous-card>
+      <app-miscellaneous-card [miscellaneous]="miscellaneous" (uponMiscellaneousDelete)="deleteEvent($event)" (uponMiscellaneousEdit)="editEvent($event)"></app-miscellaneous-card>
 
     </div>
-    <h4 *ngIf="miscellaneous.length == 0" >{{ errorMessage }}</h4>
+    <h4 *ngIf="miscellaneous.length === 0" >{{ errorMessage }}</h4>
   </div>
 </div>

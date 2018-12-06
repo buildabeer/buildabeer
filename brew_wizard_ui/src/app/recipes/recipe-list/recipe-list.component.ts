@@ -1,4 +1,4 @@
-import { AuthService } from "../../user/auth.service";
+import { AuthService } from '../../user/auth.service';
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { IStyle } from '../../style/style';
 import { IRecipe } from '../recipe';
@@ -19,14 +19,14 @@ export class RecipeListComponent implements OnInit {
   @ViewChild('public') publicTab: ElementRef;
 
   recipe: IRecipe[] = [];
-  search: string = "";
-  previousSearch: string = "";
-  title: string = "Recipes";
+  search = '';
+  previousSearch = '';
+  title = 'Recipes';
   selectedStyleCategoryDropdown: {style: IStyle, count: number} = null;
-  errorMessage: string = "Loading data...";
-  page: number = 1;
-  pageText: number = 1;
-  pageCount: number = 1;
+  errorMessage = 'Loading data...';
+  page = 1;
+  pageText = 1;
+  pageCount = 1;
   isCollapsed: boolean[] = [];
 
   style_list: {style: IStyle, count: number}[] = [];
@@ -36,15 +36,15 @@ export class RecipeListComponent implements OnInit {
 
   // xml
   xml_to_import: File = null;
-  loading: boolean = true;
+  loading = true;
   importModal: NgbModalRef;
 
   // search timer
   typingTimer: any;
-  doneTypingInterval: number = 1000;
+  doneTypingInterval = 1000;
 
-  currentTab: string = "local";
-  loading_message: string = "Loading recipes..."
+  currentTab = 'local';
+  loading_message = 'Loading recipes...';
 
   constructor(private _recipeService: RecipeService,
     private _styleService: StyleService, private _equipmentService: EquipmentService,
@@ -52,13 +52,13 @@ export class RecipeListComponent implements OnInit {
     public _authService: AuthService) { }
 
   ngOnInit() {
-    this._designer.init(true)
-    if(!this._authService.userSignedIn()) {
-      this.localTab.nativeElement.classList.remove('active')
-      this.publicTab.nativeElement.classList.add('active')
-      this.currentTab = "public"
+    this._designer.init(true);
+    if (!this._authService.userSignedIn()) {
+      this.localTab.nativeElement.classList.remove('active');
+      this.publicTab.nativeElement.classList.add('active');
+      this.currentTab = 'public';
     }
-    this.updateRecipeList()
+    this.updateRecipeList();
   }
 
   trackByRecipeName(index: number, profile: any): string {
@@ -66,26 +66,26 @@ export class RecipeListComponent implements OnInit {
   }
 
   onPageChange(): void {
-    if(this.page > this.pageCount) {
+    if (this.page > this.pageCount) {
       this.page = this.pageCount;
     } else if (this.page < 1) {
       this.page = 1;
     }
     this.pageText = this.page;
-    this.updateRecipeList()
+    this.updateRecipeList();
   }
 
   getTotalRecipeCount() {
-    var recipe_count: number = 0;
+    let recipe_count = 0;
     this.style_list.forEach((list) => {
       recipe_count += list.count;
-    })
+    });
 
     return recipe_count;
   }
 
   deleteEvent(event): void {
-    var index = this.recipe.indexOf(event.recipe);
+    const index = this.recipe.indexOf(event.recipe);
     if (index > -1) {
       this.recipe.splice(index, 1);
     }
@@ -106,46 +106,46 @@ export class RecipeListComponent implements OnInit {
   }
 
   tabChange(change_type: string) {
-    if(change_type !== this.currentTab) {
-      this.currentTab = change_type
-      this.updateRecipeList()
+    if (change_type !== this.currentTab) {
+      this.currentTab = change_type;
+      this.updateRecipeList();
     }
   }
 
   updateRecipeList() {
     this.recipe = [];
-    this.errorMessage = "Searching..."
+    this.errorMessage = 'Searching...';
     this._recipeService.getRecipes((this.selectedStyleCategoryDropdown ? this.selectedStyleCategoryDropdown.style.category_number : null),
       (this.selectedStyleCategoryDropdown ? this.selectedStyleCategoryDropdown.style.subcategory : null),
-      this.search, this.currentTab === "public", this.page)
+      this.search, this.currentTab === 'public', this.page)
       .retryWhen((err) => {
         return err.scan((retryCount) => {
           retryCount++;
-          if(retryCount < 3) {
+          if (retryCount < 3) {
             return retryCount;
           } else {
             throw(err);
           }
-        }, 0).delay(1000)
+        }, 0).delay(1000);
       })
       .subscribe(recipeData => {
-          this.errorMessage = "No data found."
+          this.errorMessage = 'No data found.';
 
-          var tempStyle;
-          if(this.selectedStyleCategoryDropdown) {
+          let tempStyle;
+          if (this.selectedStyleCategoryDropdown) {
             tempStyle = this.selectedStyleCategoryDropdown;
           }
-          this.style_list = recipeData.style_list
-          if(tempStyle) {
+          this.style_list = recipeData.style_list;
+          if (tempStyle) {
             this.style_list.some((style) => {
-              if(style.style.id === tempStyle.style.id) {
+              if (style.style.id === tempStyle.style.id) {
                 this.selectedStyleCategoryDropdown = style;
                 return true;
               }
-            })
+            });
           }
 
-          this.pageCount = recipeData.page_count
+          this.pageCount = recipeData.page_count;
 
           this.used_styles = [];
           this.used_equipment = [];
@@ -167,17 +167,17 @@ export class RecipeListComponent implements OnInit {
                 return 0;
               }
             }
-          })
+          });
 
-          if(recipeData.recipe_list !== null) {
+          if (recipeData.recipe_list !== null) {
             this.recipe = recipeData.recipe_list;
           }
         },
         error => {
-          if (error.status == "401") {
-            this.errorMessage = "You must log in first.";
+          if (error.status === 401) {
+            this.errorMessage = 'You must log in first.';
           } else {
-            this.errorMessage = "Problem with the service. Please try against later.";
+            this.errorMessage = 'Problem with the service. Please try against later.';
           }
           console.error(error);
       });
@@ -188,7 +188,7 @@ export class RecipeListComponent implements OnInit {
     if (this.search != this.previousSearch) {
       this.typingTimer = setTimeout(() => {
         this.previousSearch = this.search;
-        this.updateRecipeList()
+        this.updateRecipeList();
       }, this.doneTypingInterval);
     }
   }

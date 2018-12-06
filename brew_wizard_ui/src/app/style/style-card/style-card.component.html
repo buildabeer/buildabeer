@@ -178,7 +178,7 @@
         </table>
 
         <div class="col-md-12">
-          <app-style-edit *ngIf="(_authService.currentUserMatchOrGlobal(style.user_id))" [originalStyle]="style" (onStyleEdit)="editEvent($event)"></app-style-edit>
+          <app-style-edit *ngIf="(_authService.currentUserMatchOrGlobal(style.user_id))" [originalStyle]="style" (uponStyleEdit)="editEvent($event)"></app-style-edit>
 
           <span *ngIf="(_authService.currentUserMatchOrGlobal(style.user_id))"> |</span>
           <button *ngIf="(_authService.currentUserMatchOrGlobal(style.user_id))" class="btn btn-link" role="link" (click)="deleteCard()">Delete</button>

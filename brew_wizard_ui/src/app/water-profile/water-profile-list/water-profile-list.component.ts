@@ -1,4 +1,4 @@
-import { AuthService } from "../../user/auth.service";
+import { AuthService } from '../../user/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { IWaterProfile } from '../water-profile';
 import { WaterProfileService } from '../water-profile.service';
@@ -10,12 +10,12 @@ import { WaterProfileService } from '../water-profile.service';
 })
 export class WaterProfileListComponent implements OnInit {
 
-  search: string = "";
-  title: string = "Water Profiles";
-  selectedWaterCountDropdown: string = "All";
-  errorMessage: string = "Loading data...";
-  page: number = 1;
-  pageText: number = 1;
+  search = '';
+  title = 'Water Profiles';
+  selectedWaterCountDropdown = 'All';
+  errorMessage = 'Loading data...';
+  page = 1;
+  pageText = 1;
   waters: IWaterProfile[] = [];
   displayedWaters: IWaterProfile[] = [];
 
@@ -27,46 +27,46 @@ export class WaterProfileListComponent implements OnInit {
       .retryWhen((err) => {
         return err.scan((retryCount) => {
           retryCount++;
-          if(retryCount < 3) {
+          if (retryCount < 3) {
             return retryCount;
           } else {
             throw(err);
           }
-        }, 0).delay(1000)
+        }, 0).delay(1000);
       })
       .subscribe(profileData => {
           this.waters = profileData;
           this.displayedWaters = profileData;
-          this.errorMessage = "No data found."
+          this.errorMessage = 'No data found.';
         },
         error => {
-          if (error.status == "401") {
-            this.errorMessage = "You must log in first.";
+          if (error.status === 401) {
+            this.errorMessage = 'You must log in first.';
           } else {
-            this.errorMessage = "Problem with the service. Please try against later.";
+            this.errorMessage = 'Problem with the service. Please try against later.';
           }
           console.error(error);
       });
   }
 
   filterProfiles(resetPage = true): void {
-    if(resetPage) {
+    if (resetPage) {
           this.page = 1;
           this.pageText = 1;
     }
 
     this.displayedWaters = this.waters;
 
-    if(this.selectedWaterCountDropdown !== "All") {
+    if (this.selectedWaterCountDropdown !== 'All') {
       this.displayedWaters = this.displayedWaters.filter(w => (w.global &&
-        this.selectedWaterCountDropdown === "Global") || (!w.global &&
-        this.selectedWaterCountDropdown === "Local"));
+        this.selectedWaterCountDropdown === 'Global') || (!w.global &&
+        this.selectedWaterCountDropdown === 'Local'));
     }
   }
 
   searchedProfiles(): IWaterProfile[] {
     return this.displayedWaters
-      .filter(w => w.name.match(new RegExp(this.search, "i")));
+      .filter(w => w.name.match(new RegExp(this.search, 'i')));
   }
 
   trackByWaterName(index: number, profile: any): string {
@@ -74,7 +74,7 @@ export class WaterProfileListComponent implements OnInit {
   }
 
   onPageChange(): void {
-    if(this.page > this.getPageCount()) {
+    if (this.page > this.getPageCount()) {
       this.page = this.getPageCount();
     } else if (this.page < 1) {
       this.page = 1;
@@ -89,17 +89,17 @@ export class WaterProfileListComponent implements OnInit {
 
   getTotalWaterCount(): number {
     return this.waters
-      .filter(w => w.name.match(new RegExp(this.search, "i"))).length;
+      .filter(w => w.name.match(new RegExp(this.search, 'i'))).length;
   }
 
   getGlobalWaterCount(): number {
     return this.waters.filter(w => w.global === true)
-      .filter(w => w.name.match(new RegExp(this.search, "i"))).length;
+      .filter(w => w.name.match(new RegExp(this.search, 'i'))).length;
   }
 
   getLocalWaterCount(): number {
     return this.waters.filter(w => w.global === false)
-      .filter(w => w.name.match(new RegExp(this.search, "i"))).length;
+      .filter(w => w.name.match(new RegExp(this.search, 'i'))).length;
   }
 
   onWaterCountDropdownChange(selectedDropdownValue: string): void {
@@ -115,12 +115,12 @@ export class WaterProfileListComponent implements OnInit {
   }
 
   editEvent(event): void {
-    var index = -1;
+    let index = -1;
     this.waters.forEach((profile, i) => {
-      if(profile.id === event.profile.id) {
+      if (profile.id === event.profile.id) {
         index = i;
       }
-    })
+    });
     if (index > -1) {
       this.waters[index] = event.profile;
       this.filterProfiles(false);
@@ -128,7 +128,7 @@ export class WaterProfileListComponent implements OnInit {
   }
 
   deleteEvent(event): void {
-    var index = this.waters.indexOf(event.waterProfile);
+    const index = this.waters.indexOf(event.waterProfile);
     if (index > -1) {
       this.waters.splice(index, 1);
     }

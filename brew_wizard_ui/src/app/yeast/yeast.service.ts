@@ -26,21 +26,21 @@ export class YeastService {
   }
 
   createYeast(send_yeast: any): any {
-    var yeast = Object.assign({}, send_yeast)
-    yeast.style_yeasts_attributes = yeast.style_yeasts
-    delete yeast.style_yeasts
-    return this.http.post("yeasts/", {yeast})
+    const yeast = Object.assign({}, send_yeast);
+    yeast.style_yeasts_attributes = yeast.style_yeasts;
+    delete yeast.style_yeasts;
+    return this.http.post(`${environment.token_auth_config.apiBase}/yeasts/`, {yeast});
   }
 
   editYeast(yeastId: number, send_yeast: any): any {
-    var yeast = Object.assign({}, send_yeast)
-    yeast.style_yeasts_attributes = yeast.style_yeasts
-    delete yeast.style_yeasts
-    return this.http.put("yeasts/" + yeastId, {yeast})
+    const yeast = Object.assign({}, send_yeast);
+    yeast.style_yeasts_attributes = yeast.style_yeasts;
+    delete yeast.style_yeasts;
+    return this.http.put(`${environment.token_auth_config.apiBase}/yeasts/` + yeastId, {yeast});
   }
 
   deleteYeast(yeastId: number): any {
-    return this.http.delete("yeasts/" + yeastId)
+    return this.http.delete(`${environment.token_auth_config.apiBase}/yeasts/` + yeastId);
   }
 
   getTypes(): any {
@@ -57,6 +57,6 @@ export class YeastService {
 
   handleError(error: Response) {
     console.error(error);
-    return Observable.throw(error);
+    return Observable.throwError(error);
   }
 }

@@ -25,19 +25,19 @@ export class AcidService {
   }
 
   createAcid(acid: IAcid): any {
-    return this.http.post("acids", {acid})
+    return this.http.post(`${environment.token_auth_config.apiBase}/acids`, {acid});
   }
 
   editAcid(acid: IAcid): any {
-    return this.http.put("acids/" + acid.id, {acid})
+    return this.http.put(`${environment.token_auth_config.apiBase}/acids/` + acid.id, {acid});
   }
 
   deleteAcid(acidId: number): any {
-    return this.http.delete("acids/" + acidId)
+    return this.http.delete(`${environment.token_auth_config.apiBase}/acids/` + acidId);
   }
 
   handleError(error: Response) {
     console.error(error);
-    return Observable.throw(error);
+    return Observable.throwError(error);
   }
 }

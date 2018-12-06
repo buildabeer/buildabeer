@@ -8,13 +8,12 @@ import { AuthService } from '../../user/auth.service';
 @Component({
   selector: 'app-malt-edit',
   templateUrl: './malt-edit.component.html',
-  styleUrls: ['./malt-edit.component.scss'],
-  outputs: ['onMaltEdit']
+  styleUrls: ['./malt-edit.component.scss']
 })
 export class MaltEditComponent implements OnInit {
 
   maltTypes: string[] = [];
-  errorMessage: string = "Loading..."
+  errorMessage = 'Loading...';
 
   @Input()
   originalMaltItem: IMalt;
@@ -22,7 +21,7 @@ export class MaltEditComponent implements OnInit {
   editMaltItem: IMalt;
 
   @Output()
-  onMaltEdit = new EventEmitter();
+  uponMaltEdit = new EventEmitter();
 
   editModal: NgbModalRef;
 
@@ -37,24 +36,24 @@ export class MaltEditComponent implements OnInit {
       .retryWhen((err) => {
         return err.scan((retryCount) => {
           retryCount++;
-          if(retryCount < 3) {
+          if (retryCount < 3) {
             return retryCount;
           } else {
             throw(err);
           }
-        }, 0).delay(1000)
+        }, 0).delay(1000);
       })
       .subscribe(maltTypeData => {
           this.maltTypes = maltTypeData;
-          if(this.maltTypes.length === 0) {
-            window.alert("No malt types found.");
+          if (this.maltTypes.length === 0) {
+            window.alert('No malt types found.');
           }
         },
         error => {
-          if (error.status == "401") {
-            window.alert("You must log in first.");
+          if (error.status === 401) {
+            window.alert('You must log in first.');
           } else {
-            window.alert("Problem with the service. Please try against later.");
+            window.alert('Problem with the service. Please try against later.');
           }
           console.error(error);
       });
@@ -63,20 +62,20 @@ export class MaltEditComponent implements OnInit {
   editSubmit(form: any): void {
     this._maltService.editMalt(this.editMaltItem.id, this.editMaltItem)
       .subscribe((res) => {
-        this.onMaltEdit.emit({malt: this.editMaltItem});
+        this.uponMaltEdit.emit({malt: this.editMaltItem});
         this.editModal.close();
       }, (error) => {
-        if (error.status == "401") {
-          window.alert("You must log in first.");
+        if (error.status === 401) {
+          window.alert('You must log in first.');
         } else {
-          window.alert("There was an error processing your request, please try again later.");
+          window.alert('There was an error processing your request, please try again later.');
         }
         console.error(error);
       });
   }
 
   open(editMalt) {
-    this.editMaltItem = Object.assign({}, this.originalMaltItem)
+    this.editMaltItem = Object.assign({}, this.originalMaltItem);
     this.editSetup();
     this.editModal = this._modalService.open(editMalt, { size: 'lg' });
   }

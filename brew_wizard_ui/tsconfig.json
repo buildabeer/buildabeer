@@ -18,5 +18,12 @@
     ],
     "module": "es2015",
     "baseUrl": "./"
-  }
+  },
+  "include": [
+    "src/"
+],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+]
 }

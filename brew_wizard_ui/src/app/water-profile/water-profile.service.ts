@@ -38,19 +38,19 @@ export class WaterProfileService {
   }
 
   createWaterProfile(water: IWaterProfile): any {
-    return this.http.post("waters/", {water})
+    return this.http.post(`${environment.token_auth_config.apiBase}/waters/`, {water});
   }
 
   editWaterProfile(water: IWaterProfile): any {
-    return this.http.put("waters/" + water.id, {water})
+    return this.http.put(`${environment.token_auth_config.apiBase}/waters/` + water.id, {water});
   }
 
   deleteWaterProfile(profileId: number): any {
-    return this.http.delete("waters/" + profileId)
+    return this.http.delete(`${environment.token_auth_config.apiBase}/waters/` + profileId);
   }
 
   handleError(error: Response) {
     console.error(error);
-    return Observable.throw(error);
+    return Observable.throwError(error);
   }
 }

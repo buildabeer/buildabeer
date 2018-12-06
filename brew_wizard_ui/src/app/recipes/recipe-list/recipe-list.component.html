@@ -125,7 +125,7 @@
                     <h5>{{ recipe.name }}</h5>
                   </div>
                   <div class="row tiny-row">
-                    <p *ngIf="currentTab == 'public'"><small>{{ recipe.user_nickname }}</small></p>
+                    <p *ngIf="currentTab === 'public'"><small>{{ recipe.user_nickname }}</small></p>
                   </div>
                 </div>
               </div>
@@ -139,14 +139,14 @@
           <div class="collapse" id="collapseItem" [ngbCollapse]="!isCollapsed[i]">
             <div class="card row">
 
-              <app-recipe-card [recipe]="recipe" [style_name]="used_styles[i].name" [equipment]="used_equipment[i]" (onRecipeDelete)="deleteEvent($event)"></app-recipe-card>
+              <app-recipe-card [recipe]="recipe" [style_name]="used_styles[i].name" [equipment]="used_equipment[i]" (uponRecipeDelete)="deleteEvent($event)"></app-recipe-card>
 
             </div>
           </div>
         </div>
       </div>
     </div>
-    <h4 *ngIf="recipe.length == 0" >{{ errorMessage }}</h4>
+    <h4 *ngIf="recipe.length === 0" >{{ errorMessage }}</h4>
   </div>
 </div>
 

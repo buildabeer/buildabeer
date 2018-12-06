@@ -1,4 +1,4 @@
-import { AuthService } from "../../user/auth.service";
+import { AuthService } from '../../user/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { IYeast } from '../yeast';
 import { YeastService } from '../yeast.service';
@@ -12,17 +12,17 @@ export class YeastListComponent implements OnInit {
 
   yeasts: IYeast[] = [];
   displayedYeasts: IYeast[] = [];
-  search: string = "";
-  title: string = "Yeasts";
-  selectedYeastCountDropdown: string = "All";
-  selectedYeastTypeDropdown: string = "0";
-  selectedYeastLabDropdown: string = "0";
-  errorMessage: string = "Loading data...";
-  page: number = 1;
-  pageText: number = 1;
+  search = '';
+  title = 'Yeasts';
+  selectedYeastCountDropdown = 'All';
+  selectedYeastTypeDropdown = '0';
+  selectedYeastLabDropdown = '0';
+  errorMessage = 'Loading data...';
+  page = 1;
+  pageText = 1;
 
-  yeastTypes: string[] = ["Ale", "Lager", "Wheat", "Wine", "Champagne", "Cider"];
-  yeastLabs: string[] = []
+  yeastTypes: string[] = ['Ale', 'Lager', 'Wheat', 'Wine', 'Champagne', 'Cider'];
+  yeastLabs: string[] = [];
 
   constructor(private _yeastService: YeastService,
     public _authService: AuthService) { }
@@ -33,62 +33,62 @@ export class YeastListComponent implements OnInit {
       .retryWhen((err) => {
         return err.scan((retryCount) => {
           retryCount++;
-          if(retryCount < 3) {
+          if (retryCount < 3) {
             return retryCount;
           } else {
             throw(err);
           }
-        }, 0).delay(1000)
+        }, 0).delay(1000);
       })
       .subscribe(yeastData => {
           this.yeasts = yeastData;
           this.displayedYeasts = yeastData;
-          this.errorMessage = "No data found."
+          this.errorMessage = 'No data found.';
 
           this.yeasts.forEach((yeast) => {
-            if(!this.yeastLabs.includes(yeast.lab)) {
+            if (!this.yeastLabs.includes(yeast.lab)) {
               this.yeastLabs.push(yeast.lab);
             }
-          })
+          });
         },
         error => {
-          if (error.status == "401") {
-            this.errorMessage = "You must log in first.";
+          if (error.status === 401) {
+            this.errorMessage = 'You must log in first.';
           } else {
-            this.errorMessage = "Problem with the service. Please try against later.";
+            this.errorMessage = 'Problem with the service. Please try against later.';
           }
           console.error(error);
       });
   }
 
   filterYeasts(resetPage = true): void {
-    if(resetPage) {
+    if (resetPage) {
       this.page = 1;
       this.pageText = 1;
     }
 
-    this.displayedYeasts = this.yeasts
+    this.displayedYeasts = this.yeasts;
 
-    if(this.selectedYeastCountDropdown !== "All") {
+    if (this.selectedYeastCountDropdown !== 'All') {
       this.displayedYeasts =  this.displayedYeasts.filter(m => (m.global &&
-        this.selectedYeastCountDropdown === "Global") || (!m.global &&
-        this.selectedYeastCountDropdown === "Local"))
+        this.selectedYeastCountDropdown === 'Global') || (!m.global &&
+        this.selectedYeastCountDropdown === 'Local'));
     }
 
-    if(this.selectedYeastTypeDropdown !== "0") {
+    if (this.selectedYeastTypeDropdown !== '0') {
       this.displayedYeasts = this.displayedYeasts
-        .filter(m => (m.yeast_type == this.selectedYeastTypeDropdown))
+        .filter(m => (m.yeast_type === this.selectedYeastTypeDropdown));
     }
 
-    if(this.selectedYeastLabDropdown !== "0") {
+    if (this.selectedYeastLabDropdown !== '0') {
       this.displayedYeasts = this.displayedYeasts
-        .filter(m => (m.lab == this.selectedYeastLabDropdown))
+        .filter(m => (m.lab === this.selectedYeastLabDropdown));
     }
   }
 
   searchedYeasts(): IYeast[] {
     return this.displayedYeasts
-      .filter(m => m.name.match(new RegExp(this.search, "i")) || m.product_id.match(new RegExp(this.search, "i")));
+      .filter(m => m.name.match(new RegExp(this.search, 'i')) || m.product_id.match(new RegExp(this.search, 'i')));
   }
 
   trackByYeastName(index: number, yeast: any): string {
@@ -96,7 +96,7 @@ export class YeastListComponent implements OnInit {
   }
 
   onPageChange(): void {
-    if(this.page > this.getPageCount()) {
+    if (this.page > this.getPageCount()) {
       this.page = this.getPageCount();
     } else if (this.page < 1) {
       this.page = 1;
@@ -110,23 +110,23 @@ export class YeastListComponent implements OnInit {
   }
 
   getTypeFilteredYeastCount(searchValue: string): number {
-    var filteredYeasts: IYeast[];
+    let filteredYeasts: IYeast[];
 
     filteredYeasts = this.yeasts
-      .filter(m => m.name.match(new RegExp(this.search, "i")) || m.product_id.match(new RegExp(this.search, "i")));
+      .filter(m => m.name.match(new RegExp(this.search, 'i')) || m.product_id.match(new RegExp(this.search, 'i')));
 
-    if(this.selectedYeastCountDropdown !== "All") {
+    if (this.selectedYeastCountDropdown !== 'All') {
       filteredYeasts = filteredYeasts.filter(m => (m.global &&
-        this.selectedYeastCountDropdown === "Global") || (!m.global &&
-        this.selectedYeastCountDropdown === "Local"))
+        this.selectedYeastCountDropdown === 'Global') || (!m.global &&
+        this.selectedYeastCountDropdown === 'Local'));
     }
 
-    if(this.selectedYeastLabDropdown !== "0") {
+    if (this.selectedYeastLabDropdown !== '0') {
       filteredYeasts = filteredYeasts
-        .filter(m => (m.lab == this.selectedYeastLabDropdown))
+        .filter(m => (m.lab === this.selectedYeastLabDropdown));
     }
 
-    if(searchValue === "0") {
+    if (searchValue === '0') {
       return filteredYeasts.length;
     }
     return filteredYeasts
@@ -134,23 +134,23 @@ export class YeastListComponent implements OnInit {
   }
 
   getLabFilteredYeastCount(searchValue: string): number {
-    var filteredYeasts: IYeast[];
+    let filteredYeasts: IYeast[];
 
     filteredYeasts = this.yeasts
-      .filter(m => m.name.match(new RegExp(this.search, "i")) || m.product_id.match(new RegExp(this.search, "i")));
+      .filter(m => m.name.match(new RegExp(this.search, 'i')) || m.product_id.match(new RegExp(this.search, 'i')));
 
-    if(this.selectedYeastCountDropdown !== "All") {
+    if (this.selectedYeastCountDropdown !== 'All') {
       filteredYeasts = filteredYeasts.filter(m => (m.global &&
-        this.selectedYeastCountDropdown === "Global") || (!m.global &&
-        this.selectedYeastCountDropdown === "Local"))
+        this.selectedYeastCountDropdown === 'Global') || (!m.global &&
+        this.selectedYeastCountDropdown === 'Local'));
     }
 
-    if(this.selectedYeastTypeDropdown !== "0") {
+    if (this.selectedYeastTypeDropdown !== '0') {
       filteredYeasts = filteredYeasts
-        .filter(m => (m.yeast_type == this.selectedYeastTypeDropdown))
+        .filter(m => (m.yeast_type === this.selectedYeastTypeDropdown));
     }
 
-    if(searchValue === "0") {
+    if (searchValue === '0') {
       return filteredYeasts.length;
     }
     return filteredYeasts
@@ -158,25 +158,25 @@ export class YeastListComponent implements OnInit {
   }
 
   getGlobalFilteredYeastCount(searchValue: number): number {
-    var filteredYeasts: IYeast[];
+    let filteredYeasts: IYeast[];
 
     filteredYeasts = this.yeasts
-      .filter(m => m.name.match(new RegExp(this.search, "i")) || m.product_id.match(new RegExp(this.search, "i")));
+      .filter(m => m.name.match(new RegExp(this.search, 'i')) || m.product_id.match(new RegExp(this.search, 'i')));
 
-    if(this.selectedYeastTypeDropdown !== "0") {
+    if (this.selectedYeastTypeDropdown !== '0') {
       filteredYeasts = filteredYeasts
-        .filter(m => (m.yeast_type == this.selectedYeastTypeDropdown))
+        .filter(m => (m.yeast_type === this.selectedYeastTypeDropdown));
     }
 
-    if(this.selectedYeastLabDropdown !== "0") {
+    if (this.selectedYeastLabDropdown !== '0') {
       filteredYeasts = filteredYeasts
-        .filter(m => (m.lab == this.selectedYeastLabDropdown))
+        .filter(m => (m.lab === this.selectedYeastLabDropdown));
     }
 
-    if(searchValue == 1) {
+    if (searchValue === 1) {
       return filteredYeasts
         .filter(m => m.global).length;
-    } else if (searchValue == 0) {
+    } else if (searchValue === 0) {
       return filteredYeasts
         .filter(m => !m.global).length;
     }
@@ -188,12 +188,12 @@ export class YeastListComponent implements OnInit {
   }
 
   editEvent(event): void {
-    var index = -1;
+    let index = -1;
     this.yeasts.forEach((yeast, i) => {
-      if(yeast.id === event.yeast.id) {
+      if (yeast.id === event.yeast.id) {
         index = i;
       }
-    })
+    });
     if (index > -1) {
       this.yeasts[index] = event.yeast;
       this.filterYeasts(false);
@@ -201,7 +201,7 @@ export class YeastListComponent implements OnInit {
   }
 
   deleteEvent(event): void {
-    var index = this.yeasts.indexOf(event.yeast);
+    const index = this.yeasts.indexOf(event.yeast);
     if (index > -1) {
       this.yeasts.splice(index, 1);
     }

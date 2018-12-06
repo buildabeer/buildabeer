@@ -1,10 +1,10 @@
 import { UserService } from '../user.service';
-import { AngularTokenService } from 'angular-token'
-import { AuthService } from '../auth.service'
+import { AngularTokenService } from 'angular-token';
+import { AuthService } from '../auth.service';
 import { Component, OnInit } from '@angular/core';
 import { RecipeService } from '../../recipes/recipe.service';
 import { IMeasurementSetting } from '../measurement-setting';
-import { IUserData } from "../user-data";
+import { IUserData } from '../user-data';
 
 @Component({
   selector: 'app-profile',
@@ -13,9 +13,9 @@ import { IUserData } from "../user-data";
 })
 export class ProfileComponent implements OnInit {
 
-  recipeCount: number = 0;
+  recipeCount = 0;
 
-  measurement_load_message = "Loading..."
+  measurement_load_message = 'Loading...';
   measurement_settings_loading = true;
   measurement_settings: IMeasurementSetting = {
     'liquid': 'us',
@@ -26,12 +26,12 @@ export class ProfileComponent implements OnInit {
     'pressure': 'us',
     'ibu': 'tinseth',
     'color': 'srm'
-  }
+  };
 
   user = {
     recipe_reminders: (<IUserData>this._authTokenService.currentUserData).recipe_reminders,
     contact: (<IUserData>this._authTokenService.currentUserData).contact
-  }
+  };
 
   constructor(private _userService: UserService, public _authTokenService: AngularTokenService,
     private _recipeService: RecipeService, private _authService: AuthService) { }
@@ -41,12 +41,12 @@ export class ProfileComponent implements OnInit {
             .retryWhen((err) => {
               return err.scan((retryCount) => {
                 retryCount++;
-                if(retryCount < 3) {
+                if (retryCount < 3) {
                   return retryCount;
                 } else {
                   throw(err);
                 }
-              }, 0).delay(1000)
+              }, 0).delay(1000);
             })
             .subscribe(countData => {
                 this.recipeCount = countData;
@@ -59,19 +59,19 @@ export class ProfileComponent implements OnInit {
             .retryWhen((err) => {
               return err.scan((retryCount) => {
                 retryCount++;
-                if(retryCount < 3) {
+                if (retryCount < 3) {
                   return retryCount;
                 } else {
                   throw(err);
                 }
-              }, 0).delay(1000)
+              }, 0).delay(1000);
             })
             .subscribe(settingData => {
-                if(settingData !== null) {
+                if (settingData !== null) {
                   this.measurement_settings = settingData;
                   this.measurement_settings_loading = false;
                 } else {
-                  this.measurement_load_message = "Load failed."
+                  this.measurement_load_message = 'Load failed.';
                 }
               },
               error => {
@@ -84,9 +84,9 @@ export class ProfileComponent implements OnInit {
   updateUserSettings(): void {
     this._authService.updateUserInfo(this.user)
       .subscribe((res) => {
-        window.alert("Settings saved.");
+        window.alert('Settings saved.');
       }, (error) => {
-        window.alert("There was an error processing your request, please try again later.");
+        window.alert('There was an error processing your request, please try again later.');
         console.error(error);
       });
   }
@@ -94,9 +94,9 @@ export class ProfileComponent implements OnInit {
   updateMeasurementSettings(): void {
     this._userService.editSettings(this.measurement_settings)
       .subscribe((res) => {
-        window.alert("Settings saved.");
+        window.alert('Settings saved.');
       }, (error) => {
-        window.alert("There was an error processing your request, please try again later.");
+        window.alert('There was an error processing your request, please try again later.');
         console.error(error);
       });
   }

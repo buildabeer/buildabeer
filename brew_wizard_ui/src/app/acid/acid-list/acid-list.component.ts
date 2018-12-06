@@ -1,4 +1,4 @@
-import { AuthService } from "../../user/auth.service";
+import { AuthService } from '../../user/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { IAcid } from '../acid';
 import { AcidService } from '../acid.service';
@@ -10,11 +10,11 @@ import { AcidService } from '../acid.service';
 })
 export class AcidListComponent implements OnInit {
 
-  search: string = "";
-  title: string = "Acids";
-  errorMessage: string = "Loading data...";
-  page: number = 1;
-  pageText: number = 1;
+  search = '';
+  title = 'Acids';
+  errorMessage = 'Loading data...';
+  page = 1;
+  pageText = 1;
   acids: IAcid[] = [];
   displayedAcids: IAcid[] = [];
 
@@ -26,30 +26,30 @@ export class AcidListComponent implements OnInit {
       .retryWhen((err) => {
         return err.scan((retryCount) => {
           retryCount++;
-          if(retryCount < 3) {
+          if (retryCount < 3) {
             return retryCount;
           } else {
             throw(err);
           }
-        }, 0).delay(1000)
+        }, 0).delay(1000);
       })
       .subscribe(acidData => {
           this.acids = acidData;
           this.displayedAcids = acidData;
-          this.errorMessage = "No data found."
+          this.errorMessage = 'No data found.';
         },
         error => {
-          if (error.status == "401") {
-            this.errorMessage = "You must log in first.";
+          if (error.status === 401) {
+            this.errorMessage = 'You must log in first.';
           } else {
-            this.errorMessage = "Problem with the service. Please try against later.";
+            this.errorMessage = 'Problem with the service. Please try against later.';
           }
           console.error(error);
       });
   }
 
   filterAcids(resetPage = true): void {
-    if(resetPage) {
+    if (resetPage) {
           this.page = 1;
           this.pageText = 1;
     }
@@ -59,7 +59,7 @@ export class AcidListComponent implements OnInit {
 
   searchedAcids(): IAcid[] {
     return this.displayedAcids
-      .filter(w => w.name.match(new RegExp(this.search, "i")));
+      .filter(w => w.name.match(new RegExp(this.search, 'i')));
   }
 
   trackByAcidName(index: number, acid: any): string {
@@ -67,7 +67,7 @@ export class AcidListComponent implements OnInit {
   }
 
   onPageChange(): void {
-    if(this.page > this.getPageCount()) {
+    if (this.page > this.getPageCount()) {
       this.page = this.getPageCount();
     } else if (this.page < 1) {
       this.page = 1;
@@ -82,7 +82,7 @@ export class AcidListComponent implements OnInit {
 
   getTotalAcidCount(): number {
     return this.acids
-      .filter(w => w.name.match(new RegExp(this.search, "i"))).length;
+      .filter(w => w.name.match(new RegExp(this.search, 'i'))).length;
   }
 
   onSearchChange(searchText: string): void {
@@ -94,12 +94,12 @@ export class AcidListComponent implements OnInit {
   }
 
   editEvent(event): void {
-    var index = -1;
+    let index = -1;
     this.acids.forEach((acid, i) => {
-      if(acid.id === event.acid.id) {
+      if (acid.id === event.acid.id) {
         index = i;
       }
-    })
+    });
     if (index > -1) {
       this.acids[index] = event.acid;
       this.filterAcids(false);
@@ -107,7 +107,7 @@ export class AcidListComponent implements OnInit {
   }
 
   deleteEvent(event): void {
-    var index = this.acids.indexOf(event.acid);
+    const index = this.acids.indexOf(event.acid);
     if (index > -1) {
       this.acids.splice(index, 1);
     }

@@ -1,29 +1,29 @@
 import { Injectable } from '@angular/core';
-import { AngularTokenService } from "angular-token";
-import { Subject, Observable } from "rxjs";
-import { Response } from "@angular/http";
+import { AngularTokenService } from 'angular-token';
+import { Subject, Observable } from 'rxjs';
+import { Response } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { IUserData } from "./user-data";
-import { IMeasurementSetting } from "./measurement-setting";
+import { IUserData } from './user-data';
+import { IMeasurementSetting } from './measurement-setting';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
 @Injectable()
 export class AuthService {
 
-  userSignedIn$:Subject<boolean> = new Subject();
+  userSignedIn$: Subject<boolean> = new Subject();
 
   constructor(
     private _authService: AngularTokenService,
     private http: HttpClient
     ) {
     this._authService.validateToken().subscribe(
-      res => res.status == 200 ? this.userSignedIn$.next(res.json().success) : this.userSignedIn$.next(false)
+      res => res.status === 200 ? this.userSignedIn$.next(res.json().success) : this.userSignedIn$.next(false)
     );
   }
 
   updateUserInfo(user: { contact: boolean, recipe_reminders: boolean }): any {
-    return this.http.put("users/" + this._authService.currentUserData.id, {user})
+    return this.http.put(`${environment.token_auth_config.apiBase}/users/` + this._authService.currentUserData.id, {user});
   }
 
   logOutUser(): Observable<Response> {
@@ -74,14 +74,14 @@ export class AuthService {
   isAdmin(): boolean {
     return (this.userSignedIn$ &&
       this._authService.currentUserData &&
-      (<IUserData>this._authService.currentUserData).admin)
+      (<IUserData>this._authService.currentUserData).admin);
   }
 
   currentUserMatchOrGlobal(userId: number): boolean {
     return (this.userSignedIn$ &&
       this._authService.currentUserData &&
       (this._authService.currentUserData.id === userId ||
-      (<IUserData>this._authService.currentUserData).admin))
+      (<IUserData>this._authService.currentUserData).admin));
   }
 
   userSignedIn(): boolean {
@@ -95,12 +95,12 @@ export class AuthService {
   }
 
   editSettings(measurement_setting: IMeasurementSetting): any {
-    return this.http.put("measurement_settings/", {measurement_setting})
+    return this.http.put(`${environment.token_auth_config.apiBase}/measurement_settings/`, {measurement_setting});
   }
 
   handleError(error: Response) {
     console.error(error);
-    return Observable.throw(error);
+    return Observable.throwError(error);
   }
 
   getEvents(start: Date, end: Date) {

@@ -26,19 +26,19 @@ export class AgentService {
   }
 
   createAgent(water_agent: IWaterAgent): any {
-    return this.http.post("water_agents/", {water_agent})
+    return this.http.post(`${environment.token_auth_config.apiBase}/water_agents/`, {water_agent});
   }
 
   editAgent(water_agent: IWaterAgent): any {
-    return this.http.put("water_agents/" + water_agent.id, {water_agent})
+    return this.http.put(`${environment.token_auth_config.apiBase}/water_agents/` + water_agent.id, {water_agent});
   }
 
   deleteAgent(agentId: number): any {
-    return this.http.delete("water_agents/" + agentId)
+    return this.http.delete(`${environment.token_auth_config.apiBase}/water_agents/` + agentId);
   }
 
   handleError(error: Response) {
     console.error(error);
-    return Observable.throw(error);
+    return Observable.throwError(error);
   }
 }
