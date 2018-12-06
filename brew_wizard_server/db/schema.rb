@@ -361,13 +361,6 @@ ActiveRecord::Schema.define(version: 20181002221509) do
     t.integer "water_profile_id"
   end
 
-  create_table "styles_yeasts", force: :cascade do |t|
-    t.integer "yeast_id"
-    t.integer "style_id"
-    t.index ["style_id"], name: "index_styles_yeasts_on_style_id"
-    t.index ["yeast_id"], name: "index_styles_yeasts_on_yeast_id"
-  end
-
   create_table "users", force: :cascade do |t|
     t.string "provider", default: "email", null: false
     t.string "uid", default: "", null: false
