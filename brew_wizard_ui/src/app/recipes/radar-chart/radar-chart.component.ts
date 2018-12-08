@@ -30,12 +30,12 @@ export class RadarChartComponent implements OnInit {
             }) {
 
     this._boundary = bound;
-    if(this.profileChart) {
+    if (this.profileChart) {
       this.profileChart.data.datasets[0].data = this.convertResults([ this._boundary.calcium_max, this._boundary.magnesium_max, this._boundary.chloride_max,
-              this._boundary.alkalinity_max, this._boundary.sulfate_max, 150 ])
+              this._boundary.alkalinity_max, this._boundary.sulfate_max, 150 ]);
       this.profileChart.data.datasets[1].data = this.convertResults([ this._boundary.calcium_min, this._boundary.magnesium_min, this._boundary.chloride_min,
-              this._boundary.alkalinity_min, this._boundary.sulfate_min, 0 ])
-      this.profileChart.update()
+              this._boundary.alkalinity_min, this._boundary.sulfate_min, 0 ]);
+      this.profileChart.update();
     }
   }
 
@@ -43,16 +43,16 @@ export class RadarChartComponent implements OnInit {
 
   @Input()
   set current_water(cw: IWaterProfile) {
-    this._current_water = cw
-    if(this.profileChart) {
+    this._current_water = cw;
+    if (this.profileChart) {
       this.profileChart.data.datasets[2].data = this.convertResults([ this._current_water.calcium.toFixed(1), this._current_water.magnesium.toFixed(1),
               this._current_water.chloride.toFixed(1), this._current_water.bicarbonate.toFixed(1),
-              this._current_water.sulfate.toFixed(1), this._current_water.sodium.toFixed(1) ])
+              this._current_water.sulfate.toFixed(1), this._current_water.sodium.toFixed(1) ]);
 
-      this.profileChart.data.labels = [["Ca", this._current_water.calcium.toFixed(1) + "/150"],["Mg", this._current_water.magnesium.toFixed(1) + "/40"],
-        ["Cl", this._current_water.chloride.toFixed(1) + "/150"],["HCO3", this._current_water.bicarbonate.toFixed(1) + "/200"],
-        ["SO4", this._current_water.sulfate.toFixed(1) + "/400"],["Na", this._current_water.sodium.toFixed(1) + "/150"]]
-      this.profileChart.update()
+      this.profileChart.data.labels = [['Ca', this._current_water.calcium.toFixed(1) + '/150'], ['Mg', this._current_water.magnesium.toFixed(1) + '/40'],
+        ['Cl', this._current_water.chloride.toFixed(1) + '/150'], ['HCO3', this._current_water.bicarbonate.toFixed(1) + '/200'],
+        ['SO4', this._current_water.sulfate.toFixed(1) + '/400'], ['Na', this._current_water.sodium.toFixed(1) + '/150']];
+      this.profileChart.update();
     }
   }
 
@@ -62,19 +62,19 @@ export class RadarChartComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    var canvas = <HTMLCanvasElement> document.getElementById(this.canvas_id);
-    var ctx = canvas.getContext("2d");
+    const canvas = <HTMLCanvasElement> document.getElementById(this.canvas_id);
+    const ctx = canvas.getContext('2d');
 
     this.profileChart = new Chart(ctx, {
       type: 'radar',
       data: {
-        labels:[["Ca", this._current_water.calcium.toFixed(1) + "/150"],["Mg", this._current_water.magnesium.toFixed(1) + "/40"],
-        ["Cl", this._current_water.chloride.toFixed(1) + "/150"],["HCO3", this._current_water.bicarbonate.toFixed(1) + "/200"],
-        ["SO4", this._current_water.sulfate.toFixed(1) + "/400"],["Na", this._current_water.sodium.toFixed(1) + "/150"]],
-        datasets:[
+        labels: [['Ca', this._current_water.calcium.toFixed(1) + '/150'], ['Mg', this._current_water.magnesium.toFixed(1) + '/40'],
+        ['Cl', this._current_water.chloride.toFixed(1) + '/150'], ['HCO3', this._current_water.bicarbonate.toFixed(1) + '/200'],
+        ['SO4', this._current_water.sulfate.toFixed(1) + '/400'], ['Na', this._current_water.sodium.toFixed(1) + '/150']],
+        datasets: [
 
         {
-          title: "Max",
+          title: 'Max',
           backgroundColor: 'rgba(0, 255, 0, .4)',
           borderColor: 'rgba(0, 255, 0, 1)',
           data: this.convertResults([ this._boundary.calcium_max, this._boundary.magnesium_max, this._boundary.chloride_max,
@@ -82,14 +82,14 @@ export class RadarChartComponent implements OnInit {
           fill: '+1'
         },
         {
-          title: "Min",
+          title: 'Min',
           backgroundColor: 'rgba(0, 0, 0, 0)',
           borderColor: 'rgba(0, 255, 0, 1)',
           data: this.convertResults([ this._boundary.calcium_min, this._boundary.magnesium_min, this._boundary.chloride_min,
             this._boundary.alkalinity_min, this._boundary.sulfate_min, 0 ]),
         },
         {
-          title: "Actual",
+          title: 'Actual',
           backgroundColor: 'rgba(0, 0, 0, 0)',
           borderColor: 'rgba(0, 0, 255, 1)',
           data: this.convertResults([ this._current_water.calcium.toFixed(1), this._current_water.magnesium.toFixed(1),
@@ -113,15 +113,15 @@ export class RadarChartComponent implements OnInit {
           }
         }
       }
-    })
+    });
   }
 
   convertResults(input_array): number[] {
-    if(input_array[0] === undefined) {
-      return [0, 0, 0, 0, 0, 0]
+    if (input_array[0] === undefined) {
+      return [0, 0, 0, 0, 0, 0];
     }
     return [input_array[0] / 150, input_array[1] / 40, input_array[2] / 150,
-            input_array[3] / 200, input_array[4] / 400, input_array[5] / 150 ]
+            input_array[3] / 200, input_array[4] / 400, input_array[5] / 150 ];
   }
 
 }

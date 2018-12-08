@@ -4,58 +4,59 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
-import { Angular2TokenService } from 'angular2-token';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Response } from '@angular/http';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class MaltService {
 
-  constructor(private _angularTokenService: Angular2TokenService) { }
+  constructor(private http: HttpClient) { }
 
   getMalts(): Observable<IMalt[]> {
-    return this._angularTokenService.get("malts")
-      .map((response: Response) => <IMalt[]>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/malts`)
+      .map((response: IMalt[]) => response)
       .catch(this.handleError);
   }
 
   getMalt(maltId: number): Observable<IMalt> {
-    return this._angularTokenService.get("malts/" + maltId)
-      .map((response: Response) => <IMalt>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/malts/` + maltId)
+      .map((response: IMalt) => response)
       .catch(this.handleError);
   }
 
   createMalt(malt: IMalt): any {
-    return this._angularTokenService.post("malts/", {malt})
+    return this.http.post(`${environment.token_auth_config.apiBase}/malts/`, {malt});
   }
 
   editMalt(maltId: number, malt: IMalt): any {
-    return this._angularTokenService.put("malts/" + maltId, {malt})
+    return this.http.put(`${environment.token_auth_config.apiBase}/malts/` + maltId, {malt});
   }
 
   deleteMalt(maltId: number): any {
-    return this._angularTokenService.delete("malts/" + maltId)
+    return this.http.delete(`${environment.token_auth_config.apiBase}/malts/` + maltId);
   }
 
   getMashSteps(): any {
-    return this._angularTokenService.get("mash_steps/")
-      .map((response: Response) => response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/mash_steps/`)
+      .map((response: any) => response)
       .catch(this.handleError);
   }
 
   getTypes(): any {
-    return this._angularTokenService.get("malt_types/")
-      .map((response: Response) => response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/malt_types/`)
+      .map((response: any) => response)
       .catch(this.handleError);
   }
 
   getTypeById(typeId: number): any {
-    return this._angularTokenService.get("malt_types/" + typeId)
-      .map((response: Response) => response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/malt_types/` + typeId)
+      .map((response: any) => response)
       .catch(this.handleError);
   }
 
   handleError(error: Response) {
     console.error(error);
-    return Observable.throw(error);
+    return Observable.throwError(error);
   }
 }

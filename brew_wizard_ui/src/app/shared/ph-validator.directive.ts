@@ -1,5 +1,5 @@
-import { Directive } from '@angular/core'
-import { NG_VALIDATORS, Validator, ValidatorFn, AbstractControl, FormControl } from '@angular/forms'
+import { Directive } from '@angular/core';
+import { NG_VALIDATORS, Validator, ValidatorFn, AbstractControl, FormControl } from '@angular/forms';
 
 @Directive({
   selector: '[phValidator][ngModel],[phValidator][formControl],[phValidator][formControlName]',
@@ -23,17 +23,17 @@ export class PhValidator implements Validator {
 
   phValidator(): ValidatorFn {
     return (control: FormControl) => {
-      let v = control.value;
+      const v = control.value;
 
       if (v < 0 || v > 14) {
         return {
           phvalidator: {
             valid: false
           }
-        }
+        };
       }
 
       return null;
-    }
+    };
   }
 }

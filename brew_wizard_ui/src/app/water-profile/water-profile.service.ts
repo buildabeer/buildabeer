@@ -4,52 +4,53 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
-import { Angular2TokenService } from 'angular2-token';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Response } from '@angular/http';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class WaterProfileService {
 
-  constructor(private _angularTokenService: Angular2TokenService) { }
+  constructor(private http: HttpClient) { }
 
   getStyleWaterProfiles(): Observable<any[]> {
-    return this._angularTokenService.get("water_profiles")
-      .map((response: Response) => <any[]>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/water_profiles`)
+      .map((response: any[]) => response)
       .catch(this.handleError);
   }
 
   getStyleWaterProfile(profileId: number): Observable<any> {
-    return this._angularTokenService.get("water_profiles/" + profileId)
-      .map((response: Response) => <any>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/water_profiles/` + profileId)
+      .map((response: any) => response)
       .catch(this.handleError);
   }
 
   getWaterProfiles(): Observable<IWaterProfile[]> {
-    return this._angularTokenService.get("waters")
-      .map((response: Response) => <IWaterProfile[]>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/waters`)
+      .map((response: IWaterProfile[]) => response)
       .catch(this.handleError);
   }
 
   getWaterProfile(profileId: number): Observable<IWaterProfile> {
-    return this._angularTokenService.get("waters/" + profileId)
-      .map((response: Response) => <IWaterProfile>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/waters/` + profileId)
+      .map((response: IWaterProfile) => response)
       .catch(this.handleError);
   }
 
   createWaterProfile(water: IWaterProfile): any {
-    return this._angularTokenService.post("waters/", {water})
+    return this.http.post(`${environment.token_auth_config.apiBase}/waters/`, {water});
   }
 
   editWaterProfile(water: IWaterProfile): any {
-    return this._angularTokenService.put("waters/" + water.id, {water})
+    return this.http.put(`${environment.token_auth_config.apiBase}/waters/` + water.id, {water});
   }
 
   deleteWaterProfile(profileId: number): any {
-    return this._angularTokenService.delete("waters/" + profileId)
+    return this.http.delete(`${environment.token_auth_config.apiBase}/waters/` + profileId);
   }
 
   handleError(error: Response) {
     console.error(error);
-    return Observable.throw(error);
+    return Observable.throwError(error);
   }
 }

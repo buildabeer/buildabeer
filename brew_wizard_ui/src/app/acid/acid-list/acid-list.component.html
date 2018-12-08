@@ -6,7 +6,7 @@
         <h3 class="align-left">{{ title }}</h3>
       </div>
       <div class="col-md-6">
-        <app-acid-new (onAcidCreate)="createEvent($event)"></app-acid-new>
+        <app-acid-new (uponAcidCreate)="createEvent($event)"></app-acid-new>
       </div>
     </div>
     <div class="row">
@@ -43,7 +43,7 @@
               <h3 class="align-left">{{ title }}</h3>
             </div>
             <div class="col-3">
-              <app-acid-new (onStyleCreate)="createEvent($event)"></app-acid-new>
+              <app-acid-new (uponStyleCreate)="createEvent($event)"></app-acid-new>
             </div>
           </div>
         </div>
@@ -70,9 +70,9 @@
   <div class="pre-scrollable">
     <div *ngFor="let acid of searchedAcids() | slice:(page-1)*20:(page*20-1); trackBy:trackByAcidName;">
 
-      <app-acid-card [acid]="acid" (onAcidEdit)="editEvent($event)" (onAcidDelete)="deleteEvent($event)"></app-acid-card>
+      <app-acid-card [acid]="acid" (uponAcidEdit)="editEvent($event)" (uponAcidDelete)="deleteEvent($event)"></app-acid-card>
 
     </div>
-    <h4 *ngIf="acids.length == 0" >{{ errorMessage }}</h4>
+    <h4 *ngIf="acids.length === 0" >{{ errorMessage }}</h4>
   </div>
 </div>

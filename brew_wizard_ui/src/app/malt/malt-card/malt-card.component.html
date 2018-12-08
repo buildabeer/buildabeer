@@ -111,7 +111,7 @@
         </table>
 
         <div class="col-md-12">
-          <app-malt-edit *ngIf="(_authService.currentUserMatchOrGlobal(malt.user_id))" [originalMaltItem]="malt" (onMaltEdit)="editEvent($event)"></app-malt-edit>
+          <app-malt-edit *ngIf="(_authService.currentUserMatchOrGlobal(malt.user_id))" [originalMaltItem]="malt" (uponMaltEdit)="editEvent($event)"></app-malt-edit>
 
           <span *ngIf="(_authService.currentUserMatchOrGlobal(malt.user_id))"> |</span>
           <button *ngIf="(_authService.currentUserMatchOrGlobal(malt.user_id))" class="btn btn-link" role="link" (click)="deleteCard()">Delete</button>

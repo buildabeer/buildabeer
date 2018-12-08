@@ -22,20 +22,20 @@ export class CalendarComponent {
 
   addEventModal: NgbModalRef;
 
-  view: string = 'month';
+  view = 'month';
   viewDate: Date = new Date();
   offset: number = new Date().getTimezoneOffset();
 
   newEvent: ICalendarEvent =
   {
-    name: "",
+    name: '',
     id: null,
-    description: "",
+    description: '',
     calendar_start: new Date(),
     calendar_end: new Date(),
     color: '#ad2121',
     calendar_reminders_attributes: []
-  }
+  };
 
   modalData: {
     event: CalendarEvent;
@@ -61,7 +61,7 @@ export class CalendarComponent {
 
   events: CalendarEvent[] = [];
 
-  activeDayIsOpen: boolean = true;
+  activeDayIsOpen = true;
 
   constructor(private modal: NgbModal, private _userService: UserService) {
     this.getEvents();
@@ -82,30 +82,30 @@ export class CalendarComponent {
   }
 
   getEvents(): void {
-    var start: Date;
-    var end: Date;
+    let start: Date;
+    let end: Date;
 
-    if(this.view === 'month') {
-      start = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), 0)
-      end = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() + 1, 0)
+    if (this.view === 'month') {
+      start = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), 0);
+      end = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() + 1, 0);
     } else if (this.view === 'week') {
-      start = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), this.viewDate.getDate() - this.viewDate.getDay())
-      end = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), this.viewDate.getDate() - this.viewDate.getDay() + 7)
+      start = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), this.viewDate.getDate() - this.viewDate.getDay());
+      end = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), this.viewDate.getDate() - this.viewDate.getDay() + 7);
     } else if (this.view === 'day') {
-      start = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), this.viewDate.getDate())
-      end = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), this.viewDate.getDate() + 1)
+      start = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), this.viewDate.getDate());
+      end = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), this.viewDate.getDate() + 1);
     }
 
     this._userService.getEvents(start, end)
       .retryWhen((err) => {
         return err.scan((retryCount) => {
           retryCount++;
-          if(retryCount < 3) {
+          if (retryCount < 3) {
             return retryCount;
           } else {
             throw(err);
           }
-        }, 0).delay(1000)
+        }, 0).delay(1000);
       })
       .subscribe(eventData => {
           this.events = [];
@@ -125,9 +125,9 @@ export class CalendarComponent {
                 },
                 draggable: true
               }
-            )
+            );
             this.refresh.next();
-          })
+          });
         },
         error => {
           console.error(error);
@@ -135,14 +135,13 @@ export class CalendarComponent {
   }
 
   eventTimesChanged({ event, newStart, newEnd }: CalendarEventTimesChangedEvent): void {
-    var oldStart = event.start;
-    var oldEnd = event.end;
+    const oldStart = event.start;
+    const oldEnd = event.end;
     event.start = newStart;
     event.end = newEnd;
     this.refresh.next();
 
-    var editEvent: ICalendarEvent =
-    {
+    const editEvent: ICalendarEvent = {
       id: Number(event.id),
       calendar_start: new Date(event.start),
       calendar_end: event.end ? new Date(event.end) : new Date(event.start.getTime() + 15 * 60000),
@@ -150,15 +149,15 @@ export class CalendarComponent {
       color: event.color ? event.color.primary : '#ad2121',
       description: event.meta['description'],
       calendar_reminders_attributes: event.meta['calendar_reminders_attributes']
-    }
+    };
 
     this._userService.editEvent(editEvent)
       .subscribe((res) => {
       }, (error) => {
-        if (error.status == "401") {
-          window.alert("You must log in first.");
+        if (error.status === 401) {
+          window.alert('You must log in first.');
         } else {
-          window.alert("There was an error editting the event, please try again later.");
+          window.alert('There was an error editting the event, please try again later.');
         }
         console.error(error);
         event.start = oldStart;
@@ -168,7 +167,7 @@ export class CalendarComponent {
   }
 
   getDateString(reminder_time): string {
-     return new Date(reminder_time).toDateString() + " " + new Date(reminder_time).toLocaleTimeString()
+     return new Date(reminder_time).toDateString() + ' ' + new Date(reminder_time).toLocaleTimeString();
   }
 
   clearReminder(reminder): void {
@@ -176,7 +175,7 @@ export class CalendarComponent {
   }
 
   addReminder(): void {
-    var new_reminder: any = { id: null, reminder_time: new Date(this.newEvent.calendar_start), sent: false }
+    const new_reminder: any = { id: null, reminder_time: new Date(this.newEvent.calendar_start), sent: false };
     this.newEvent.calendar_reminders_attributes[this.newEvent.calendar_reminders_attributes.length] = new_reminder;
   }
 
@@ -186,16 +185,15 @@ export class CalendarComponent {
   }
 
   openAddEvent(addEvent): void {
-    this.newEvent =
-    {
-      name: "",
+    this.newEvent = {
+      name: '',
       id: null,
-      description: "",
+      description: '',
       calendar_start: new Date(),
       calendar_end: new Date(this.newEvent.calendar_start.getTime() + 15 * 60000),
       color: '#ad2121',
       calendar_reminders_attributes: []
-    }
+    };
     this.addEventModal = this.modal.open(addEvent, { size: 'lg' });
   }
 
@@ -218,23 +216,22 @@ export class CalendarComponent {
             },
             draggable: true
           }
-        )
+        );
 
         this.refresh.next();
         this.addEventModal.close();
       }, (error) => {
-        if (error.status == "401") {
-          window.alert("You must log in first.");
+        if (error.status === 401) {
+          window.alert('You must log in first.');
         } else {
-          window.alert("There was an error adding the event, please try again later.");
+          window.alert('There was an error adding the event, please try again later.');
         }
         console.error(error);
       });
   }
 
   openEditEvent(event: CalendarEvent): void {
-    this.newEvent =
-    {
+    this.newEvent = {
       id: Number(event.id),
       calendar_start: new Date(event.start),
       calendar_end: event.end ? new Date(event.end) : new Date(event.start.getTime() + 15 * 60000),
@@ -242,7 +239,7 @@ export class CalendarComponent {
       color: event.color ? event.color.primary : '#ad2121',
       description: event.meta['description'],
       calendar_reminders_attributes: event.meta['calendar_reminders_attributes']
-    }
+    };
 
     this.addEventModal = this.modal.open(this.addEvent, { size: 'lg' });
   }
@@ -265,14 +262,14 @@ export class CalendarComponent {
               },
               draggable: true
             }
-        )
+        );
         this.refresh.next();
         this.addEventModal.close();
       }, (error) => {
-        if (error.status == "401") {
-          window.alert("You must log in first.");
+        if (error.status === 401) {
+          window.alert('You must log in first.');
         } else {
-          window.alert("There was an error editting the event, please try again later.");
+          window.alert('There was an error editting the event, please try again later.');
         }
         console.error(error);
       });

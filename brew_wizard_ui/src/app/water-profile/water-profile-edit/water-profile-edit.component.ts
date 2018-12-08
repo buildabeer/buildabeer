@@ -8,12 +8,11 @@ import { AuthService } from '../../user/auth.service';
 @Component({
   selector: 'app-water-profile-edit',
   templateUrl: './water-profile-edit.component.html',
-  styleUrls: ['./water-profile-edit.component.scss'],
-  outputs: ['onWaterEdit']
+  styleUrls: ['./water-profile-edit.component.scss']
 })
 export class WaterProfileEditComponent implements OnInit {
 
-  errorMessage: string = "Loading..."
+  errorMessage = 'Loading...';
 
   originalName: string;
 
@@ -23,7 +22,7 @@ export class WaterProfileEditComponent implements OnInit {
   editWaterProfile: IWaterProfile;
 
   @Output()
-  onWaterEdit = new EventEmitter();
+  uponWaterEdit = new EventEmitter();
 
   editModal: NgbModalRef;
 
@@ -36,20 +35,20 @@ export class WaterProfileEditComponent implements OnInit {
   editSubmit(form: any): void {
     this._waterProfileService.editWaterProfile(this.editWaterProfile)
       .subscribe((res) => {
-        this.onWaterEdit.emit({waterProfile: this.editWaterProfile});
+        this.uponWaterEdit.emit({waterProfile: this.editWaterProfile});
         this.editModal.close();
       }, (error) => {
-        if (error.status == "401") {
-          window.alert("You must log in first.");
+        if (error.status === 401) {
+          window.alert('You must log in first.');
         } else {
-          window.alert("There was an error processing your request, please try again later.");
+          window.alert('There was an error processing your request, please try again later.');
         }
         console.error(error);
       });
   }
 
   open(editWater) {
-    this.editWaterProfile = Object.assign({}, this.originalWaterProfile)
+    this.editWaterProfile = Object.assign({}, this.originalWaterProfile);
     this.editModal = this._modalService.open(editWater, { size: 'lg' });
   }
 }

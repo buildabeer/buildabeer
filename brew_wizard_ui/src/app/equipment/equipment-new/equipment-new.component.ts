@@ -17,7 +17,7 @@ export class EquipmentNewComponent implements OnInit {
   newEquipmentItem: IEquipment = {
         id: 0,
         user_id: 0,
-        name: "",
+        name: '',
         global: false,
         fly_sparge: false,
         batch_sparge: true,
@@ -32,11 +32,11 @@ export class EquipmentNewComponent implements OnInit {
         recipe_count: 0
       };
 
-  equipmentTypes: string[] = ["All Grain", "Extract", "Brew in a Bag"];
-  equipment_type: string = this.equipmentTypes[0]
+  equipmentTypes: string[] = ['All Grain', 'Extract', 'Brew in a Bag'];
+  equipment_type: string = this.equipmentTypes[0];
 
   @Output()
-  onEquipmentCreate = new EventEmitter();
+  uponEquipmentCreate = new EventEmitter();
 
   createModal: NgbModalRef;
 
@@ -47,7 +47,7 @@ export class EquipmentNewComponent implements OnInit {
   ngOnInit() { }
 
   creationSubmit(form: any): void {
-    if(this.equipment_type !== "All Grain") {
+    if (this.equipment_type !== 'All Grain') {
       this.newEquipmentItem.fly_sparge = false;
       this.newEquipmentItem.batch_sparge = false;
       this.newEquipmentItem.wl_hlt = 0;
@@ -58,13 +58,13 @@ export class EquipmentNewComponent implements OnInit {
       .subscribe((res) => {
         this.newEquipmentItem.id = JSON.parse(res._body).id;
         this.newEquipmentItem.user_id = JSON.parse(res._body).user_id;
-        this.onEquipmentCreate.emit({equipment: this.newEquipmentItem});
+        this.uponEquipmentCreate.emit({equipment: this.newEquipmentItem});
         this.createModal.close();
 
         this.newEquipmentItem = {
           id: 0,
           user_id: 0,
-          name: "",
+          name: '',
           global: false,
           fly_sparge: false,
           batch_sparge: true,
@@ -79,10 +79,10 @@ export class EquipmentNewComponent implements OnInit {
           recipe_count: 0
         };
       }, (error) => {
-        if (error.status == "401") {
-          window.alert("You must log in first.");
+        if (error.status === 401) {
+          window.alert('You must log in first.');
         } else {
-          window.alert("There was an error adding the equipment, please try again later.");
+          window.alert('There was an error adding the equipment, please try again later.');
         }
         console.error(error);
       });

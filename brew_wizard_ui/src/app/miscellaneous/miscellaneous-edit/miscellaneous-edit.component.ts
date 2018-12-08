@@ -8,12 +8,11 @@ import { AuthService } from '../../user/auth.service';
 @Component({
   selector: 'app-miscellaneous-edit',
   templateUrl: './miscellaneous-edit.component.html',
-  styleUrls: ['./miscellaneous-edit.component.scss'],
-  outputs: ['onMiscellaneousEdit']
+  styleUrls: ['./miscellaneous-edit.component.scss']
 })
 export class MiscellaneousEditComponent implements OnInit {
 
-  errorMessage: string = "Loading..."
+  errorMessage = 'Loading...';
 
   @Input()
   originalMiscellaneousItem: IMiscellaneous;
@@ -21,14 +20,14 @@ export class MiscellaneousEditComponent implements OnInit {
   editMiscellaneousItem: IMiscellaneous;
 
   @Output()
-  onMiscellaneousEdit = new EventEmitter();
+  uponMiscellaneousEdit = new EventEmitter();
 
   editModal: NgbModalRef;
 
-  misc_types: string[] = ["Spice", "Fining", "Herb", "Flavor", "Other"]
-  misc_usages: string[] = ["Boil", "Mash", "Primary", "Secondary", "Bottling"]
+  misc_types: string[] = ['Spice', 'Fining', 'Herb', 'Flavor', 'Other'];
+  misc_usages: string[] = ['Boil', 'Mash', 'Primary', 'Secondary', 'Bottling'];
 
-  misc_time_label: number = 1;
+  misc_time_label = 1;
 
   constructor(private _router: Router, private _miscellaneousService:
     MiscellaneousService, private _activatedRoute: ActivatedRoute,
@@ -40,33 +39,33 @@ export class MiscellaneousEditComponent implements OnInit {
     this.editMiscellaneousItem.time = this.editMiscellaneousItem.time * this.misc_time_label;
     this._miscellaneousService.editMiscellaneous(this.editMiscellaneousItem.id, this.editMiscellaneousItem)
       .subscribe((res) => {
-        this.onMiscellaneousEdit.emit({miscellaneous: this.editMiscellaneousItem});
+        this.uponMiscellaneousEdit.emit({miscellaneous: this.editMiscellaneousItem});
         this.editModal.close();
       }, (error) => {
-        if (error.status == "401") {
-          window.alert("You must log in first.");
+        if (error.status === 401) {
+          window.alert('You must log in first.');
         } else {
-          window.alert("There was an error processing your request, please try again later.");
+          window.alert('There was an error processing your request, please try again later.');
         }
         console.error(error);
       });
   }
 
   open(editMiscellaneous) {
-    this.editMiscellaneousItem = Object.assign({}, this.originalMiscellaneousItem)
+    this.editMiscellaneousItem = Object.assign({}, this.originalMiscellaneousItem);
 
-    switch(this._miscellaneousService.calculateTime(this.editMiscellaneousItem.time).label) {
-      case "days":
+    switch (this._miscellaneousService.calculateTime(this.editMiscellaneousItem.time).label) {
+      case 'days':
         this.misc_time_label = 24 * 60;
         break;
-      case "hours":
+      case 'hours':
         this.misc_time_label = 60;
         break;
-      case "minutes":
+      case 'minutes':
         this.misc_time_label = 1;
         break;
     }
-    this.editMiscellaneousItem.time = this._miscellaneousService.calculateTime(this.editMiscellaneousItem.time).time
+    this.editMiscellaneousItem.time = this._miscellaneousService.calculateTime(this.editMiscellaneousItem.time).time;
 
     this.editModal = this._modalService.open(editMiscellaneous, { size: 'lg' });
   }

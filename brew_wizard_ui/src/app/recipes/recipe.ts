@@ -34,7 +34,8 @@ export interface IRecipe {
   recipe_water_agents_attributes: {id: number, water_agent_id: number, quantity: number}[];
   recipe_malts_attributes: {id: number, malt_id: number, quantity: number, color: number, malt_usage: string }[];
   recipe_hops_attributes: {id: number, hop_id: number, quantity: number, alpha: number, time: number, form: string, usage: string}[];
-  recipe_miscellaneous_attributes: {id: number, miscellaneou_id: number, quantity: number, quantity_label: string, time: number, time_label: string, usage: string}[];
+  recipe_miscellaneous_attributes: {id: number, miscellaneou_id: number, quantity: number,
+    quantity_label: string, time: number, time_label: string, usage: string}[];
   recipe_yeasts_attributes: {id: number, yeast_id: number, quantity: number, fermentation_stage: number}[];
   recipe_acids_attributes: {id: number, acid_id: number, quantity: number}[];
   recipe_sparge_acids_attributes: {id: number, acid_id: number, quantity: number}[];

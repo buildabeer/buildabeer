@@ -6,7 +6,7 @@
         <h3 class="align-left">{{ title }}</h3>
       </div>
       <div class="col-md-6">
-        <app-style-new (onStyleCreate)="createEvent($event)"></app-style-new>
+        <app-style-new (uponStyleCreate)="createEvent($event)"></app-style-new>
       </div>
     </div>
     <div class="row">
@@ -68,7 +68,7 @@
               <h3 class="align-left">{{ title }}</h3>
             </div>
             <div class="col-3">
-              <app-style-new (onStyleCreate)="createEvent($event)"></app-style-new>
+              <app-style-new (uponStyleCreate)="createEvent($event)"></app-style-new>
             </div>
           </div>
         </div>
@@ -114,9 +114,9 @@
   <div class="pre-scrollable">
     <div *ngFor="let style of searchedStyles() | slice:(page-1)*20:(page*20-1); trackBy:trackByStyleName;">
 
-      <app-style-card [style]="style" (onStyleDelete)="deleteEvent($event)"></app-style-card>
+      <app-style-card [style]="style" (uponStyleDelete)="deleteEvent($event)"></app-style-card>
 
     </div>
-    <h4 *ngIf="styles.length == 0" >{{ errorMessage }}</h4>
+    <h4 *ngIf="styles.length === 0" >{{ errorMessage }}</h4>
   </div>
 </div>

@@ -15,35 +15,35 @@ import 'rxjs/add/operator/scan';
 export class WaterProfileComponent implements OnInit {
 
   water: IWaterProfile;
-  errorMessage: string = "Loading..."
+  errorMessage = 'Loading...';
 
   constructor(private _waterProfileService: WaterProfileService, private _activatedRoute: ActivatedRoute, private _router: Router) { }
 
   ngOnInit() {
-    let profileId: number = this._activatedRoute.snapshot.params['id'];
+    const profileId: number = this._activatedRoute.snapshot.params['id'];
     this._waterProfileService.getWaterProfile(profileId)
       .retryWhen((err) => {
         return err.scan((retryCount) => {
           retryCount++;
-          if(retryCount < 6) {
+          if (retryCount < 6) {
             return retryCount;
           } else {
             throw(err);
           }
-        }, 0).delay(1000)
+        }, 0).delay(1000);
       })
       .subscribe((profileData) => {
-        if (profileData == null) {
-          this.errorMessage = "Specified profile was not found.";
+        if (profileData === null) {
+          this.errorMessage = 'Specified profile was not found.';
         } else {
           this.water = profileData;
-          this.errorMessage = "";
+          this.errorMessage = '';
         }
       }, (error) => {
-          if (error.status == "401") {
-            this.errorMessage = "You must log in first.";
+          if (error.status === 401) {
+            this.errorMessage = 'You must log in first.';
           } else {
-            this.errorMessage = "Problem with the service. Please try against later.";
+            this.errorMessage = 'Problem with the service. Please try against later.';
           }
           console.error(error);
       });

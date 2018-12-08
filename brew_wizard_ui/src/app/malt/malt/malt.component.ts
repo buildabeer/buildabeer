@@ -16,55 +16,55 @@ export class MaltComponent implements OnInit {
 
   malt: IMalt;
   malt_type: string;
-  errorMessage: string = "Loading..."
+  errorMessage = 'Loading...';
 
   constructor(private _maltService: MaltService, private _activatedRoute: ActivatedRoute, private _router: Router) { }
 
   ngOnInit() {
-    let maltId: number = this._activatedRoute.snapshot.params['id'];
+    const maltId: number = this._activatedRoute.snapshot.params['id'];
     this._maltService.getMalt(maltId)
       .retryWhen((err) => {
         return err.scan((retryCount) => {
           retryCount++;
-          if(retryCount < 6) {
+          if (retryCount < 6) {
             return retryCount;
           } else {
             throw(err);
           }
-        }, 0).delay(1000)
+        }, 0).delay(1000);
       })
       .subscribe((maltData) => {
-        if (maltData == null) {
-          this.errorMessage = "Specified malt was not found.";
+        if (maltData === null) {
+          this.errorMessage = 'Specified malt was not found.';
         } else {
 
           this._maltService.getTypeById(maltData.malt_type_id)
             .retryWhen((err) => {
               return err.scan((retryCount) => {
                 retryCount++;
-                if(retryCount < 6) {
+                if (retryCount < 6) {
                   return retryCount;
                 } else {
                   throw(err);
                 }
-              }, 0).delay(1000)
+              }, 0).delay(1000);
             })
             .subscribe((maltType) => {
-              if (maltType == null) {
-                this.errorMessage = "Type was not found for specified malt.";
+              if (maltType === null) {
+                this.errorMessage = 'Type was not found for specified malt.';
               } else {
                 this.malt_type = maltType.name;
               }
-            })
+            });
 
           this.malt = maltData;
-          this.errorMessage = "";
+          this.errorMessage = '';
         }
       }, (error) => {
-          if (error.status == "401") {
-            this.errorMessage = "You must log in first.";
+          if (error.status === 401) {
+            this.errorMessage = 'You must log in first.';
           } else {
-            this.errorMessage = "Problem with the service. Please try against later.";
+            this.errorMessage = 'Problem with the service. Please try against later.';
           }
           console.error(error);
       });

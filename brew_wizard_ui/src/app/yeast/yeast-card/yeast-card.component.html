@@ -97,7 +97,7 @@
         </table>
 
         <div class="col-md-12">
-          <app-yeast-edit *ngIf="(_authService.currentUserMatchOrGlobal(yeast.user_id))" [originalYeastItem]="yeast" (onYeastEdit)="editEvent($event)"></app-yeast-edit>
+          <app-yeast-edit *ngIf="(_authService.currentUserMatchOrGlobal(yeast.user_id))" [originalYeastItem]="yeast" (uponYeastEdit)="editEvent($event)"></app-yeast-edit>
 
           <span *ngIf="(_authService.currentUserMatchOrGlobal(yeast.user_id))"> |</span>
           <button *ngIf="(_authService.currentUserMatchOrGlobal(yeast.user_id))" class="btn btn-link" role="link" (click)="deleteCard()">Delete</button>

@@ -8,14 +8,13 @@ import { AuthService } from '../../user/auth.service';
 @Component({
   selector: 'app-equipment-edit',
   templateUrl: './equipment-edit.component.html',
-  styleUrls: ['./equipment-edit.component.scss'],
-  outputs: ['onEquipmentEdit']
+  styleUrls: ['./equipment-edit.component.scss']
 })
 export class EquipmentEditComponent implements OnInit {
 
-  equipmentTypes: string[] = ["All Grain", "Extract", "Brew in a Bag"];
-  equipment_type: string = this.equipmentTypes[0]
-  errorMessage: string = "Loading..."
+  equipmentTypes: string[] = ['All Grain', 'Extract', 'Brew in a Bag'];
+  equipment_type: string = this.equipmentTypes[0];
+  errorMessage = 'Loading...';
 
   @Input()
   originalEquipmentItem: IEquipment;
@@ -23,7 +22,7 @@ export class EquipmentEditComponent implements OnInit {
   editEquipmentItem: IEquipment;
 
   @Output()
-  onEquipmentEdit = new EventEmitter();
+  uponEquipmentEdit = new EventEmitter();
 
   editModal: NgbModalRef;
 
@@ -34,7 +33,7 @@ export class EquipmentEditComponent implements OnInit {
   ngOnInit() { }
 
   editSubmit(form: any): void {
-    if(this.equipment_type !== "All Grain") {
+    if (this.equipment_type !== 'All Grain') {
       this.editEquipmentItem.fly_sparge = false;
       this.editEquipmentItem.batch_sparge = false;
       this.editEquipmentItem.wl_hlt = 0;
@@ -43,20 +42,20 @@ export class EquipmentEditComponent implements OnInit {
 
     this._equipmentService.editEquipment(this.editEquipmentItem.id, this.editEquipmentItem)
       .subscribe((res) => {
-        this.onEquipmentEdit.emit({equipment: this.editEquipmentItem});
+        this.uponEquipmentEdit.emit({equipment: this.editEquipmentItem});
         this.editModal.close();
       }, (error) => {
-        if (error.status == "401") {
-          window.alert("You must log in first.");
+        if (error.status === 401) {
+          window.alert('You must log in first.');
         } else {
-          window.alert("There was an error processing your request, please try again later.");
+          window.alert('There was an error processing your request, please try again later.');
         }
         console.error(error);
       });
   }
 
   open(editEquipment) {
-    this.editEquipmentItem = Object.assign({}, this.originalEquipmentItem)
+    this.editEquipmentItem = Object.assign({}, this.originalEquipmentItem);
     this.editModal = this._modalService.open(editEquipment, { size: 'lg' });
   }
 }

@@ -4,40 +4,41 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
-import { Angular2TokenService } from 'angular2-token';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Response } from '@angular/http';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class AgentService {
 
-  constructor(private _angularTokenService: Angular2TokenService) { }
+  constructor(private http: HttpClient) { }
 
   getAgents(): Observable<IWaterAgent[]> {
-    return this._angularTokenService.get("water_agents")
-      .map((response: Response) => <IWaterAgent[]>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/water_agents`)
+      .map((response: IWaterAgent[]) => response)
       .catch(this.handleError);
   }
 
   getAgent(agentId: number): Observable<IWaterAgent> {
-    return this._angularTokenService.get("water_agents/" + agentId)
-      .map((response: Response) => <IWaterAgent>response.json())
+    return this.http.get(`${environment.token_auth_config.apiBase}/water_agents/` + agentId)
+      .map((response: IWaterAgent) => response)
       .catch(this.handleError);
   }
 
   createAgent(water_agent: IWaterAgent): any {
-    return this._angularTokenService.post("water_agents/", {water_agent})
+    return this.http.post(`${environment.token_auth_config.apiBase}/water_agents/`, {water_agent});
   }
 
   editAgent(water_agent: IWaterAgent): any {
-    return this._angularTokenService.put("water_agents/" + water_agent.id, {water_agent})
+    return this.http.put(`${environment.token_auth_config.apiBase}/water_agents/` + water_agent.id, {water_agent});
   }
 
   deleteAgent(agentId: number): any {
-    return this._angularTokenService.delete("water_agents/" + agentId)
+    return this.http.delete(`${environment.token_auth_config.apiBase}/water_agents/` + agentId);
   }
 
   handleError(error: Response) {
     console.error(error);
-    return Observable.throw(error);
+    return Observable.throwError(error);
   }
 }

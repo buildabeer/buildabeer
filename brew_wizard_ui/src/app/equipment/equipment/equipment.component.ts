@@ -15,36 +15,36 @@ import 'rxjs/add/operator/scan';
 export class EquipmentComponent implements OnInit {
 
   equipment: IEquipment;
-  errorMessage: string = "Loading..."
+  errorMessage = 'Loading...';
 
   constructor(private _equipmentService: EquipmentService, private _activatedRoute: ActivatedRoute, private _router: Router) { }
 
   ngOnInit() {
-    let equipmentId: number = this._activatedRoute.snapshot.params['id'];
+    const equipmentId: number = this._activatedRoute.snapshot.params['id'];
     this._equipmentService.getEquipment(equipmentId)
       .retryWhen((err) => {
         return err.scan((retryCount) => {
           retryCount++;
-          if(retryCount < 6) {
+          if (retryCount < 6) {
             return retryCount;
           } else {
             throw(err);
           }
-        }, 0).delay(1000)
+        }, 0).delay(1000);
       })
       .subscribe((equipmentData) => {
-        if (equipmentData == null) {
-          this.errorMessage = "Specified equipment was not found.";
+        if (equipmentData === null) {
+          this.errorMessage = 'Specified equipment was not found.';
         } else {
 
           this.equipment = equipmentData;
-          this.errorMessage = "";
+          this.errorMessage = '';
         }
       }, (error) => {
-          if (error.status == "401") {
-            this.errorMessage = "You must log in first.";
+          if (error.status === 401) {
+            this.errorMessage = 'You must log in first.';
           } else {
-            this.errorMessage = "Problem with the service. Please try against later.";
+            this.errorMessage = 'Problem with the service. Please try against later.';
           }
           console.error(error);
       });

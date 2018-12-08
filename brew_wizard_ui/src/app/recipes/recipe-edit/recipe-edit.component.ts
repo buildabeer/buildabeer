@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AuthService } from "../../user/auth.service";
+import { AuthService } from '../../user/auth.service';
 
 import { RecipeService } from '../recipe.service';
 import { DesignerService } from '../designer.service';
-import { SaveDialogService } from '../save-dialog.service'
+import { SaveDialogService } from '../save-dialog.service';
 
 import { DecimalPipe } from '@angular/common';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -19,9 +19,9 @@ import { Observable } from 'rxjs/Rx';
 })
 export class RecipeEditComponent implements OnInit {
 
-  scale_number: number = 5;
+  scale_number = 5;
   scaleModal: NgbModalRef;
-  copy_name: string = "";
+  copy_name = '';
   copyModal: NgbModalRef;
   recipeRunnerModal: NgbModalRef;
   importModal: NgbModalRef;
@@ -32,7 +32,7 @@ export class RecipeEditComponent implements OnInit {
   mash_collapse: boolean;
   yeast_collapse: boolean;
 
-  runner_step: number = 1;
+  runner_step = 1;
 
   // xml
   xml_to_import: File = null;
@@ -40,7 +40,7 @@ export class RecipeEditComponent implements OnInit {
   constructor(private _recipeService: RecipeService,
     public _authService: AuthService, private _modalService: NgbModal,
     public _designer: DesignerService, private _activatedRoute: ActivatedRoute,
-    public _dialogService: SaveDialogService, private router: Router,) { }
+    public _dialogService: SaveDialogService, private router: Router, ) { }
 
   ngOnInit() {
     this.style_collapse = true;
@@ -49,7 +49,7 @@ export class RecipeEditComponent implements OnInit {
     this.mash_collapse = true;
     this.yeast_collapse = true;
 
-    let recipeId: number = this._activatedRoute.snapshot.params['id'];
+    const recipeId: number = this._activatedRoute.snapshot.params['id'];
     this._designer.loadRecipe(recipeId);
   }
 
@@ -80,24 +80,24 @@ export class RecipeEditComponent implements OnInit {
   }
 
   savePdf(pdfPopup) {
-    var pdf = new jsPDF('p', 'pt', 'letter');
-    var name = this._designer.recipe.name ? this._designer.recipe.name : "new_recipe" + ".pdf"
-    var pdfModal = this._modalService.open(pdfPopup, { size: 'lg' });
+    const pdf = new jsPDF('p', 'pt', 'letter');
+    const name = this._designer.recipe.name ? this._designer.recipe.name : 'new_recipe' + '.pdf';
+    const pdfModal = this._modalService.open(pdfPopup, { size: 'lg' });
 
     pdf.addHTML(document.getElementById('pdf'), function() {
       pdf.save(name);
-      pdfModal.close()
+      pdfModal.close();
     });
   }
 
   copySubmit(form: any): void {
     this._designer.copyRecipe(this.copy_name);
-    this.copy_name = "";
+    this.copy_name = '';
     this.copyModal.close();
   }
 
   copyOpen(copyPopup) {
-    this.copy_name = this._designer.recipe.name + " - Copy"
+    this.copy_name = this._designer.recipe.name + ' - Copy';
     this.copyModal = this._modalService.open(copyPopup, { size: 'sm' });
   }
 

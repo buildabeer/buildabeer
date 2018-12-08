@@ -18,19 +18,19 @@ export class YeastNewComponent implements OnInit {
   newYeastItem: IYeast = {
         id: 0,
         user_id: 0,
-        name: "",
+        name: '',
         global: false,
-        lab: "",
-        product_id: "",
-        yeast_type: "",
-        form: "",
+        lab: '',
+        product_id: '',
+        yeast_type: '',
+        form: '',
         flocculation: 0,
         min_attenuation: 0,
         max_attenuation: 0,
         min_temperature: 0,
         max_temperature: 0,
         cell_count: 100,
-        description: "",
+        description: '',
         recipe_count: 0,
         style_yeasts: [],
         yeast_relations: []
@@ -47,7 +47,7 @@ export class YeastNewComponent implements OnInit {
   yeast_relation_collapse: boolean;
 
   @Output()
-  onYeastCreate = new EventEmitter();
+  uponYeastCreate = new EventEmitter();
 
   createModal: NgbModalRef;
 
@@ -64,14 +64,14 @@ export class YeastNewComponent implements OnInit {
 
     this.used_styles.push(add_style);
     this.newYeastItem.style_yeasts.push({ id: null, style_id: add_style.id, yeast_id: this.newYeastItem.id });
-    this.styles.splice(this.styles.indexOf(add_style), 1)
+    this.styles.splice(this.styles.indexOf(add_style), 1);
   }
 
   removeStyle(style_index): void {
-    this.styles.push(this.used_styles[style_index])
+    this.styles.push(this.used_styles[style_index]);
     this.newYeastItem.style_yeasts.splice(style_index, 1);
     this.used_styles.splice(style_index, 1);
-    this.styles.sort(function(a,b) {return (a.name > b.name) ? 1 : ((a.name < b.name) ? -1 : 0); });
+    this.styles.sort(function(a, b) {return (a.name > b.name) ? 1 : ((a.name < b.name) ? -1 : 0); });
   }
 
   onAddYeast(add_yeast): void {
@@ -81,14 +81,14 @@ export class YeastNewComponent implements OnInit {
 
     this.used_yeasts.push(add_yeast);
     this.newYeastItem.yeast_relations.push({ id: null, yeast_id: this.newYeastItem.id, yeast_relation_id: add_yeast.id });
-    this.yeasts.splice(this.yeasts.indexOf(add_yeast), 1)
+    this.yeasts.splice(this.yeasts.indexOf(add_yeast), 1);
   }
 
   removeYeast(yeast_index): void {
-    this.yeasts.push(this.used_yeasts[yeast_index])
+    this.yeasts.push(this.used_yeasts[yeast_index]);
     this.newYeastItem.yeast_relations.splice(yeast_index, 1);
     this.used_yeasts.splice(yeast_index, 1);
-    this.yeasts.sort(function(a,b) {return (a.name > b.name) ? 1 : ((a.name < b.name) ? -1 : 0); });
+    this.yeasts.sort(function(a, b) {return (a.name > b.name) ? 1 : ((a.name < b.name) ? -1 : 0); });
   }
 
   creationSubmit(form: any): void {
@@ -96,34 +96,34 @@ export class YeastNewComponent implements OnInit {
       .subscribe((res) => {
         this.newYeastItem.id = JSON.parse(res._body).id;
         this.newYeastItem.user_id = JSON.parse(res._body).user_id;
-        this.onYeastCreate.emit({yeast: this.newYeastItem});
+        this.uponYeastCreate.emit({yeast: this.newYeastItem});
         this.createModal.close();
 
         this.newYeastItem = {
           id: 0,
           user_id: 0,
-          name: "",
+          name: '',
           global: false,
-          lab: "",
-          product_id: "",
-          yeast_type: "",
-          form: "",
+          lab: '',
+          product_id: '',
+          yeast_type: '',
+          form: '',
           flocculation: 0,
           min_attenuation: 0,
           max_attenuation: 0,
           min_temperature: 0,
           max_temperature: 0,
           cell_count: 100,
-          description: "",
+          description: '',
           recipe_count: 0,
           style_yeasts: [],
           yeast_relations: []
         };
       }, (error) => {
-        if (error.status == "401") {
-          window.alert("You must log in first.");
+        if (error.status === 401) {
+          window.alert('You must log in first.');
         } else {
-          window.alert("There was an error adding the yeast, please try again later.");
+          window.alert('There was an error adding the yeast, please try again later.');
         }
         console.error(error);
       });
@@ -138,12 +138,12 @@ export class YeastNewComponent implements OnInit {
       .retryWhen((err) => {
         return err.scan((retryCount) => {
           retryCount++;
-          if(retryCount < 3) {
+          if (retryCount < 3) {
             return retryCount;
           } else {
             throw(err);
           }
-        }, 0).delay(1000)
+        }, 0).delay(1000);
       })
       .subscribe(styleData => {
           this.styles = styleData;
@@ -156,34 +156,34 @@ export class YeastNewComponent implements OnInit {
       .retryWhen((err) => {
         return err.scan((retryCount) => {
           retryCount++;
-          if(retryCount < 3) {
+          if (retryCount < 3) {
             return retryCount;
           } else {
             throw(err);
           }
-        }, 0).delay(1000)
+        }, 0).delay(1000);
       })
       .subscribe(yeastData => {
           this.yeasts = yeastData;
           this.used_yeasts = [];
 
           this.yeasts.some((yeast, i) => {
-            if(yeast.id === this.newYeastItem.id) {
+            if (yeast.id === this.newYeastItem.id) {
               this.yeasts.splice(i, 1);
               return true;
             }
-          })
+          });
 
           this.newYeastItem.yeast_relations.forEach((relation) => {
             this.yeasts.some((yeast, i) => {
-              if(relation.yeast_relation_id === yeast.id) {
-                this.used_yeasts.push(this.yeasts[i])
+              if (relation.yeast_relation_id === yeast.id) {
+                this.used_yeasts.push(this.yeasts[i]);
                 this.yeasts.splice(i, 1);
                 return true;
               }
               return false;
-            })
-          })
+            });
+          });
         },
         error => {
           console.error(error);

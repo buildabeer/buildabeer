@@ -1,4 +1,4 @@
-import { AuthService } from "../../user/auth.service";
+import { AuthService } from '../../user/auth.service';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { IMalt } from '../malt';
 import { MaltService } from '../malt.service';
@@ -11,7 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class MaltCardComponent implements OnInit {
 
-  isCollapsed: boolean = true;
+  isCollapsed = true;
 
   @Input()
   malt: IMalt;
@@ -20,41 +20,43 @@ export class MaltCardComponent implements OnInit {
   malt_type: string;
 
   @Output()
-  onMaltDelete = new EventEmitter();
+  uponMaltDelete = new EventEmitter();
 
   @Output()
-  onMaltEdit = new EventEmitter();
+  uponMaltEdit = new EventEmitter();
 
   constructor(private _maltService: MaltService,
     public _router: Router, public _authService: AuthService) { }
 
   ngOnInit() {
-    this.isCollapsed = (this._router.url === '/malts')
+    this.isCollapsed = (this._router.url === '/malts');
   }
 
   deleteCard(): void {
-    var recipe_message: string = this.malt.recipe_count > 0 ? "This malt is used " + this.malt.recipe_count + " times, are you sure you want to delete it?" : "Are you sure you want to delete this malt?"
+    const recipe_message: string = this.malt.recipe_count > 0
+    ? 'This malt is used ' + this.malt.recipe_count + ' times, are you sure you want to delete it?'
+    : 'Are you sure you want to delete this malt?';
     if (window.confirm(recipe_message)) {
       this._maltService.deleteMalt(this.malt.id)
         .subscribe((res) => {
-          if(this._router.url !== '/malts') {
-            this._router.navigate(['/malts'])
+          if (this._router.url !== '/malts') {
+            this._router.navigate(['/malts']);
           } else {
-            this.onMaltDelete.emit({malt: this.malt});
+            this.uponMaltDelete.emit({malt: this.malt});
           }
         }, (error) => {
-          if (error.status == "401") {
-            window.alert("You must log in first.");
+          if (error.status === 401) {
+            window.alert('You must log in first.');
           } else {
-            window.alert("There was an error deleting the malt malt, please try again later.");
+            window.alert('There was an error deleting the malt malt, please try again later.');
           }
           console.error(error);
-        })
+        });
     }
   }
 
   editEvent(event): void {
     this.malt = event.malt;
-    this.onMaltEdit.emit({malt: this.malt});
+    this.uponMaltEdit.emit({malt: this.malt});
   }
 }

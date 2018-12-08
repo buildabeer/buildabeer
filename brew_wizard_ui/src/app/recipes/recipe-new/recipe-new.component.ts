@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AuthService } from "../../user/auth.service";
+import { AuthService } from '../../user/auth.service';
 
 import { RecipeService } from '../recipe.service';
 import { DesignerService } from '../designer.service';
-import { SaveDialogService } from '../save-dialog.service'
+import { SaveDialogService } from '../save-dialog.service';
 
 import { DecimalPipe } from '@angular/common';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -19,14 +19,14 @@ import { Observable } from 'rxjs/Rx';
 })
 export class RecipeNewComponent implements OnInit {
   signIn = {
-          email: '',
+          login: '',
           password: ''
-        }
+        };
   signInErrors: string[] = [];
 
-  scale_number: number = 5;
+  scale_number = 5;
   scaleModal: NgbModalRef;
-  copy_name: string = "";
+  copy_name = '';
   copyModal: NgbModalRef;
   loginModal: NgbModalRef;
   recipeRunnerModal: NgbModalRef;
@@ -38,7 +38,7 @@ export class RecipeNewComponent implements OnInit {
   mash_collapse: boolean;
   yeast_collapse: boolean;
 
-  runner_step: number = 1;
+  runner_step = 1;
 
   // xml
   xml_to_import: File = null;
@@ -56,10 +56,10 @@ export class RecipeNewComponent implements OnInit {
     this.yeast_collapse = true;
 
     this._activatedRoute.queryParams.subscribe(params => {
-      if(params.recipe_id) {
+      if (params.recipe_id) {
         this._designer.loadRecipeCopy(Number(params.recipe_id));
       } else {
-        this._designer.init(true)
+        this._designer.init(true);
       }
     });
   }
@@ -79,22 +79,22 @@ export class RecipeNewComponent implements OnInit {
   onSignInSubmit() {
     this._authService.loginUser(this.signIn)
       .subscribe((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           this.signIn = {
-            email: '',
+            login: '',
             password: ''
-          }
+          };
           this.loginModal.close();
-          this._designer.save()
+          this._designer.save();
         }
       },
       err => {
         this.signIn = {
-          email: '',
+          login: '',
           password: ''
-        }
-        this.signInErrors = err.json().errors;
-      })
+        };
+        this.signInErrors = err.errors;
+      });
   }
 
   save(loginPopup): void {
@@ -112,24 +112,24 @@ export class RecipeNewComponent implements OnInit {
   }
 
   savePdf(pdfPopup) {
-    var pdf = new jsPDF('p', 'pt', 'letter');
-    var name = this._designer.recipe.name ? this._designer.recipe.name : "new_recipe" + ".pdf"
-    var pdfModal = this._modalService.open(pdfPopup, { size: 'lg' });
+    const pdf = new jsPDF('p', 'pt', 'letter');
+    const name = this._designer.recipe.name ? this._designer.recipe.name : 'new_recipe' + '.pdf';
+    const pdfModal = this._modalService.open(pdfPopup, { size: 'lg' });
 
     pdf.addHTML(document.getElementById('pdf'), function() {
       pdf.save(name);
-      pdfModal.close()
+      pdfModal.close();
     });
   }
 
   copySubmit(form: any): void {
     this._designer.copyRecipe(this.copy_name);
-    this.copy_name = "";
+    this.copy_name = '';
     this.copyModal.close();
   }
 
   copyOpen(copyPopup) {
-    this.copy_name = this._designer.recipe.name + " - Copy"
+    this.copy_name = this._designer.recipe.name + ' - Copy';
     this.copyModal = this._modalService.open(copyPopup, { size: 'sm' });
   }
 

@@ -16,20 +16,20 @@ export class HopNewComponent implements OnInit {
   newHopItem: IHop = {
         id: 0,
         user_id: 0,
-        name: "",
+        name: '',
         global: false,
-        origin: "",
-        hop_type: "",
+        origin: '',
+        hop_type: '',
         alpha: 0,
         beta: 0,
-        description: "",
+        description: '',
         recipe_count: 0,
         hop_relations: [],
-        aromas: ""
+        aromas: ''
       };
 
   aromas: string[] = [];
-  newAroma: string = "";
+  newAroma = '';
   hops: IHop[] = [];
   used_hops: IHop[] = [];
   selected_hop: IHop = null;
@@ -38,7 +38,7 @@ export class HopNewComponent implements OnInit {
   description: string;
 
   @Output()
-  onHopCreate = new EventEmitter();
+  uponHopCreate = new EventEmitter();
 
   createModal: NgbModalRef;
 
@@ -51,33 +51,33 @@ export class HopNewComponent implements OnInit {
   }
 
   creationSubmit(form: any): void {
-    this.newHopItem.aromas = this.aromas.join(', ')
+    this.newHopItem.aromas = this.aromas.join(', ');
     this._hopService.createHop(this.newHopItem)
       .subscribe((res) => {
         this.newHopItem.id = JSON.parse(res._body).id;
         this.newHopItem.user_id = JSON.parse(res._body).user_id;
-        this.onHopCreate.emit({hop: this.newHopItem});
+        this.uponHopCreate.emit({hop: this.newHopItem});
         this.createModal.close();
 
         this.newHopItem = {
           id: 0,
           user_id: 0,
-          name: "",
+          name: '',
           global: false,
-          origin: "",
-          hop_type: "",
+          origin: '',
+          hop_type: '',
           alpha: 0,
           beta: 0,
-          description: "",
+          description: '',
           recipe_count: 0,
           hop_relations: [],
           aromas: ''
         };
       }, (error) => {
-        if (error.status == "401") {
-          window.alert("You must log in first.");
+        if (error.status === 401) {
+          window.alert('You must log in first.');
         } else {
-          window.alert("There was an error adding the hop, please try again later.");
+          window.alert('There was an error adding the hop, please try again later.');
         }
         console.error(error);
       });
@@ -90,14 +90,14 @@ export class HopNewComponent implements OnInit {
 
     this.used_hops.push(add_hop);
     this.newHopItem.hop_relations.push({ id: null, hop_id: this.newHopItem.id, hop_relation_id: add_hop.id });
-    this.hops.splice(this.hops.indexOf(add_hop), 1)
+    this.hops.splice(this.hops.indexOf(add_hop), 1);
   }
 
   removeHop(hop_index): void {
-    this.hops.push(this.used_hops[hop_index])
+    this.hops.push(this.used_hops[hop_index]);
     this.newHopItem.hop_relations.splice(hop_index, 1);
     this.used_hops.splice(hop_index, 1);
-    this.hops.sort(function(a,b) {return (a.name > b.name) ? 1 : ((a.name < b.name) ? -1 : 0); });
+    this.hops.sort(function(a, b) {return (a.name > b.name) ? 1 : ((a.name < b.name) ? -1 : 0); });
   }
 
   removeAroma(index): void {
@@ -105,21 +105,21 @@ export class HopNewComponent implements OnInit {
   }
 
   addAroma(): void {
-    if(this.newAroma.length > 0) {
-      if(!this.aromas.includes(this.newAroma)) {
-        this.aromas.push(this.newAroma)
+    if (this.newAroma.length > 0) {
+      if (!this.aromas.includes(this.newAroma)) {
+        this.aromas.push(this.newAroma);
       }
-      this.newAroma = ''
+      this.newAroma = '';
     }
   }
 
   commaCheck(event): void {
-    this.newAroma = this.newAroma.replace(/,/g, "");
-    if(event[event.length-1] === ',') {
-      if(this.newAroma.length > 1 && !this.aromas.includes(this.newAroma)) {
-        this.aromas.push(this.newAroma)
+    this.newAroma = this.newAroma.replace(/,/g, '');
+    if (event[event.length - 1] === ',') {
+      if (this.newAroma.length > 1 && !this.aromas.includes(this.newAroma)) {
+        this.aromas.push(this.newAroma);
       }
-      this.newAroma = ''
+      this.newAroma = '';
     }
   }
 
@@ -131,34 +131,34 @@ export class HopNewComponent implements OnInit {
       .retryWhen((err) => {
         return err.scan((retryCount) => {
           retryCount++;
-          if(retryCount < 3) {
+          if (retryCount < 3) {
             return retryCount;
           } else {
             throw(err);
           }
-        }, 0).delay(1000)
+        }, 0).delay(1000);
       })
       .subscribe(hopData => {
           this.hops = hopData;
           this.used_hops = [];
 
           this.hops.some((hop, i) => {
-            if(hop.id === this.newHopItem.id) {
+            if (hop.id === this.newHopItem.id) {
               this.hops.splice(i, 1);
               return true;
             }
-          })
+          });
 
           this.newHopItem.hop_relations.forEach((relation) => {
             this.hops.some((hop, i) => {
-              if(relation.hop_relation_id === hop.id) {
-                this.used_hops.push(this.hops[i])
+              if (relation.hop_relation_id === hop.id) {
+                this.used_hops.push(this.hops[i]);
                 this.hops.splice(i, 1);
                 return true;
               }
               return false;
-            })
-          })
+            });
+          });
         },
         error => {
           console.error(error);

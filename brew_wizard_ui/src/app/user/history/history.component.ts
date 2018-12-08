@@ -1,4 +1,4 @@
-import { AuthService } from "../../user/auth.service";
+import { AuthService } from '../../user/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { IHistory } from '../history';
 import { UserService } from '../user.service';
@@ -12,13 +12,13 @@ export class HistoryComponent implements OnInit {
 
   history: IHistory[] = [];
   displayedHistory: IHistory[] = [];
-  search: string = "";
-  title: string = "History";
+  search = '';
+  title = 'History';
   start_search: Date = null;
   end_search: Date = null;
-  errorMessage: string = "Loading data...";
-  page: number = 1;
-  pageText: number = 1;
+  errorMessage = 'Loading data...';
+  page = 1;
+  pageText = 1;
   isCollapsed: boolean[] = [];
   isEdit: boolean[] = [];
 
@@ -31,28 +31,28 @@ export class HistoryComponent implements OnInit {
       .retryWhen((err) => {
         return err.scan((retryCount) => {
           retryCount++;
-          if(retryCount < 3) {
+          if (retryCount < 3) {
             return retryCount;
           } else {
             throw(err);
           }
-        }, 0).delay(1000)
+        }, 0).delay(1000);
       })
       .subscribe(historyData => {
-          this.isCollapsed.fill(true, 0, historyData.length - 1)
-          this.isEdit.fill(false, 0, historyData.length - 1)
+          this.isCollapsed.fill(true, 0, historyData.length - 1);
+          this.isEdit.fill(false, 0, historyData.length - 1);
           this.history = historyData;
-          this.errorMessage = "No data found."
+          this.errorMessage = 'No data found.';
         },
         error => {
-          this.errorMessage = "Problem with the service. Please try against later.";
+          this.errorMessage = 'Problem with the service. Please try against later.';
           console.error(error);
       });
   }
 
   filteredHistory(): IHistory[] {
-    return this.history.filter(h => h.recipe_name.match(new RegExp(this.search, "i")) &&
-      (this.end_search ? h.brew_date <= this.end_search : true) && (this.start_search ? h.brew_date >= this.start_search : true))
+    return this.history.filter(h => h.recipe_name.match(new RegExp(this.search, 'i')) &&
+      (this.end_search ? h.brew_date <= this.end_search : true) && (this.start_search ? h.brew_date >= this.start_search : true));
   }
 
   trackByHistoryName(index: number, history: any): string {
@@ -64,9 +64,9 @@ export class HistoryComponent implements OnInit {
       og: null,
       fg: null,
       gallons: null,
-      ingredients: "",
-      notes: "",
-      recipe_name: "",
+      ingredients: '',
+      notes: '',
+      recipe_name: '',
       recipe_id: null,
       brew_date: new Date(),
       id: null
@@ -76,19 +76,19 @@ export class HistoryComponent implements OnInit {
   }
 
   deleteHistory(index: number): void {
-    if(this.history[index].id !== null) {
+    if (this.history[index].id !== null) {
       this._userService.deleteHistory(this.history[index].id)
         .subscribe(historyData => {
             this.history.splice(index, 1);
             this.isCollapsed.splice(index, 1);
             this.isEdit.splice(index, 1);
-            window.alert("History point deleted.")
+            window.alert('History point deleted.');
           },
           error => {
-            if (error.status == "401") {
-              window.alert("You must log in first.");
+            if (error.status === 401) {
+              window.alert('You must log in first.');
             } else {
-              window.alert("There was an error deleting the history point, please try again later.");
+              window.alert('There was an error deleting the history point, please try again later.');
             }
             console.error(error);
         });
@@ -96,17 +96,17 @@ export class HistoryComponent implements OnInit {
   }
 
   saveHistory(index: number): void {
-    if(this.history[index].id === null) {
+    if (this.history[index].id === null) {
       this._userService.createHistory(this.history[index])
         .subscribe((res) => {
           this.history[index].id = JSON.parse(res._body).id;
           this.isEdit[index] = false;
-          window.alert("History point saved.")
+          window.alert('History point saved.');
         }, (error) => {
-          if (error.status == "401") {
-            window.alert("You must log in first.");
+          if (error.status === 401) {
+            window.alert('You must log in first.');
           } else {
-            window.alert("There was an error adding the history point, please try again later.");
+            window.alert('There was an error adding the history point, please try again later.');
           }
           console.error(error);
         });
@@ -115,12 +115,12 @@ export class HistoryComponent implements OnInit {
         .subscribe((res) => {
           this.history[index].id = JSON.parse(res._body).id;
           this.isEdit[index] = false;
-          window.alert("History point saved.")
+          window.alert('History point saved.');
         }, (error) => {
-          if (error.status == "401") {
-            window.alert("You must log in first.");
+          if (error.status === 401) {
+            window.alert('You must log in first.');
           } else {
-            window.alert("There was an error adding the history point, please try again later.");
+            window.alert('There was an error adding the history point, please try again later.');
           }
           console.error(error);
         });
@@ -128,7 +128,7 @@ export class HistoryComponent implements OnInit {
   }
 
   onPageChange(): void {
-    if(this.page > this.getPageCount()) {
+    if (this.page > this.getPageCount()) {
       this.page = this.getPageCount();
     } else if (this.page < 1) {
       this.page = 1;

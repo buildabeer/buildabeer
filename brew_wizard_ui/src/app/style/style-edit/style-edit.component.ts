@@ -8,14 +8,13 @@ import { AuthService } from '../../user/auth.service';
 @Component({
   selector: 'app-style-edit',
   templateUrl: './style-edit.component.html',
-  styleUrls: ['./style-edit.component.scss'],
-  outputs: ['onStyleEdit']
+  styleUrls: ['./style-edit.component.scss']
 })
 export class StyleEditComponent implements OnInit {
 
-  water_profiles: any[] = []
+  water_profiles: any[] = [];
 
-  errorMessage: string = "Loading..."
+  errorMessage = 'Loading...';
 
   @Input()
   originalStyle: IStyle;
@@ -23,7 +22,7 @@ export class StyleEditComponent implements OnInit {
   editStyleItem: IStyle;
 
   @Output()
-  onStyleEdit = new EventEmitter();
+  uponStyleEdit = new EventEmitter();
 
   editModal: NgbModalRef;
 
@@ -36,32 +35,32 @@ export class StyleEditComponent implements OnInit {
   editSubmit(form: any): void {
     this._styleService.editStyle(this.originalStyle.id, this.editStyleItem)
       .subscribe((res) => {
-        this.onStyleEdit.emit({style: this.editStyleItem});
+        this.uponStyleEdit.emit({style: this.editStyleItem});
         this.editModal.close();
       }, (error) => {
-        if (error.status == "401") {
-          window.alert("You must log in first.");
+        if (error.status === 401) {
+          window.alert('You must log in first.');
         } else {
-          window.alert("There was an error processing your request, please try again later.");
+          window.alert('There was an error processing your request, please try again later.');
         }
         console.error(error);
       });
   }
 
   open(editStyle) {
-    this.editStyleItem = Object.assign({}, this.originalStyle)
+    this.editStyleItem = Object.assign({}, this.originalStyle);
     this.editModal = this._modalService.open(editStyle, { size: 'lg' });
 
     this._styleService.getWaterProfiles()
       .retryWhen((err) => {
         return err.scan((retryCount) => {
           retryCount++;
-          if(retryCount < 3) {
+          if (retryCount < 3) {
             return retryCount;
           } else {
             throw(err);
           }
-        }, 0).delay(1000)
+        }, 0).delay(1000);
       })
       .subscribe(waterProfileData => {
           this.water_profiles = waterProfileData;

@@ -1,7 +1,12 @@
 //Install express server
 const express = require('express');
+compression = require('compression');
 const app = express();
 const path = require('path');
+cors = require('cors');
+app.use(compression());
+app.use(cors());
+app.options('*', cors());
 
 // Server only the static files from the dist directory
 app.use(express.static(__dirname + '/dist'));

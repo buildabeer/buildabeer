@@ -93,7 +93,7 @@
         </table>
 
         <div class="col-md-12">
-          <app-water-profile-edit *ngIf="(_authService.currentUserMatchOrGlobal(profile.user_id))" [originalWaterProfile]="profile" (onWaterEdit)="editEvent($event)"></app-water-profile-edit>
+          <app-water-profile-edit *ngIf="(_authService.currentUserMatchOrGlobal(profile.user_id))" [originalWaterProfile]="profile" (uponWaterEdit)="editEvent($event)"></app-water-profile-edit>
           <span *ngIf="(_authService.currentUserMatchOrGlobal(profile.user_id))"> |</span>
           <button *ngIf="(_authService.currentUserMatchOrGlobal(profile.user_id))" class="btn btn-link" role="link" (click)="deleteCard()">Delete</button>
         </div>

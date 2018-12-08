@@ -6,7 +6,7 @@
         <h3 class="align-left">{{ title }}</h3>
       </div>
       <div class="col-md-6">
-        <app-malt-new (onMaltCreate)="createEvent($event)"></app-malt-new>
+        <app-malt-new (uponMaltCreate)="createEvent($event)"></app-malt-new>
       </div>
     </div>
     <div class="row">
@@ -68,7 +68,7 @@
               <h3 class="align-left">{{ title }}</h3>
             </div>
             <div class="col-3">
-              <app-malt-new (onStyleCreate)="createEvent($event)"></app-malt-new>
+              <app-malt-new (uponStyleCreate)="createEvent($event)"></app-malt-new>
             </div>
           </div>
         </div>
@@ -113,9 +113,9 @@
   <div class="pre-scrollable">
     <div *ngFor="let malt of searchedMalts() | slice:(page-1)*20:(page*20-1); trackBy:trackByMaltName; let i = index">
 
-      <app-malt-card [malt]="malt" (onMaltEdit)="editEvent($event)" [malt_type]="maltTypes[malt.malt_type_id-1].name" (onMaltDelete)="deleteEvent($event)"></app-malt-card>
+      <app-malt-card [malt]="malt" (uponMaltEdit)="editEvent($event)" [malt_type]="maltTypes[malt.malt_type_id-1].name" (uponMaltDelete)="deleteEvent($event)"></app-malt-card>
 
     </div>
-    <h4 *ngIf="malts.length == 0" >{{ errorMessage }}</h4>
+    <h4 *ngIf="malts.length === 0" >{{ errorMessage }}</h4>
   </div>
 </div>

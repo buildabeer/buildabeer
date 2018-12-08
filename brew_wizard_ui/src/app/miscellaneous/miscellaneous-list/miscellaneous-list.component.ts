@@ -1,4 +1,4 @@
-import { AuthService } from "../../user/auth.service";
+import { AuthService } from '../../user/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { IMiscellaneous } from '../miscellaneous';
 import { MiscellaneousService } from '../miscellaneous.service';
@@ -12,17 +12,17 @@ export class MiscellaneousListComponent implements OnInit {
 
   miscellaneous: IMiscellaneous[] = [];
   displayedMiscellaneous: IMiscellaneous[] = [];
-  search: string = "";
-  title: string = "Miscellaneous";
-  selectedMiscellaneousCountDropdown: string = "All";
-  selectedMiscellaneousTypeDropdown: string = "0";
-  selectedMiscellaneousUsageDropdown: string = "0";
-  errorMessage: string = "Loading data...";
-  page: number = 1;
-  pageText: number = 1;
+  search = '';
+  title = 'Miscellaneous';
+  selectedMiscellaneousCountDropdown = 'All';
+  selectedMiscellaneousTypeDropdown = '0';
+  selectedMiscellaneousUsageDropdown = '0';
+  errorMessage = 'Loading data...';
+  page = 1;
+  pageText = 1;
 
-  misc_types: string[] = ["Spice", "Fining", "Herb", "Flavor", "Other"]
-  misc_usages: string[] = ["Boil", "Mash", "Primary", "Secondary", "Bottling"]
+  misc_types: string[] = ['Spice', 'Fining', 'Herb', 'Flavor', 'Other'];
+  misc_usages: string[] = ['Boil', 'Mash', 'Primary', 'Secondary', 'Bottling'];
 
   constructor(private _miscellaneousService: MiscellaneousService,
     public _authService: AuthService) { }
@@ -33,52 +33,52 @@ export class MiscellaneousListComponent implements OnInit {
       .retryWhen((err) => {
         return err.scan((retryCount) => {
           retryCount++;
-          if(retryCount < 3) {
+          if (retryCount < 3) {
             return retryCount;
           } else {
             throw(err);
           }
-        }, 0).delay(1000)
+        }, 0).delay(1000);
       })
       .subscribe(miscellaneousData => {
           this.miscellaneous = miscellaneousData;
           this.displayedMiscellaneous = miscellaneousData;
-          this.errorMessage = "No data found."
+          this.errorMessage = 'No data found.';
         },
         error => {
-          this.errorMessage = "Problem with the service. Please try against later.";
+          this.errorMessage = 'Problem with the service. Please try against later.';
           console.error(error);
       });
   }
 
   filterMiscellaneous(resetPage = true): void {
-    if(resetPage) {
+    if (resetPage) {
       this.page = 1;
       this.pageText = 1;
     }
 
-    this.displayedMiscellaneous = this.miscellaneous
+    this.displayedMiscellaneous = this.miscellaneous;
 
-    if(this.selectedMiscellaneousCountDropdown !== "All") {
+    if (this.selectedMiscellaneousCountDropdown !== 'All') {
       this.displayedMiscellaneous =  this.displayedMiscellaneous.filter(m => (m.global &&
-        this.selectedMiscellaneousCountDropdown === "Global") || (!m.global &&
-        this.selectedMiscellaneousCountDropdown === "Local"))
+        this.selectedMiscellaneousCountDropdown === 'Global') || (!m.global &&
+        this.selectedMiscellaneousCountDropdown === 'Local'));
     }
 
-    if(this.selectedMiscellaneousTypeDropdown !== "0") {
+    if (this.selectedMiscellaneousTypeDropdown !== '0') {
       this.displayedMiscellaneous = this.displayedMiscellaneous
-        .filter(m => (m.miscellaneous_type == this.selectedMiscellaneousTypeDropdown || m.miscellaneous_type == "Both"))
+        .filter(m => (m.miscellaneous_type === this.selectedMiscellaneousTypeDropdown || m.miscellaneous_type === 'Both'));
     }
 
-    if(this.selectedMiscellaneousUsageDropdown !== "0") {
+    if (this.selectedMiscellaneousUsageDropdown !== '0') {
       this.displayedMiscellaneous = this.displayedMiscellaneous
-        .filter(m => (m.usage == this.selectedMiscellaneousUsageDropdown))
+        .filter(m => (m.usage === this.selectedMiscellaneousUsageDropdown));
     }
   }
 
   searchedMiscellaneous(): IMiscellaneous[] {
     return this.displayedMiscellaneous
-      .filter(m => m.name.match(new RegExp(this.search, "i")));
+      .filter(m => m.name.match(new RegExp(this.search, 'i')));
   }
 
   trackByMiscellaneousName(index: number, miscellaneous: any): string {
@@ -86,7 +86,7 @@ export class MiscellaneousListComponent implements OnInit {
   }
 
   onPageChange(): void {
-    if(this.page > this.getPageCount()) {
+    if (this.page > this.getPageCount()) {
       this.page = this.getPageCount();
     } else if (this.page < 1) {
       this.page = 1;
@@ -100,49 +100,49 @@ export class MiscellaneousListComponent implements OnInit {
   }
 
   getTypeFilteredMiscellaneousCount(searchValue: string): number {
-    var filteredMiscellaneous: IMiscellaneous[];
+    let filteredMiscellaneous: IMiscellaneous[];
 
     filteredMiscellaneous = this.miscellaneous
-      .filter(m => m.name.match(new RegExp(this.search, "i")));
+      .filter(m => m.name.match(new RegExp(this.search, 'i')));
 
 
-    if(this.selectedMiscellaneousCountDropdown !== "All") {
+    if (this.selectedMiscellaneousCountDropdown !== 'All') {
       filteredMiscellaneous =  filteredMiscellaneous.filter(m => (m.global &&
-        this.selectedMiscellaneousCountDropdown === "Global") || (!m.global &&
-        this.selectedMiscellaneousCountDropdown === "Local"))
+        this.selectedMiscellaneousCountDropdown === 'Global') || (!m.global &&
+        this.selectedMiscellaneousCountDropdown === 'Local'));
     }
 
-    if(this.selectedMiscellaneousUsageDropdown !== "0") {
+    if (this.selectedMiscellaneousUsageDropdown !== '0') {
       filteredMiscellaneous = filteredMiscellaneous
-        .filter(m => (m.usage == this.selectedMiscellaneousUsageDropdown))
+        .filter(m => (m.usage === this.selectedMiscellaneousUsageDropdown));
     }
 
-    if(searchValue === "0") {
+    if (searchValue === '0') {
       return filteredMiscellaneous.length;
     }
     return filteredMiscellaneous
-      .filter(m => m.miscellaneous_type === searchValue || m.miscellaneous_type == "Both").length;
+      .filter(m => m.miscellaneous_type === searchValue || m.miscellaneous_type === 'Both').length;
   }
 
   getUsageFilteredMiscellaneousCount(searchValue: string): number {
-    var filteredMiscellaneous: IMiscellaneous[];
+    let filteredMiscellaneous: IMiscellaneous[];
 
     filteredMiscellaneous = this.miscellaneous
-      .filter(m => m.name.match(new RegExp(this.search, "i")));
+      .filter(m => m.name.match(new RegExp(this.search, 'i')));
 
 
-    if(this.selectedMiscellaneousCountDropdown !== "All") {
+    if (this.selectedMiscellaneousCountDropdown !== 'All') {
       filteredMiscellaneous =  filteredMiscellaneous.filter(m => (m.global &&
-        this.selectedMiscellaneousCountDropdown === "Global") || (!m.global &&
-        this.selectedMiscellaneousCountDropdown === "Local"))
+        this.selectedMiscellaneousCountDropdown === 'Global') || (!m.global &&
+        this.selectedMiscellaneousCountDropdown === 'Local'));
     }
 
-    if(this.selectedMiscellaneousTypeDropdown !== "0") {
+    if (this.selectedMiscellaneousTypeDropdown !== '0') {
       this.displayedMiscellaneous = this.displayedMiscellaneous
-        .filter(m => (m.miscellaneous_type == this.selectedMiscellaneousTypeDropdown || m.miscellaneous_type == "Both"))
+        .filter(m => (m.miscellaneous_type === this.selectedMiscellaneousTypeDropdown || m.miscellaneous_type === 'Both'));
     }
 
-    if(searchValue === "0") {
+    if (searchValue === '0') {
       return filteredMiscellaneous.length;
     }
     return filteredMiscellaneous
@@ -150,25 +150,25 @@ export class MiscellaneousListComponent implements OnInit {
   }
 
   getGlobalFilteredMiscellaneousCount(searchValue: number): number {
-    var filteredMiscellaneous: IMiscellaneous[];
+    let filteredMiscellaneous: IMiscellaneous[];
 
     filteredMiscellaneous = this.miscellaneous
-      .filter(m => m.name.match(new RegExp(this.search, "i")));
+      .filter(m => m.name.match(new RegExp(this.search, 'i')));
 
-    if(this.selectedMiscellaneousTypeDropdown !== "0") {
+    if (this.selectedMiscellaneousTypeDropdown !== '0') {
       filteredMiscellaneous = filteredMiscellaneous
-        .filter(m => (m.miscellaneous_type == this.selectedMiscellaneousTypeDropdown || m.miscellaneous_type == "Both"))
+        .filter(m => (m.miscellaneous_type === this.selectedMiscellaneousTypeDropdown || m.miscellaneous_type === 'Both'));
     }
 
-    if(this.selectedMiscellaneousUsageDropdown !== "0") {
+    if (this.selectedMiscellaneousUsageDropdown !== '0') {
       filteredMiscellaneous = filteredMiscellaneous
-        .filter(m => (m.usage == this.selectedMiscellaneousUsageDropdown))
+        .filter(m => (m.usage === this.selectedMiscellaneousUsageDropdown));
     }
 
-    if(searchValue == 1) {
+    if (searchValue === 1) {
       return filteredMiscellaneous
         .filter(m => m.global).length;
-    } else if (searchValue == 0) {
+    } else if (searchValue === 0) {
       return filteredMiscellaneous
         .filter(m => !m.global).length;
     }
@@ -181,13 +181,13 @@ export class MiscellaneousListComponent implements OnInit {
   }
 
   editEvent(event): void {
-    var index = -1;
+    let index = -1;
     this.miscellaneous.some((miscellaneous, i) => {
-      if(miscellaneous.id === event.miscellaneous.id) {
+      if (miscellaneous.id === event.miscellaneous.id) {
         index = i;
         return true;
       }
-    })
+    });
     if (index > -1) {
       this.miscellaneous[index] = event.miscellaneous;
       this.filterMiscellaneous(false);
@@ -195,7 +195,7 @@ export class MiscellaneousListComponent implements OnInit {
   }
 
   deleteEvent(event): void {
-    var index = this.miscellaneous.indexOf(event.miscellaneous);
+    const index = this.miscellaneous.indexOf(event.miscellaneous);
     if (index > -1) {
       this.miscellaneous.splice(index, 1);
     }

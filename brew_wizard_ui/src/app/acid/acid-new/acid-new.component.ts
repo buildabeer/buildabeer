@@ -15,16 +15,16 @@ export class AcidNewComponent implements OnInit {
 
   newAcidItem: IAcid = {
         id: 0,
-        name: "",
+        name: '',
         strength: 0,
         quantity_for_normal: 0,
         molecular_weight: 0,
         density: 0,
-        description: ""
+        description: ''
       };
 
   @Output()
-  onAcidCreate = new EventEmitter();
+  uponAcidCreate = new EventEmitter();
 
   createModal: NgbModalRef;
 
@@ -36,27 +36,27 @@ export class AcidNewComponent implements OnInit {
   }
 
   creationSubmit(form: any): void {
-    console.log(this.newAcidItem)
+    console.log(this.newAcidItem);
     this._acidService.createAcid(this.newAcidItem)
       .subscribe((res) => {
         this.newAcidItem.id = JSON.parse(res._body).id;
-        this.onAcidCreate.emit({acid: this.newAcidItem});
+        this.uponAcidCreate.emit({acid: this.newAcidItem});
         this.createModal.close();
 
         this.newAcidItem = {
             id: 0,
-            name: "",
+            name: '',
             strength: 0,
             quantity_for_normal: 0,
             molecular_weight: 0,
             density: 0,
-            description: ""
+            description: ''
           };
       }, (error) => {
-        if (error.status == "401") {
-          window.alert("You must log in first.");
+        if (error.status === 401) {
+          window.alert('You must log in first.');
         } else {
-          window.alert("There was an error adding the acid acid, please try again later.");
+          window.alert('There was an error adding the acid acid, please try again later.');
         }
         console.error(error);
       });

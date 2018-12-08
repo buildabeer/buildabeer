@@ -8,12 +8,11 @@ import { AuthService } from '../../user/auth.service';
 @Component({
   selector: 'app-acid-edit',
   templateUrl: './acid-edit.component.html',
-  styleUrls: ['./acid-edit.component.scss'],
-  outputs: ['onAcidEdit']
+  styleUrls: ['./acid-edit.component.scss']
 })
 export class AcidEditComponent implements OnInit {
 
-  errorMessage: string = "Loading..."
+  errorMessage = 'Loading...';
 
   originalName: string;
 
@@ -22,8 +21,7 @@ export class AcidEditComponent implements OnInit {
 
   editAcid: IAcid;
 
-  @Output()
-  onAcidEdit = new EventEmitter();
+  uponAcidEdit = new EventEmitter();
 
   editModal: NgbModalRef;
 
@@ -36,20 +34,20 @@ export class AcidEditComponent implements OnInit {
   editSubmit(form: any): void {
     this._acidService.editAcid(this.editAcid)
       .subscribe((res) => {
-        this.onAcidEdit.emit({acid: this.editAcid});
+        this.uponAcidEdit.emit({acid: this.editAcid});
         this.editModal.close();
       }, (error) => {
-        if (error.status == "401") {
-          window.alert("You must log in first.");
+        if (error.status === 401) {
+          window.alert('You must log in first.');
         } else {
-          window.alert("There was an error processing your request, please try again later.");
+          window.alert('There was an error processing your request, please try again later.');
         }
         console.error(error);
       });
   }
 
   open(editAcid) {
-    this.editAcid = Object.assign({}, this.originalAcid)
+    this.editAcid = Object.assign({}, this.originalAcid);
     this.editModal = this._modalService.open(editAcid, { size: 'lg' });
   }
 }

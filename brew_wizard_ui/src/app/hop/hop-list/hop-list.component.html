@@ -6,7 +6,7 @@
         <h3 class="align-left">{{ title }}</h3>
       </div>
       <div class="col-md-6">
-        <app-hop-new (onHopCreate)="createEvent($event)"></app-hop-new>
+        <app-hop-new (uponHopCreate)="createEvent($event)"></app-hop-new>
       </div>
     </div>
     <div class="row">
@@ -103,7 +103,7 @@
               <h3 class="align-left">{{ title }}</h3>
             </div>
             <div class="col-3">
-              <app-hop-new (onStyleCreate)="createEvent($event)"></app-hop-new>
+              <app-hop-new (uponStyleCreate)="createEvent($event)"></app-hop-new>
             </div>
           </div>
         </div>
@@ -157,9 +157,9 @@
   <div class="pre-scrollable">
     <div *ngFor="let hop of searchedHops() | slice:(page-1)*20:(page*20-1); trackBy:trackByHopName;">
 
-      <app-hop-card [hop]="hop" (onHopDelete)="deleteEvent($event)" (onHopEdit)="editEvent($event)"></app-hop-card>
+      <app-hop-card [hop]="hop" (uponHopDelete)="deleteEvent($event)" (uponHopEdit)="editEvent($event)"></app-hop-card>
 
     </div>
-    <h4 *ngIf="hops.length == 0" >{{ errorMessage }}</h4>
+    <h4 *ngIf="hops.length === 0" >{{ errorMessage }}</h4>
   </div>
 </div>

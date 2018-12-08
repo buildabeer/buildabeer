@@ -16,23 +16,23 @@ export class MaltNewComponent implements OnInit {
   newMaltItem: IMalt = {
         id: 0,
         user_id: 0,
-        name: "",
+        name: '',
         global: false,
         malt_type_id: 1,
-        origin: "",
+        origin: '',
         color: 0,
         malt_yield: 70,
         diastatic_power: 0,
         protein: 0,
         must_mash: true,
         max_percent: 100,
-        description: "",
+        description: '',
         recipe_count: 0
       };
   maltTypes: string[] = [];
 
   @Output()
-  onMaltCreate = new EventEmitter();
+  uponMaltCreate = new EventEmitter();
 
   createModal: NgbModalRef;
 
@@ -46,24 +46,24 @@ export class MaltNewComponent implements OnInit {
       .retryWhen((err) => {
         return err.scan((retryCount) => {
           retryCount++;
-          if(retryCount < 3) {
+          if (retryCount < 3) {
             return retryCount;
           } else {
             throw(err);
           }
-        }, 0).delay(1000)
+        }, 0).delay(1000);
       })
       .subscribe(maltTypeData => {
           this.maltTypes = maltTypeData;
-          if(this.maltTypes.length === 0) {
-            window.alert("No malt types found.");
+          if (this.maltTypes.length === 0) {
+            window.alert('No malt types found.');
           }
         },
         error => {
-          if (error.status == "401") {
-            window.alert("You must log in first.");
+          if (error.status === 401) {
+            window.alert('You must log in first.');
           } else {
-            window.alert("Problem with the service. Please try against later.");
+            window.alert('Problem with the service. Please try against later.');
           }
           console.error(error);
       });
@@ -74,30 +74,30 @@ export class MaltNewComponent implements OnInit {
       .subscribe((res) => {
         this.newMaltItem.id = JSON.parse(res._body).id;
         this.newMaltItem.user_id = JSON.parse(res._body).user_id;
-        this.onMaltCreate.emit({malt: this.newMaltItem});
+        this.uponMaltCreate.emit({malt: this.newMaltItem});
         this.createModal.close();
 
         this.newMaltItem = {
             id: 0,
             user_id: 0,
-            name: "",
+            name: '',
             global: false,
             malt_type_id: 1,
-            origin: "",
+            origin: '',
             color: 0,
             malt_yield: 70,
             diastatic_power: 0,
             protein: 0,
             must_mash: true,
             max_percent: 100,
-            description: "",
+            description: '',
             recipe_count: 0
         };
       }, (error) => {
-        if (error.status == "401") {
-          window.alert("You must log in first.");
+        if (error.status === 401) {
+          window.alert('You must log in first.');
         } else {
-          window.alert("There was an error adding the malt, please try again later.");
+          window.alert('There was an error adding the malt, please try again later.');
         }
         console.error(error);
       });

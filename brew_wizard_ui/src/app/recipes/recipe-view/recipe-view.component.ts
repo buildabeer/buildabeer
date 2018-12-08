@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AuthService } from "../../user/auth.service";
+import { AuthService } from '../../user/auth.service';
 
 import { RecipeService } from '../recipe.service';
 import { DesignerService } from '../designer.service';
@@ -17,22 +17,22 @@ import * as html2canvas from 'html2canvas';
 })
 export class RecipeViewComponent implements OnInit {
 
-  scale_number: number = 5;
+  scale_number = 5;
   scaleModal: NgbModalRef;
   measurementModal: NgbModalRef;
 
   constructor(private _recipeService: RecipeService, public _router: Router,
     public _authService: AuthService, private _modalService: NgbModal,
-    public _designer: DesignerService, private _activatedRoute: ActivatedRoute,) { }
+    public _designer: DesignerService, private _activatedRoute: ActivatedRoute, ) { }
 
   ngOnInit() {
-    let recipeId: number = this._activatedRoute.snapshot.params['id'];
+    const recipeId: number = this._activatedRoute.snapshot.params['id'];
     this._designer.loadRecipe(recipeId);
   }
 
   savePdf(pdfPopup) {
-    var pdf = new jsPDF('p', 'pt', 'letter');
-    var name = this._designer.recipe.name ? this._designer.recipe.name : "new_recipe" + ".pdf"
+    const pdf = new jsPDF('p', 'pt', 'letter');
+    const name = this._designer.recipe.name ? this._designer.recipe.name : 'new_recipe' + '.pdf';
 
     pdf.addHTML(document.getElementById('pdf'), function() {
       pdf.save(name);
@@ -40,18 +40,18 @@ export class RecipeViewComponent implements OnInit {
   }
 
   deleteRecipe() {
-    if (window.confirm("Are you sure you want to delete this recipe?" )) {
+    if (window.confirm('Are you sure you want to delete this recipe?' )) {
       this._recipeService.deleteRecipe(this._designer.recipe.id)
         .subscribe((res) => {
-          this._router.navigate(['/recipes'])
+          this._router.navigate(['/recipes']);
         }, (error) => {
-          if (error.status == "401") {
-            window.alert("You must log in first.");
+          if (error.status === 401) {
+            window.alert('You must log in first.');
           } else {
-            window.alert("There was an error deleting the recipe, please try again later.");
+            window.alert('There was an error deleting the recipe, please try again later.');
           }
           console.error(error);
-        })
+        });
     }
   }
 

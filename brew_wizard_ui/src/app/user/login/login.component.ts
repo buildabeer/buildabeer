@@ -10,9 +10,9 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
 
   signInUser = {
-    email: '',
+    login: '',
     password: ''
-  }
+  };
 
   signInErrors: string[] = [];
 
@@ -24,16 +24,16 @@ export class LoginComponent implements OnInit {
   onSignInSubmit() {
     this._authService.loginUser(this.signInUser)
       .subscribe((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           this._router.navigate(['']);
         }
       },
       err => {
         this.signInUser = {
-          email: '',
+          login: '',
           password: ''
-        }
-        this.signInErrors = err.json().errors;
-      })
+        };
+        this.signInErrors = err.errors;
+      });
   }
 }
