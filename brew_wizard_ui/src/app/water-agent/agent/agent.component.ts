@@ -15,35 +15,35 @@ import 'rxjs/add/operator/scan';
 export class AgentComponent implements OnInit {
 
   agent: IWaterAgent;
-  errorMessage: string = "Loading..."
+  errorMessage = 'Loading...';
 
   constructor(private _agentService: AgentService, private _activatedRoute: ActivatedRoute, private _router: Router) { }
 
   ngOnInit() {
-    let agentId: number = this._activatedRoute.snapshot.params['id'];
+    const agentId: number = this._activatedRoute.snapshot.params['id'];
     this._agentService.getAgent(agentId)
       .retryWhen((err) => {
         return err.scan((retryCount) => {
           retryCount++;
-          if(retryCount < 6) {
+          if (retryCount < 6) {
             return retryCount;
           } else {
             throw(err);
           }
-        }, 0).delay(1000)
+        }, 0).delay(1000);
       })
       .subscribe((agentData) => {
-        if (agentData == null) {
-          this.errorMessage = "Specified agent was not found.";
+        if (agentData === null) {
+          this.errorMessage = 'Specified agent was not found.';
         } else {
           this.agent = agentData;
-          this.errorMessage = "";
+          this.errorMessage = '';
         }
       }, (error) => {
-          if (error.status == "401") {
-            this.errorMessage = "You must log in first.";
+          if (error.status === 401) {
+            this.errorMessage = 'You must log in first.';
           } else {
-            this.errorMessage = "Problem with the service. Please try against later.";
+            this.errorMessage = 'Problem with the service. Please try against later.';
           }
           console.error(error);
       });

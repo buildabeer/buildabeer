@@ -85,7 +85,7 @@
         </table>
 
         <div class="col-md-12">
-          <app-miscellaneous-edit *ngIf="(_authService.currentUserMatchOrGlobal(miscellaneous.user_id))" [originalMiscellaneousItem]="miscellaneous" (onMiscellaneousEdit)="editEvent($event)"></app-miscellaneous-edit>
+          <app-miscellaneous-edit *ngIf="(_authService.currentUserMatchOrGlobal(miscellaneous.user_id))" [originalMiscellaneousItem]="miscellaneous" (uponMiscellaneousEdit)="editEvent($event)"></app-miscellaneous-edit>
 
           <span *ngIf="(_authService.currentUserMatchOrGlobal(miscellaneous.user_id))"> |</span>
           <button *ngIf="(_authService.currentUserMatchOrGlobal(miscellaneous.user_id))" class="btn btn-link" role="link" (click)="deleteCard()">Delete</button>

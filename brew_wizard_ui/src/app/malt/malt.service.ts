@@ -26,15 +26,15 @@ export class MaltService {
   }
 
   createMalt(malt: IMalt): any {
-    return this.http.post("malts/", {malt})
+    return this.http.post(`${environment.token_auth_config.apiBase}/malts/`, {malt});
   }
 
   editMalt(maltId: number, malt: IMalt): any {
-    return this.http.put("malts/" + maltId, {malt})
+    return this.http.put(`${environment.token_auth_config.apiBase}/malts/` + maltId, {malt});
   }
 
   deleteMalt(maltId: number): any {
-    return this.http.delete("malts/" + maltId)
+    return this.http.delete(`${environment.token_auth_config.apiBase}/malts/` + maltId);
   }
 
   getMashSteps(): any {
@@ -57,6 +57,6 @@ export class MaltService {
 
   handleError(error: Response) {
     console.error(error);
-    return Observable.throw(error);
+    return Observable.throwError(error);
   }
 }

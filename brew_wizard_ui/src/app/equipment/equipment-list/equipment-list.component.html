@@ -6,7 +6,7 @@
         <h3 class="align-left">{{ title }}</h3>
       </div>
       <div class="col-md-6">
-        <app-equipment-new (onEquipmentCreate)="createEvent($event)"></app-equipment-new>
+        <app-equipment-new (uponEquipmentCreate)="createEvent($event)"></app-equipment-new>
       </div>
     </div>
     <div class="row">
@@ -57,7 +57,7 @@
               <h3 class="align-left">{{ title }}</h3>
             </div>
             <div class="col-3">
-              <app-equipment-new (onEquipmentCreate)="createEvent($event)"></app-equipment-new>
+              <app-equipment-new (uponEquipmentCreate)="createEvent($event)"></app-equipment-new>
             </div>
           </div>
         </div>
@@ -96,9 +96,9 @@
   <div class="pre-scrollable">
     <div *ngFor="let equipment of searchedEquipment() | slice:(page-1)*20:(page*20-1); trackBy:trackByEquipmentName">
 
-      <app-equipment-card [equipment]="equipment" (onEquipmentEdit)="editEvent($event)" (onEquipmentDelete)="deleteEvent($event)"></app-equipment-card>
+      <app-equipment-card [equipment]="equipment" (uponEquipmentEdit)="editEvent($event)" (uponEquipmentDelete)="deleteEvent($event)"></app-equipment-card>
 
     </div>
-    <h4 *ngIf="equipment.length == 0" >{{ errorMessage }}</h4>
+    <h4 *ngIf="equipment.length === 0" >{{ errorMessage }}</h4>
   </div>
 </div>

@@ -1,7 +1,7 @@
 import { AuthService } from '../../user/auth.service';
-import { AngularTokenService } from 'angular-token'
+import { AngularTokenService } from 'angular-token';
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
+import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
 @Component({
@@ -14,7 +14,7 @@ export class AppHeaderComponent implements OnInit {
   headerSignIn = {
     login: '',
     password: ''
-  }
+  };
   navbarCollapsed: boolean;
 
   signInErrors: string[] = [];
@@ -34,11 +34,11 @@ export class AppHeaderComponent implements OnInit {
   onSignInSubmit() {
     this._authService.loginUser(this.headerSignIn)
       .subscribe((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           this.headerSignIn = {
             login: '',
             password: ''
-          }
+          };
           // if (this._router.url !== '/recipes/new') {
           //   window.location.reload();
           // }
@@ -48,8 +48,8 @@ export class AppHeaderComponent implements OnInit {
         this.headerSignIn = {
           login: '',
           password: ''
-        }
-        this.signInErrors = err.json().errors;
-      })
+        };
+        this.signInErrors = err.errors;
+      });
   }
 }

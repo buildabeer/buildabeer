@@ -20,23 +20,23 @@ export class RecipeService {
   // }
 
   getRecipes(category_number, subcategory, search, publicSearch, page): any {
-    var query_string_array: string[] = []
-    var query_string: string = ''
-    if(category_number && subcategory) {
-      query_string_array.push("category_number=" + category_number)
-      query_string_array.push("subcategory=" + subcategory)
+    const query_string_array: string[] = [];
+    let query_string = '';
+    if (category_number && subcategory) {
+      query_string_array.push('category_number=' + category_number);
+      query_string_array.push('subcategory=' + subcategory);
     }
-    if(search) {
-      query_string_array.push("search=" + search)
+    if (search) {
+      query_string_array.push('search=' + search);
     }
-    if(publicSearch) {
-      query_string_array.push("public=" + publicSearch)
+    if (publicSearch) {
+      query_string_array.push('public=' + publicSearch);
     }
-    if(page) {
-      query_string_array.push("page=" + page)
+    if (page) {
+      query_string_array.push('page=' + page);
     }
-    if(query_string_array.length > 0) {
-      query_string = '?' + query_string_array.join("&")
+    if (query_string_array.length > 0) {
+      query_string = '?' + query_string_array.join('&');
     }
     return this.http.get(`${environment.token_auth_config.apiBase}/recipes` + query_string)
       .map((response: any) => response)
@@ -50,20 +50,20 @@ export class RecipeService {
   }
 
   createRecipe(recipe: any): any {
-    return this.http.post("recipes/", {recipe})
+    return this.http.post(`${environment.token_auth_config.apiBase}/recipes/`, {recipe});
   }
 
   editRecipe(recipe: any): any {
-    return this.http.put("recipes/" + recipe.id, {recipe})
+    return this.http.put(`${environment.token_auth_config.apiBase}/recipes/` + recipe.id, {recipe});
   }
 
   deleteRecipe(recipeId: number): any {
-    return this.http.delete("recipes/" + recipeId)
+    return this.http.delete(`${environment.token_auth_config.apiBase}/recipes/` + recipeId);
   }
 
   handleError(error: Response) {
     console.error(error);
-    return Observable.throw(error);
+    return Observable.throwError(error);
   }
 
   getRecipeCount(): Observable<any> {

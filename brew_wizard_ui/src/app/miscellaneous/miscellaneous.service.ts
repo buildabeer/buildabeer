@@ -26,15 +26,15 @@ export class MiscellaneousService {
   }
 
   createMiscellaneous(miscellaneou: IMiscellaneous): any {
-    return this.http.post("miscellaneous/", {miscellaneou})
+    return this.http.post(`${environment.token_auth_config.apiBase}/miscellaneous/`, {miscellaneou});
   }
 
   editMiscellaneous(miscellaneousId: number, miscellaneou: IMiscellaneous): any {
-    return this.http.put("miscellaneous/" + miscellaneousId, {miscellaneou})
+    return this.http.put(`${environment.token_auth_config.apiBase}/miscellaneous/` + miscellaneousId, {miscellaneou});
   }
 
   deleteMiscellaneous(miscellaneousId: number): any {
-    return this.http.delete("miscellaneous/" + miscellaneousId)
+    return this.http.delete(`${environment.token_auth_config.apiBase}/miscellaneous/` + miscellaneousId);
   }
 
   getTypes(): any {
@@ -51,15 +51,15 @@ export class MiscellaneousService {
 
   handleError(error: Response) {
     console.error(error);
-    return Observable.throw(error);
+    return Observable.throwError(error);
   }
 
   calculateTime(minutes: number): { time: number, label: string } {
     if ( minutes >= 60 * 24 ) {
-      return { time: minutes / 60 / 24, label: "days" }
+      return { time: minutes / 60 / 24, label: 'days' };
     } else if (minutes >= 60) {
-      return { time: minutes / 60, label: "hours" }
+      return { time: minutes / 60, label: 'hours' };
     }
-    return { time: minutes, label: "minutes" }
+    return { time: minutes, label: 'minutes' };
   }
 }

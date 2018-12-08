@@ -8,7 +8,7 @@ export class SaveDialogService {
     const confirmation = window.confirm(message || 'Are you sure?');
 
     return Observable.of(confirmation);
-  };
+  }
 
   constructor() { }
 

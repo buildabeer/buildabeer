@@ -4,7 +4,7 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 
-import { environment } from '../../../environments/environment'
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-contact-us',
@@ -19,7 +19,7 @@ export class ContactUsComponent implements OnInit {
     phone: '',
     title: '',
     message: ''
-  }
+  };
 
   contactErrors: string[] = [];
 
@@ -31,30 +31,30 @@ export class ContactUsComponent implements OnInit {
   sendContact(): Observable<Response> {
     return this._http.post(environment.token_auth_config.apiBase + '/contact_us', this.contact)
       .map((response: Response) => response)
-      .catch(this.handleError)
+      .catch(this.handleError);
   }
 
   contactSubmit(): void {
     this.sendContact()
       .subscribe((res) => {
-        if (res.status == 201) {
+        if (res.status === 201) {
           this.contact = {
             email: '',
             name: '',
             phone: '',
             title: '',
             message: ''
-          }
-          window.alert("Message sent.")
+          };
+          window.alert('Message sent.');
         }
       },
       err => {
-        this.contactErrors = err.json().errors;
-      })
+        this.contactErrors = err.errors;
+      });
   }
 
   handleError(error: Response) {
     console.error(error);
-    return Observable.throw(error);
+    return Observable.throwError(error);
   }
 }

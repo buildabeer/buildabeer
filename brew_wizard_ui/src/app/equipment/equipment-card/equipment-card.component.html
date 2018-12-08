@@ -85,7 +85,7 @@
         </table>
 
         <div class="col-md-12">
-          <app-equipment-edit *ngIf="(_authService.currentUserMatchOrGlobal(equipment.user_id))" [originalEquipmentItem]="equipment" (onEquipmentEdit)="editEvent($event)"></app-equipment-edit>
+          <app-equipment-edit *ngIf="(_authService.currentUserMatchOrGlobal(equipment.user_id))" [originalEquipmentItem]="equipment" (uponEquipmentEdit)="editEvent($event)"></app-equipment-edit>
 
           <span *ngIf="(_authService.currentUserMatchOrGlobal(equipment.user_id))"> |</span>
           <button *ngIf="(_authService.currentUserMatchOrGlobal(equipment.user_id))" class="btn btn-link" role="link" (click)="deleteCard()">Delete</button>

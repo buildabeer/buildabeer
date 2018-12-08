@@ -32,19 +32,19 @@ export class StyleService {
   }
 
   createStyle(style: IStyle): any {
-    return this.http.post("styles/", {style})
+    return this.http.post(`${environment.token_auth_config.apiBase}/styles/`, {style});
   }
 
   editStyle(styleId: number, style: IStyle): any {
-    return this.http.put("styles/" + styleId, {style})
+    return this.http.put(`${environment.token_auth_config.apiBase}/styles/` + styleId, {style});
   }
 
   deleteStyle(styleId: number): any {
-    return this.http.delete("styles/" + styleId)
+    return this.http.delete(`${environment.token_auth_config.apiBase}/styles/` + styleId);
   }
 
   handleError(error: Response) {
     console.error(error);
-    return Observable.throw(error);
+    return Observable.throwError(error);
   }
 }

@@ -16,35 +16,35 @@ export class MiscellaneousComponent implements OnInit {
 
   miscellaneous: IMiscellaneous;
   miscellaneous_type: string;
-  errorMessage: string = "Loading..."
+  errorMessage = 'Loading...';
 
   constructor(private _miscellaneousService: MiscellaneousService, private _activatedRoute: ActivatedRoute, private _router: Router) { }
 
   ngOnInit() {
-    let miscellaneousId: number = this._activatedRoute.snapshot.params['id'];
+    const miscellaneousId: number = this._activatedRoute.snapshot.params['id'];
     this._miscellaneousService.getMiscellaneous(miscellaneousId)
       .retryWhen((err) => {
         return err.scan((retryCount) => {
           retryCount++;
-          if(retryCount < 6) {
+          if (retryCount < 6) {
             return retryCount;
           } else {
             throw(err);
           }
-        }, 0).delay(1000)
+        }, 0).delay(1000);
       })
       .subscribe((miscellaneousData) => {
-        if (miscellaneousData == null) {
-          this.errorMessage = "Specified miscellaneous was not found.";
+        if (miscellaneousData === null) {
+          this.errorMessage = 'Specified miscellaneous was not found.';
         } else {
           this.miscellaneous = miscellaneousData;
-          this.errorMessage = "";
+          this.errorMessage = '';
         }
       }, (error) => {
-          if (error.status == "401") {
-            this.errorMessage = "You must log in first.";
+          if (error.status === 401) {
+            this.errorMessage = 'You must log in first.';
           } else {
-            this.errorMessage = "Problem with the service. Please try against later.";
+            this.errorMessage = 'Problem with the service. Please try against later.';
           }
           console.error(error);
       });

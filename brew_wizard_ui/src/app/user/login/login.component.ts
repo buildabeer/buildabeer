@@ -12,7 +12,7 @@ export class LoginComponent implements OnInit {
   signInUser = {
     login: '',
     password: ''
-  }
+  };
 
   signInErrors: string[] = [];
 
@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
   onSignInSubmit() {
     this._authService.loginUser(this.signInUser)
       .subscribe((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           this._router.navigate(['']);
         }
       },
@@ -32,8 +32,8 @@ export class LoginComponent implements OnInit {
         this.signInUser = {
           login: '',
           password: ''
-        }
-        this.signInErrors = err.json().errors;
-      })
+        };
+        this.signInErrors = err.errors;
+      });
   }
 }

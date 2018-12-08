@@ -6,7 +6,7 @@
         <h3 class="align-left">{{ title }}</h3>
       </div>
       <div class="col-md-6">
-        <app-water-profile-new (onWaterCreate)="createEvent($event)"></app-water-profile-new>
+        <app-water-profile-new (uponWaterCreate)="createEvent($event)"></app-water-profile-new>
       </div>
     </div>
     <div class="row">
@@ -57,7 +57,7 @@
               <h3 class="align-left">{{ title }}</h3>
             </div>
             <div class="col-3">
-              <app-water-profile-new (onStyleCreate)="createEvent($event)"></app-water-profile-new>
+              <app-water-profile-new (uponStyleCreate)="createEvent($event)"></app-water-profile-new>
             </div>
           </div>
         </div>
@@ -95,9 +95,9 @@
   <div class="pre-scrollable">
     <div *ngFor="let water of searchedProfiles() | slice:(page-1)*20:(page*20-1); trackBy:trackByWaterName;">
 
-      <app-water-card [profile]="water" (onProfileEdit)="editEvent($event)" (onWaterDelete)="deleteEvent($event)"></app-water-card>
+      <app-water-card [profile]="water" (uponProfileEdit)="editEvent($event)" (uponWaterDelete)="deleteEvent($event)"></app-water-card>
 
     </div>
-    <h4 *ngIf="waters.length == 0" >{{ errorMessage }}</h4>
+    <h4 *ngIf="waters.length === 0" >{{ errorMessage }}</h4>
   </div>
 </div>

@@ -26,19 +26,19 @@ export class EquipmentService {
   }
 
   createEquipment(equipment: IEquipment): any {
-    return this.http.post("equipment/", {equipment})
+    return this.http.post(`${environment.token_auth_config.apiBase}/equipment/`, {equipment});
   }
 
   editEquipment(equipmentId: number, equipment: IEquipment): any {
-    return this.http.put("equipment/" + equipmentId, {equipment})
+    return this.http.put(`${environment.token_auth_config.apiBase}/equipment/` + equipmentId, {equipment});
   }
 
   deleteEquipment(equipmentId: number): any {
-    return this.http.delete("equipment/" + equipmentId)
+    return this.http.delete(`${environment.token_auth_config.apiBase}/equipment/` + equipmentId);
   }
 
   handleError(error: Response) {
     console.error(error);
-    return Observable.throw(error);
+    return Observable.throwError(error);
   }
 }

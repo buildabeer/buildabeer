@@ -26,21 +26,21 @@ export class HopService {
   }
 
   createHop(send_hop: any): any {
-    var hop = Object.assign({}, send_hop)
-    hop.hop_relations_attributes = hop.hop_relations
-    delete hop.hop_relations
-    return this.http.post("hops/", {hop})
+    const hop = Object.assign({}, send_hop);
+    hop.hop_relations_attributes = hop.hop_relations;
+    delete hop.hop_relations;
+    return this.http.post(`${environment.token_auth_config.apiBase}/hops/`, {hop});
   }
 
   editHop(hopId: number, send_hop: any): any {
-    var hop = Object.assign({}, send_hop)
-    hop.hop_relations_attributes = hop.hop_relations
-    delete hop.hop_relations
-    return this.http.put("hops/" + hopId, {hop})
+    const hop = Object.assign({}, send_hop);
+    hop.hop_relations_attributes = hop.hop_relations;
+    delete hop.hop_relations;
+    return this.http.put(`${environment.token_auth_config.apiBase}/hops/` + hopId, {hop});
   }
 
   deleteHop(hopId: number): any {
-    return this.http.delete("hops/" + hopId)
+    return this.http.delete(`${environment.token_auth_config.apiBase}/hops/` + hopId);
   }
 
   getTypes(): any {
@@ -57,6 +57,6 @@ export class HopService {
 
   handleError(error: Response) {
     console.error(error);
-    return Observable.throw(error);
+    return Observable.throwError(error);
   }
 }

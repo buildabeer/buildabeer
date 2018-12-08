@@ -6,7 +6,7 @@
         <h3 class="align-left">{{ title }}</h3>
       </div>
       <div class="col-md-6">
-        <app-yeast-new (onYeastCreate)="createEvent($event)"></app-yeast-new>
+        <app-yeast-new (uponYeastCreate)="createEvent($event)"></app-yeast-new>
       </div>
     </div>
     <div class="row">
@@ -79,7 +79,7 @@
               <h3 class="align-left">{{ title }}</h3>
             </div>
             <div class="col-3">
-              <app-yeast-new (onStyleCreate)="createEvent($event)"></app-yeast-new>
+              <app-yeast-new (uponStyleCreate)="createEvent($event)"></app-yeast-new>
             </div>
           </div>
         </div>
@@ -131,9 +131,9 @@
   <div class="pre-scrollable">
     <div *ngFor="let yeast of searchedYeasts() | slice:(page-1)*20:(page*20-1); trackBy:trackByYeastName;">
 
-      <app-yeast-card [yeast]="yeast" (onYeastDelete)="deleteEvent($event)" (onYeastEdit)="editEvent($event)"></app-yeast-card>
+      <app-yeast-card [yeast]="yeast" (uponYeastDelete)="deleteEvent($event)" (uponYeastEdit)="editEvent($event)"></app-yeast-card>
 
     </div>
-    <h4 *ngIf="yeasts.length == 0" >{{ errorMessage }}</h4>
+    <h4 *ngIf="yeasts.length === 0" >{{ errorMessage }}</h4>
   </div>
 </div>

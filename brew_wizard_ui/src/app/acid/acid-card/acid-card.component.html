@@ -54,7 +54,7 @@
         </table>
 
         <div class="col-md-12">
-          <app-acid-edit *ngIf="_authService.isAdmin()" [originalAcid]="acid" (onAcidEdit)="editEvent($event)"></app-acid-edit>
+          <app-acid-edit *ngIf="_authService.isAdmin()" [originalAcid]="acid" (uponAcidEdit)="editEvent($event)"></app-acid-edit>
           <span *ngIf="_authService.isAdmin()"> |</span>
           <button *ngIf="_authService.isAdmin()" class="btn btn-link" role="link" (click)="deleteCard()">Delete</button>
         </div>

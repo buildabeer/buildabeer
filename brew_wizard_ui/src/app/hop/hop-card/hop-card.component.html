@@ -83,7 +83,7 @@
         </table>
 
         <div class="col-md-12">
-          <app-hop-edit *ngIf="(_authService.currentUserMatchOrGlobal(hop.user_id))" [originalHopItem]="hop" (onHopEdit)="editEvent($event)"></app-hop-edit>
+          <app-hop-edit *ngIf="(_authService.currentUserMatchOrGlobal(hop.user_id))" [originalHopItem]="hop" (uponHopEdit)="editEvent($event)"></app-hop-edit>
 
           <span *ngIf="(_authService.currentUserMatchOrGlobal(hop.user_id))"> |</span>
           <button *ngIf="(_authService.currentUserMatchOrGlobal(hop.user_id))" class="btn btn-link" role="link" (click)="deleteCard()">Delete</button>
