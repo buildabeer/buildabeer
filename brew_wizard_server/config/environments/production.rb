@@ -95,4 +95,6 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+  
+  config.target_email = 'builda.beer8@gmail.com'
 end

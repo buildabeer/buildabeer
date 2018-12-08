@@ -72,8 +72,8 @@ export class MaltNewComponent implements OnInit {
   creationSubmit(form: any): void {
     this._maltService.createMalt(this.newMaltItem)
       .subscribe((res) => {
-        this.newMaltItem.id = JSON.parse(res._body).id;
-        this.newMaltItem.user_id = JSON.parse(res._body).user_id;
+        this.newMaltItem.id = res.id;
+        this.newMaltItem.user_id = res.user_id;
         this.uponMaltCreate.emit({malt: this.newMaltItem});
         this.createModal.close();
 

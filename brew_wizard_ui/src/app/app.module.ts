@@ -6,7 +6,7 @@ import { HttpModule } from '@angular/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {HttpClientModule} from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { AppHeaderComponent } from './components/app-header/app-header.component';
@@ -114,6 +114,9 @@ import { RadarChartComponent } from './recipes/radar-chart/radar-chart.component
 import { SourcesComponent } from './static-pages/sources/sources.component';
 import { environment } from '../environments/environment';
 
+import { GoogleAnalyticsService } from './services/google-analytics.service';
+import { LicenseComponent } from './static-pages/license/license.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -189,6 +192,7 @@ import { environment } from '../environments/environment';
     AcidComponent,
     RadarChartComponent,
     SourcesComponent,
+    LicenseComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -208,7 +212,9 @@ import { environment } from '../environments/environment';
                 AgentService, MaltService, StyleService, HopService,
                 YeastService, EquipmentService, RecipeService, DesignerService,
                 CanDeactivateGuard, SaveDialogService, UserService, MiscellaneousService,
-                AcidService],
+                AcidService, GoogleAnalyticsService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+    constructor(protected _googleAnalyticsService: GoogleAnalyticsService) { }
+}

@@ -5,8 +5,6 @@ class WaterProfilesController < ApplicationController
   def index
     @water_profiles = WaterProfile.all
 
-    puts "WTF"
-
     render json: @water_profiles
   end
 

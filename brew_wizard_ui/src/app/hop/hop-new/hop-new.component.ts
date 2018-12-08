@@ -54,8 +54,8 @@ export class HopNewComponent implements OnInit {
     this.newHopItem.aromas = this.aromas.join(', ');
     this._hopService.createHop(this.newHopItem)
       .subscribe((res) => {
-        this.newHopItem.id = JSON.parse(res._body).id;
-        this.newHopItem.user_id = JSON.parse(res._body).user_id;
+        this.newHopItem.id = res.id;
+        this.newHopItem.user_id = res.user_id
         this.uponHopCreate.emit({hop: this.newHopItem});
         this.createModal.close();
 
