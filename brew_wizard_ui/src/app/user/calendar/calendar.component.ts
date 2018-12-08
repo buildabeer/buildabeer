@@ -203,7 +203,7 @@ export class CalendarComponent {
 
         this.events.push(
           {
-            id: JSON.parse(res._body).id,
+            id: res.id,
             start: new Date(this.newEvent.calendar_start),
             end: this.newEvent.calendar_end ? new Date(this.newEvent.calendar_end) : new Date(this.newEvent.calendar_start.getTime() + 15 * 60000),
             title: this.newEvent.name,

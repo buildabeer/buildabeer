@@ -39,8 +39,8 @@ export class MiscellaneousNewComponent implements OnInit {
     this.newMiscellaneousItem.time = this.newMiscellaneousItem.time * this.misc_time_label;
     this._miscellaneousService.createMiscellaneous(this.newMiscellaneousItem)
       .subscribe((res) => {
-        this.newMiscellaneousItem.id = JSON.parse(res._body).id;
-        this.newMiscellaneousItem.user_id = JSON.parse(res._body).user_id;
+        this.newMiscellaneousItem.id = res.id;
+        this.newMiscellaneousItem.user_id = res.user_id
         this.uponMiscellaneousCreate.emit({miscellaneous: this.newMiscellaneousItem});
         this.newModal.close();
       }, (error) => {

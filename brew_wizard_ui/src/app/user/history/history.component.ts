@@ -99,7 +99,7 @@ export class HistoryComponent implements OnInit {
     if (this.history[index].id === null) {
       this._userService.createHistory(this.history[index])
         .subscribe((res) => {
-          this.history[index].id = JSON.parse(res._body).id;
+          this.history[index].id = res.id;
           this.isEdit[index] = false;
           window.alert('History point saved.');
         }, (error) => {
@@ -113,7 +113,7 @@ export class HistoryComponent implements OnInit {
     } else {
       this._userService.editHistory(this.history[index])
         .subscribe((res) => {
-          this.history[index].id = JSON.parse(res._body).id;
+          this.history[index].id = res.id;
           this.isEdit[index] = false;
           window.alert('History point saved.');
         }, (error) => {

@@ -94,8 +94,8 @@ export class YeastNewComponent implements OnInit {
   creationSubmit(form: any): void {
     this._yeastService.createYeast(this.newYeastItem)
       .subscribe((res) => {
-        this.newYeastItem.id = JSON.parse(res._body).id;
-        this.newYeastItem.user_id = JSON.parse(res._body).user_id;
+        this.newYeastItem.id = res.id;
+        this.newYeastItem.user_id = res.user_id
         this.uponYeastCreate.emit({yeast: this.newYeastItem});
         this.createModal.close();
 

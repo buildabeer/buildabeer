@@ -56,8 +56,8 @@ export class EquipmentNewComponent implements OnInit {
 
     this._equipmentService.createEquipment(this.newEquipmentItem)
       .subscribe((res) => {
-        this.newEquipmentItem.id = JSON.parse(res._body).id;
-        this.newEquipmentItem.user_id = JSON.parse(res._body).user_id;
+        this.newEquipmentItem.id = res.id;
+        this.newEquipmentItem.user_id = res.user_id
         this.uponEquipmentCreate.emit({equipment: this.newEquipmentItem});
         this.createModal.close();
 
