@@ -34,15 +34,13 @@ export class RegisterComponent implements OnInit {
   onSignUpSubmit() {
     this._authService.registerUser(this.signUpUser)
       .subscribe ((res) => {
-        if (res.status === 200) {
-          window.alert('A confirmation email has been sent. Please check your spam if you do not see it after a few minutes.');
-          this._router.navigate(['']);
-        }
+        window.alert('A confirmation email has been sent. Please check your spam if you do not see it after a few minutes.');
+        this._router.navigate(['']);
       },
       (err) => {
         this.signUpUser.password = '';
         this.signUpUser.passwordConfirmation = '';
-        this.signUpErrors = err.errors.full_messages[0];
+        this.signUpErrors = err.error.errors.full_messages;
       }
     );
   }

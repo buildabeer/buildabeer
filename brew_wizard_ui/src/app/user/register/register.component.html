@@ -2,8 +2,9 @@
 
   <form class="form-signup" (ngSubmit)="onSignUpSubmit()" #f="ngForm" >
     <h2 class="form-signup-heading">Registration</h2>
-    <span class="text-danger">
-      <p *ngIf="signUpErrors!=''"> {{ signUpErrors }}</p>
+    <span class="text-danger" *ngFor="let err of signUpErrors">
+      <p> {{ err }}</p>
+      <!-- <p *ngIf="signUpErrors!=''"> {{ signUpErrors }}</p> -->
     </span>
     <label for="inputUsername" class="sr-only">Username</label>
     <input type="text" name="username" id="inputUsername" [(ngModel)]="signUpUser.nickname" class="form-control" placeholder="Username" required autofocus>

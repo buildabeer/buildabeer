@@ -103,7 +103,7 @@
 
   <div class="row title-bar">
     <p class="text-light offset-1 name">Name</p>
-    <p class="text-light offset-9 help-icon" title="Private items are ones that you personally created and are only available for you to use, while global items are available for all users.">&#9432;</p>
+    <p class="text-light offset-5 offset-sm-7 offset-md-8 help-icon" title="Private items are ones that you personally created and are only available for you to use, while global items are available for all users.">&#9432;</p>
     <p class="text-light">Status</p>
   </div>
 
@@ -114,12 +114,12 @@
         <div class="card-header">
           <div class="container">
             <div class="row">
-              <div class="col-1">
+              <div class="col-1 no-padding">
                 <button type="button" class="btn btn-outline-primary expansion-button" (click)="isCollapsed[i] = !isCollapsed[i]" [attr.aria-expanded]="!isCollapsed[i]" aria-controls="collapseItem">
                   {{ isCollapsed[i]? "-" : "+" }}
                 </button>
               </div>
-              <div class="col-8 col-md-9">
+              <div class="offset-1 offset-sm-0 col-7 col-sm-8 col-md-9">
                 <div class="container">
                   <div class="row mini-row">
                     <h5>{{ recipe.name }}</h5>
@@ -131,7 +131,7 @@
               </div>
               <div class="col-3 col-md-2">
                 <p class="short"><i>{{ (recipe.global ? "Public" : "Private") }}</i></p>
-                <p class="short"><i>{{ recipe.recipe_type }}</i></p>
+                <p class="short text-nowrap"><i>{{ recipe.recipe_type }}</i></p>
               </div>
             </div>
           </div>
