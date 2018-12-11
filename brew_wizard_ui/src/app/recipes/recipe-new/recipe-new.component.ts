@@ -79,14 +79,12 @@ export class RecipeNewComponent implements OnInit {
   onSignInSubmit() {
     this._authService.loginUser(this.signIn)
       .subscribe((res) => {
-        if (res.status === 200) {
-          this.signIn = {
-            login: '',
-            password: ''
-          };
-          this.loginModal.close();
-          this._designer.save();
-        }
+        this.signIn = {
+          login: '',
+          password: ''
+        };
+        this.loginModal.close();
+        this._designer.save();
       },
       err => {
         this.signIn = {

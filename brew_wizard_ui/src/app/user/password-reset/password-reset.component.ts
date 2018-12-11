@@ -43,10 +43,8 @@ export class PasswordResetComponent implements OnInit {
     this._authService.resetPassword({
       login: this.resetUser
     }).subscribe ((res) => {
-        if (res.status === 200) {
-          this._router.navigate(['']);
-          window.alert('Password reset email sent. Please be patient, it is on it\'s way!');
-        }
+        this._router.navigate(['']);
+        window.alert('Password reset email sent. Please be patient, it is on it\'s way!');
       },
       (err) => {
         this.resetUser = '';
@@ -58,10 +56,8 @@ export class PasswordResetComponent implements OnInit {
   onResetConfirmSubmit() {
     this._authService.updatePassword(this.reset)
       .subscribe ((res) => {
-        if (res.status === 200) {
-          this._router.navigate(['login']);
-          window.alert('Password reset!');
-        }
+        this._router.navigate(['login']);
+        window.alert('Password reset!');
       },
       (err) => {
         this.reset.password = '';

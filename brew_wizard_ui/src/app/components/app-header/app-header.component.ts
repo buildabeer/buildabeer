@@ -34,15 +34,10 @@ export class AppHeaderComponent implements OnInit {
   onSignInSubmit() {
     this._authService.loginUser(this.headerSignIn)
       .subscribe((res) => {
-        if (res.status === 200) {
-          this.headerSignIn = {
-            login: '',
-            password: ''
-          };
-          // if (this._router.url !== '/recipes/new') {
-          //   window.location.reload();
-          // }
-        }
+        this.headerSignIn = {
+          login: '',
+          password: ''
+        };
       },
       err => {
         this.headerSignIn = {

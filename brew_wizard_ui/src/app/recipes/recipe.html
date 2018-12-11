@@ -101,7 +101,7 @@
                     <label for="recipe-style">Style</label>
                     <div class="input-group">
                       <button class="btn btn-primary" title="View style details." (click)="_designer.openDetail(styleDetailPopup)"><i class="fas fa-sticky-note"></i></button>
-                      <select id="recipe-style" class="item-selector form-control" [(ngModel)]="_designer.used_style" (ngModelChange)="_designer.styleChange($event)">
+                      <select id="recipe-style" class="form-control" [(ngModel)]="_designer.used_style" (ngModelChange)="_designer.styleChange($event)">
                         <option *ngFor="let s of _designer.styles" [ngValue]="s">{{ s.name }} - {{ s.category_number }}</option>
                       </select>
                     </div>
@@ -131,7 +131,7 @@
                     <label for="recipe_equip">Equipment</label>
                     <div class="input-group">
                       <button class="btn btn-primary" title="View equipment details." (click)="_designer.openDetail(equipmentDetailPopup)"><i class="fas fa-sticky-note"></i></button>
-                      <select id="recipe_equip" (ngModelChange)="_designer.waterAutoOnChange(); _designer.hopUsageOnChange(); _designer.recipe.efficiency = _designer.used_equipment.efficiency " class="item-selector form-control" [(ngModel)]="_designer.used_equipment">
+                      <select id="recipe_equip" (ngModelChange)="_designer.waterAutoOnChange(); _designer.hopUsageOnChange(); _designer.recipe.efficiency = _designer.used_equipment.efficiency " class="form-control" [(ngModel)]="_designer.used_equipment">
                         <option *ngFor="let e of _designer.equipment" [ngValue]="e">{{ e.name }}</option>
                       </select>
                     </div>
@@ -139,7 +139,7 @@
 
                   <div class="col-6">
                     <label for="recipe-type">Recipe Type</label>
-                      <select id="recipe-type" (ngModelChange)="_designer.waterAutoOnChange();" class="item-selector form-control" [(ngModel)]="_designer.recipe.recipe_type">
+                      <select id="recipe-type" (ngModelChange)="_designer.waterAutoOnChange();" class="form-control" [(ngModel)]="_designer.recipe.recipe_type">
                         <option>All Grain</option>
                         <option>Extract</option>
                         <option>Brew in a Bag</option>
