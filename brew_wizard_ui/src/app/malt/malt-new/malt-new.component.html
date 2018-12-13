@@ -92,12 +92,12 @@
                   </div>
 
                   <div class="form-group col-lg-3 col-md-4 col-sm-4 col-6">
-                    <label for="protein">Diastatic</label>
-                    <span class="text-danger" *ngIf="protein.errors && (protein.dirty || protein.touched)">
-                      <span *ngIf="protein.errors.required"> *required</span>
-                      <span *ngIf="protein.errors.pattern"> *invalid input</span>
+                    <label for="diastatic_power">Diastatic</label>
+                    <span class="text-danger" *ngIf="diastatic_power.errors && (diastatic_power.dirty || diastatic_power.touched)">
+                      <span *ngIf="diastatic_power.errors.required"> *required</span>
+                      <span *ngIf="diastatic_power.errors.pattern"> *invalid input</span>
                     </span>
-                    <input type="number" class="form-control" id="protein" name="protein" required min="0" max="999.9" step="0.1" pattern="^\d{0,3}(\.\d{0,1})?$" [(ngModel)]="newMaltItem.protein" #protein="ngModel">
+                    <input type="number" class="form-control" id="diastatic_power" name="diastatic_power" required min="0" max="999.9" step="0.1" pattern="^\d{0,3}(\.\d{0,1})?$" [(ngModel)]="newMaltItem.diastatic_power" #diastatic_power="ngModel">
                   </div>
 
                   <div class="form-group col-lg-6 col-12 hard-pad-top">

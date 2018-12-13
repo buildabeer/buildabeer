@@ -44,8 +44,8 @@ export class AgentNewComponent implements OnInit {
   creationSubmit(form: any): void {
     this._agentService.createAgent(this.newAgentItem)
       .subscribe((res) => {
-        this.newAgentItem.id = JSON.parse(res._body).id;
-        this.newAgentItem.user_id = JSON.parse(res._body).user_id;
+        this.newAgentItem.id = res.id;
+        this.newAgentItem.user_id = res.user_id
         this.uponAgentCreate.emit({agent: this.newAgentItem});
         this.createModal.close();
 

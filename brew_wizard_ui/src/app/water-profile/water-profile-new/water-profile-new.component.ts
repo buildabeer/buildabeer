@@ -44,8 +44,8 @@ export class WaterProfileNewComponent implements OnInit {
   creationSubmit(form: any): void {
     this._waterProfileService.createWaterProfile(this.newWaterProfile)
       .subscribe((res) => {
-        this.newWaterProfile.id = JSON.parse(res._body).id;
-        this.newWaterProfile.user_id = JSON.parse(res._body).user_id;
+        this.newWaterProfile.id = res.id;
+        this.newWaterProfile.user_id = res.user_id
         this.uponWaterCreate.emit({waterProfile: this.newWaterProfile});
         this.createModal.close();
 

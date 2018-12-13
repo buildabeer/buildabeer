@@ -39,7 +39,7 @@ export class AcidNewComponent implements OnInit {
     console.log(this.newAcidItem);
     this._acidService.createAcid(this.newAcidItem)
       .subscribe((res) => {
-        this.newAcidItem.id = JSON.parse(res._body).id;
+        this.newAcidItem.id = res.id;
         this.uponAcidCreate.emit({acid: this.newAcidItem});
         this.createModal.close();
 

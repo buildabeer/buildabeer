@@ -34,6 +34,7 @@ import { AcidComponent } from './acid/acid/acid.component';
 import { AcidListComponent } from './acid/acid-list/acid-list.component';
 import { ContactUsComponent } from './static-pages/contact-us/contact-us.component';
 import { AboutUsComponent } from './static-pages/about-us/about-us.component';
+import { LicenseComponent } from './static-pages/license/license.component';
 import { PrivacyPolicyComponent } from './static-pages/privacy-policy/privacy-policy.component';
 
 import { CanDeactivateGuard } from './shared/can-deactivate-guard.service';
@@ -64,6 +65,10 @@ const routes: Routes = [
   {
     path: 'about_us',
     component: AboutUsComponent
+  },
+  {
+    path: 'license',
+    component: LicenseComponent
   },
   {
     path: 'privacy_policy',

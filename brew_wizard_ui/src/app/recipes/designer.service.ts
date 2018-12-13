@@ -2972,7 +2972,7 @@ recipe_hop.quantity, 'hops');
         this.old_recipe = JSON.stringify(this.recipe);
         window.alert('Recipe saved.');
         if (redirect) {
-          this._router.navigate(['/recipes', JSON.parse(res._body).id, 'edit']);
+          this._router.navigate(['/recipes', res.id, 'edit']);
         }
       }, (error) => {
         if (error.status === 401) {

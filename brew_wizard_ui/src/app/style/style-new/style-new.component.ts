@@ -59,8 +59,8 @@ export class StyleNewComponent implements OnInit {
   creationSubmit(form: any): void {
     this._styleService.createStyle(this.newStyleItem)
       .subscribe((res) => {
-        this.newStyleItem.id = JSON.parse(res._body).id;
-        this.newStyleItem.user_id = JSON.parse(res._body).user_id;
+        this.newStyleItem.id = res.id;
+        this.newStyleItem.user_id = res.user_id
         this.uponStyleCreate.emit({style: this.newStyleItem});
         this.createModal.close();
 

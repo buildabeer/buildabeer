@@ -91,7 +91,7 @@ class StylesController < ApplicationController
         :category_number, :style_type, :min_og, :max_og, :min_fg, :max_fg,
         :min_ibu, :max_ibu, :min_carb, :max_carb, :min_color, :max_color,
         :min_abv, :max_abv, :description, :profile, :ingredients, :examples,
-        :style_yeast_attributes, :water_profile)
+        :style_yeast_attributes, :water_profile_id)
     end
 end
 
