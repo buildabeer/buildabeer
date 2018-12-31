@@ -1859,7 +1859,7 @@
               </div>
             </div>
             <div class="btn-group">
-              <button type="button" title="Save" class="btn btn-default light-color save-group" (click)="save(loginPopup)">
+              <button type="button" title="Save" class="btn btn-default light-color save-group" (click)="_authService.userSignedIn$ ? _designer.save() : save(loginPopup)">
                 <i class="fas fa-save icon img-responsive"></i>
               </button>
               <button type="button" title="Tools" class="btn btn-default dropdown-toggle dropdown-toggle-split light-color tools-icon save-group" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="tools-dropdown">
@@ -2402,7 +2402,7 @@
 
             <div class="form-group">
               <label class="sr-only" for="username">Email address</label>
-              <input type="text" name="username" id="username" class="form-control" placeholder="Email address" [(ngModel)]="signIn.email" required>
+              <input type="text" name="username" id="username" class="form-control" placeholder="Email address" [(ngModel)]="signIn.login" required>
 
               <label class="sr-only" for="password">Password</label>
               <input type="password" name="password" id="password" class="form-control" placeholder="Password" [(ngModel)]="signIn.password" required>
