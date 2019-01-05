@@ -15,6 +15,16 @@ class HopsController < ApplicationController
     render json: @hops.sort_by { |hop| hop.name.downcase }, methods: :recipe_count, include: [:hop_relations]
   end
 
+  def index_names
+    if !user_signed_in?
+      @hops = Hop.where(global: true)
+    else
+      @hops = Hop.where("global = ? OR user_id = ?", true, current_user.id)
+    end
+
+    render json: @hops.select("id, name, origin").sort_by { |hop| hop.name.downcase }
+  end
+
   # GET /hops/1
   def show
     render json: @hop, methods: :recipe_count, include: [:hop_relations]
@@ -34,7 +44,7 @@ class HopsController < ApplicationController
     end
 
     if @hop.save
-      render json: @hop, status: :created, location: @hop
+      render json: @hop, status: :created
     else
       render json: @hop.errors, status: :unprocessable_entity
     end

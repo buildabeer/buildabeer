@@ -25,6 +25,26 @@ export class HopService {
       .catch(this.handleError);
   }
 
+  getHopNames(): any {
+    return this.http.get(`${environment.token_auth_config.apiBase}/hop_names`)
+      .map((response: any) => response)
+      .catch(this.handleError);
+  }
+
+  getHopRelations(): any {
+    return this.http.get(`${environment.token_auth_config.apiBase}/hop_relations`)
+      .map((response: any) => response)
+      .catch(this.handleError);
+  }
+
+  deleteHopRelation(first_id, second_id): any {
+    return this.http.delete(`${environment.token_auth_config.apiBase}/hop_relations/` + first_id + '-' + second_id);
+  }
+
+  createHopRelation(hop_relation: any): any {
+    return this.http.post(`${environment.token_auth_config.apiBase}/hop_relations/`, { hop_relation });
+  }
+
   createHop(send_hop: any): any {
     const hop = Object.assign({}, send_hop);
     hop.hop_relations_attributes = hop.hop_relations;

@@ -22,6 +22,9 @@ import { MaltComponent } from './malt/malt/malt.component';
 import { MaltListComponent } from './malt/malt-list/malt-list.component';
 import { StyleComponent } from './style/style/style.component';
 import { StyleListComponent } from './style/style-list/style-list.component';
+import { HopRelationsComponent } from './hop/hop-relations/hop-relations.component';
+import { YeastRelationsComponent } from './yeast/yeast-relations/yeast-relations.component';
+import { StyleYeastRelationsComponent } from './style/style-yeast-relations/style-yeast-relations.component';
 import { HopComponent } from './hop/hop/hop.component';
 import { HopListComponent } from './hop/hop-list/hop-list.component';
 import { MiscellaneousComponent } from './miscellaneous/miscellaneous/miscellaneous.component';
@@ -120,12 +123,20 @@ const routes: Routes = [
     component: MaltComponent
   },
   {
+    path: 'style_yeast_relations',
+    component: StyleYeastRelationsComponent
+  },
+  {
     path: 'styles',
     component: StyleListComponent
   },
   {
     path: 'styles/:id',
     component: StyleComponent
+  },
+  {
+    path: 'hop_relations',
+    component: HopRelationsComponent
   },
   {
     path: 'hops',
@@ -142,6 +153,10 @@ const routes: Routes = [
   {
     path: 'miscellaneous/:id',
     component: MiscellaneousComponent
+  },
+  {
+    path: 'yeast_relations',
+    component: YeastRelationsComponent
   },
   {
     path: 'yeasts',

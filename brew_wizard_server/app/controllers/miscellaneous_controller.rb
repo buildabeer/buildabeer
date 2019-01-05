@@ -35,7 +35,7 @@ class MiscellaneousController < ApplicationController
     end
 
     if @miscellaneous.save
-      render json: @miscellaneous, status: :created, location: @miscellaneous
+      render json: @miscellaneous, status: :created
     else
       render json: @miscellaneous.errors, status: :unprocessable_entity
     end

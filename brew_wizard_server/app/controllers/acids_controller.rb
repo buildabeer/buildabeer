@@ -19,7 +19,7 @@ class AcidsController < ApplicationController
     @acid = Acid.new(acid_params)
 
     if current_user.admin? && @acid.save
-      render json: @acid, status: :created, location: @acid
+      render json: @acid, status: :created
     else
       render json: @acid.errors, status: :unprocessable_entity
     end

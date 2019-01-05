@@ -96,7 +96,11 @@ export class RecipeNewComponent implements OnInit {
   }
 
   save(loginPopup): void {
-    this.loginModal = this._modalService.open(loginPopup, { size: 'sm' });
+    if (!this._authService.userSignedIn()) {
+      this.loginModal = this._modalService.open(loginPopup, { size: 'sm' });
+    } else {
+      this._designer.save();
+    }
   }
 
   scaleSubmit(form: any): void {

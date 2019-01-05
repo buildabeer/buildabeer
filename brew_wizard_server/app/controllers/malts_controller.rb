@@ -32,7 +32,7 @@ class MaltsController < ApplicationController
     end
 
     if @malt.save
-      render json: @malt, status: :created, location: @malt
+      render json: @malt, status: :created
     else
       render json: @malt.errors, status: :unprocessable_entity
     end

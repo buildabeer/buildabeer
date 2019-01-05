@@ -116,6 +116,10 @@ import { environment } from '../environments/environment';
 
 import { GoogleAnalyticsService } from './services/google-analytics.service';
 import { LicenseComponent } from './static-pages/license/license.component';
+import { HopRelationsComponent } from './hop/hop-relations/hop-relations.component';
+import { YeastRelationsComponent } from './yeast/yeast-relations/yeast-relations.component';
+import { ChartComponent } from './components/chart/chart.component';
+import { StyleYeastRelationsComponent } from './style/style-yeast-relations/style-yeast-relations.component';
 
 @NgModule({
   declarations: [
@@ -193,6 +197,10 @@ import { LicenseComponent } from './static-pages/license/license.component';
     RadarChartComponent,
     SourcesComponent,
     LicenseComponent,
+    HopRelationsComponent,
+    YeastRelationsComponent,
+    ChartComponent,
+    StyleYeastRelationsComponent,
   ],
   imports: [
     AppRoutingModule,

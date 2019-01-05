@@ -1,0 +1,26 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12" *ngIf="!style_name_complete || !yeast_name_complete || !relations_complete">
+        <h4>Please hold, it takes a minute to load the chart.</h4>
+    </div>
+    <div class="col-12" *ngIf="style_name_complete && yeast_name_complete && relations_complete && (style_yeast_relations.length === 0 || yeast_names.length === 0) || style_names.length === 0">
+        <h4>{{ errorMessage }}</h4>
+    </div>
+    <div class="col-12" *ngIf="style_name_complete && yeast_name_complete && relations_complete && (style_yeast_relations.length !== 0 && yeast_names.length !== 0 && style_names.length !== 0)">
+      <table class="table-responsive table-striped">
+        <thead>
+          <tr>
+            <th class="rotate-45 first"><div><span></span></div></th>
+            <th *ngFor="let yeast of yeast_names;" class="rotate-45"><div><span>{{ yeast.name }} ({{ yeast.product_id}})</span></div></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of relationship_dictionary; let i = index">
+            <th scope="row" class="row-header {{ i % 2 === 0 ? 'even' : 'odd' }}">{{ style_names[i].name }}</th>
+            <td *ngFor="let cell of row; let i2 = index" (click)="alter_relationship(i, i2)"><i class="{{ interpret_keyword(cell) }}"></i></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

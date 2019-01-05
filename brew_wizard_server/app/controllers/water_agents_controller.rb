@@ -28,7 +28,7 @@ class WaterAgentsController < ApplicationController
     end
 
     if @water_agent.save
-      render json: @water_agent, status: :created, location: @water_agent
+      render json: @water_agent, status: :created
     else
       render json: @water_agent.errors, status: :unprocessable_entity
     end

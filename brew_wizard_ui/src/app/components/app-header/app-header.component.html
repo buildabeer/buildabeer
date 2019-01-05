@@ -33,6 +33,15 @@
           <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" routerLink="recipes/new">Create Recipe</a>
         </div>
       </li>
+
+      <li class="nav-item dropdown" ngbDropdown>
+        <a class="nav-link dropdown-toggle text-light" id="tablesDropdown" ngbDropdownToggle>Tables</a>
+        <div class="dropdown-menu" aria-labelledby="tablesDropdown" ngbDropdownMenu>
+          <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" routerLink="hop_relations">Hop Substitutes</a>
+          <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" routerLink="yeast_relations">Yeast Substitutes</a>
+          <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" routerLink="style_yeast_relations">Style/Yeast Relationships</a>
+        </div>
+      </li>
     </div>
 
     <ul class="navbar-nav">

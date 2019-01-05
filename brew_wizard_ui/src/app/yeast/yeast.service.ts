@@ -25,6 +25,26 @@ export class YeastService {
       .catch(this.handleError);
   }
 
+  getYeastNames(): any {
+    return this.http.get(`${environment.token_auth_config.apiBase}/yeast_names`)
+      .map((response: any) => response)
+      .catch(this.handleError);
+  }
+
+  getYeastRelations(): any {
+    return this.http.get(`${environment.token_auth_config.apiBase}/yeast_relations`)
+      .map((response: any) => response)
+      .catch(this.handleError);
+  }
+
+  deleteYeastRelation(first_id, second_id): any {
+    return this.http.delete(`${environment.token_auth_config.apiBase}/yeast_relations/` + first_id + '-' + second_id);
+  }
+
+  createYeastRelation(yeast_relation: any): any {
+    return this.http.post(`${environment.token_auth_config.apiBase}/yeast_relations/`, { yeast_relation });
+  }
+
   createYeast(send_yeast: any): any {
     const yeast = Object.assign({}, send_yeast);
     yeast.style_yeasts_attributes = yeast.style_yeasts;
