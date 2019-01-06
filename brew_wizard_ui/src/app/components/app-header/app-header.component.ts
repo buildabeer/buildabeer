@@ -27,7 +27,7 @@ export class AppHeaderComponent implements OnInit {
   signInErrors: string[] = [];
 
   constructor(private _title: Title, public _authService: AuthService, private _router: Router,
-    public _authTokenService: AngularTokenService, private _modalService: NgbModal,
+    public _authTokenService: AngularTokenService, public _modalService: NgbModal,
     private _contactService: ContactService) {
     this._title.setTitle('My Homebrew Recipes');
   }
