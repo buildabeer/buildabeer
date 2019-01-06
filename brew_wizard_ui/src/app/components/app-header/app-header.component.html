@@ -45,6 +45,8 @@
     </div>
 
     <ul class="navbar-nav">
+      <button class="btn btn-primary text-danger border-danger" title="Report issue or request feature" (click)="_modalService.open(contactPopup, { size: 'sm' });"><i class="fas fa-exclamation-circle"></i><span class="d-sm-none"> Report Issue</span></button>
+
       <a class="btn btn-complementary text-light" href="https://www.paypal.me/buildabeer" target="_blank">Donate</a>
 
       <li class="nav-item dropdown" *ngIf="!(_authService.userSignedIn$ | async)">
@@ -100,3 +102,32 @@
   </div>
 </nav>
 
+<ng-template #contactPopup let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Report Request</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 pad-bottom">
+          <label for="title">Message Type</label>
+          <select id="title" class="form-control" [(ngModel)]="headerBugReport.title">
+            <option>Bug Report</option>
+            <option>Feature Request</option>
+          </select>
+        </div>
+        <div class="col-12 pad-bottom">
+          <label for="title">Message</label>
+          <textarea class="form-control" id="message" name="message" maxlength="1000" [(ngModel)]="headerBugReport.message"></textarea>
+        </div>
+        <div class="col-12">
+          <button (click)="sendContact(headerBugReport);c('Close click')" class="btn btn-primary">Send</button>
+          <button type="button" class="btn btn-default" (click)="c('Close click')">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

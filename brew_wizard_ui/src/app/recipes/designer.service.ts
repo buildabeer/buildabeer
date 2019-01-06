@@ -13,6 +13,7 @@ import { YeastService } from './../yeast/yeast.service';
 import { StyleService } from './../style/style.service';
 import { RecipeService } from './recipe.service';
 import { EquipmentService } from './../equipment/equipment.service';
+import { ContactService } from './../static-pages/contact-us/contact.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { IWaterProfile } from './../water-profile/water-profile';
@@ -31,6 +32,11 @@ import * as FileSaver from 'file-saver';
 
 @Injectable()
 export class DesignerService {
+
+  bug_report = {
+    title: 'Bug Report',
+    message: ''
+  };
 
   recipe_user_id: number;
 
@@ -165,7 +171,24 @@ export class DesignerService {
     private _styleService: StyleService, private _equipmentService: EquipmentService,
     private _recipeService: RecipeService, public _router: Router,
     private _userService: UserService, private _miscService: MiscellaneousService,
-    private _modalService: NgbModal, private _acidService: AcidService) { }
+    private _modalService: NgbModal, private _acidService: AcidService,
+    private _contactService: ContactService) { }
+
+  sendContact(contact) {
+    this._contactService.sendContact(contact)
+      .subscribe((res) => {
+        if (res.status === 201) {
+          this.bug_report = {
+            title: 'Bug Report',
+            message: ''
+          };
+          window.alert('Message sent.');
+        }
+      },
+      err => {
+        window.alert('Ironically, there was an error sending your message. Please feel free to yell at us on github.com/buildabeer/buildabeer');
+      });
+  }
 
   reset_recipe() {
     this.loading_waters = true;

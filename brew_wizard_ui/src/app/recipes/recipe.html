@@ -1685,6 +1685,9 @@
                 <button type="button" class="btn btn-primary" (click)="copyOpen(copyPopup)">Copy</button>
               </div>
               <div class="row pad-bottom">
+                <button type="button" class="btn btn-primary" (click)="_modalService.open(contactPopup, { size: 'sm' });"><i class="fas fa-exclamation-circle text-danger"></i> Report Issue</button>
+              </div>
+              <div class="row pad-bottom">
                 <button type="button" class="btn btn-primary" (click)="savePdf(pdfPopup)">Save to PDF</button>
               </div>
               <div class="row pad-bottom">
@@ -1868,6 +1871,7 @@
               <div class="dropdown-menu" aria-labelledby="tools-dropdown">
                 <a type="button" class="dropdown-item" (click)="scaleOpen(scalePopup)">Scale</a>
                 <a type="button" class="dropdown-item" (click)="copyOpen(copyPopup)">Copy</a>
+                <a type="button" class="dropdown-item" (click)="_modalService.open(contactPopup, { size: 'sm' });"><i class="fas fa-exclamation-circle text-danger"></i> Report Issue</a>
                 <a type="button" class="dropdown-item" (click)="savePdf(pdfPopup)">Save to PDF</a>
                 <a type="button" class="dropdown-item" (click)="importXmlOpen(importXmlPopup)">Import XML</a>
                 <a type="button" class="dropdown-item" (click)="_designer.exportXml()">Export XML</a>
@@ -3088,5 +3092,35 @@
   <app-agent-card [agent]="_designer.agents[_designer.detailIndex]"></app-agent-card>
   <div class="col-12">
     <button type="button" class="btn btn-primary float-right margin-full" (click)="c('Close click')">Close</button>
+  </div>
+</ng-template>
+
+<ng-template #contactPopup let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Report Request</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 pad-bottom">
+          <label for="title">Message Type</label>
+          <select id="title" class="form-control" [(ngModel)]="_designer.bug_report.title">
+            <option>Bug Report</option>
+            <option>Feature Request</option>
+          </select>
+        </div>
+        <div class="col-12 pad-bottom">
+          <label for="title">Message</label>
+          <textarea class="form-control" id="message" name="message" maxlength="1000" [(ngModel)]="_designer.bug_report.message"></textarea>
+        </div>
+        <div class="col-12">
+          <button (click)="_designer.sendContact(_designer.bug_report);c('Close click')" class="btn btn-primary">Send</button>
+          <button type="button" class="btn btn-default" (click)="c('Close click')">Cancel</button>
+        </div>
+      </div>
+    </div>
   </div>
 </ng-template>

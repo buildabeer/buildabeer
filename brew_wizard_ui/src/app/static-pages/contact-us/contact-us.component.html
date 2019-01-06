@@ -11,8 +11,7 @@
         </div>
 
         <div class="row">
-          <p class="text-danger" *ngIf="contact.email.length === 0">*</p><label for="inputEmail">Email address</label>
-          <input type="email" name="email" id="inputEmail" [(ngModel)]="contact.email" maxlength="50" class="form-control" placeholder="Email address" required autofocus>
+          <input type="email" name="email" id="inputEmail" [(ngModel)]="contact.email" maxlength="50" class="form-control" placeholder="Email address" autofocus>
         </div>
         <div class="row">
           <label for="inputName">Name</label>

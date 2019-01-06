@@ -141,7 +141,7 @@ export class StyleYeastRelationsComponent implements OnInit {
     } else if (keyword === 'set') {
       return 'green fas fa-check-circle';
     } else if (keyword === 'loading') {
-      return 'blue fas fa-circle-notch';
+      return 'blue fas fa-spinner fa-pulse';
     }
 
     return '';
