@@ -124,24 +124,14 @@
                         <div class="row pad-top">
                           <span class="card pad" *ngFor="let hop of used_hops; let i = index ">
                             <p class="item-name">
-                              <span class="help-icon margin-right" title="{{ hop.description }}">&#9432;</span>
+                              <span class="margin-right" ngbTooltip="{{ hop.description }}">
+                                <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
+                              </span>
                               {{ hop.name }}
                               <button type="button" class="btn btn-secondary mini-cancel float-right margin-left" (click)="removeHop(i)">&#8854;</button>
                             </p>
                           </span>
                         </div>
-                      <!--
-                        <div class="row pad-top border-bottom" *ngFor="let hop of used_hops; let i = index ">
-                          <div class="col-1 no-pad">
-                            <span class="help-icon float-right" title="{{ hop.description }}">&#9432; </span>
-                          </div>
-                          <div class="col-8 no-right-pad">
-                            <p class="item-name ">{{ hop.name }}</p>
-                          </div>
-                          <div class="col-2">
-                            <button type="button" class="btn btn-secondary mini-cancel float-right" (click)="removeHop(i)">&#8854;</button>
-                          </div>
-                        </div> -->
                         <div class="row pad-bottom">
                           <div class="col-12" *ngIf="!hops">
                             <p>Loading hop substitutes.</p>

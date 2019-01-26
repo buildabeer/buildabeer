@@ -3,6 +3,6 @@ class ContactMailer < ApplicationMailer
 
   def contact_email(message)
     @message = message
-    mail(to: config.target_email, subject: "Contact Request: " + message.title)
+    mail(to: Rails.application.config.target_email, subject: "Contact Request: " + message.title)
   end
 end

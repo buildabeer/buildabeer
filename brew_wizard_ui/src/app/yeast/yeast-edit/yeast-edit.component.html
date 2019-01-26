@@ -152,7 +152,9 @@
 
                         <div class="row pad-top border-bottom" *ngFor="let style of used_styles; let i = index ">
                           <div class="col-1 no-pad">
-                            <span class="help-icon float-right" title="{{ style.description }}">&#9432; </span>
+                            <span class="float-right" ngbTooltip="{{ style.description }}">
+                              <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
+                            </span>
                           </div>
                           <div class="col-8 no-right-pad">
                             <p class="item-name ">{{ style.name }}</p>
@@ -189,7 +191,9 @@
 
                         <div class="row pad-top border-bottom" *ngFor="let yeast of used_yeasts; let i = index ">
                           <div class="col-1 no-pad">
-                            <span class="help-icon float-right" title="{{ yeast.description }}">&#9432; </span>
+                            <span class="float-right" ngbTooltip="{{ yeast.description }}">
+                              <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
+                            </span>
                           </div>
                           <div class="col-8 no-right-pad">
                             <p class="item-name ">{{ yeast.name }}</p>
