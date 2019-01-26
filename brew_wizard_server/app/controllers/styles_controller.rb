@@ -16,6 +16,16 @@ class StylesController < ApplicationController
     render json: @styles.sort_by { |style| style.name.downcase }, methods: :recipe_count#, include: [:yeasts]
   end
 
+  def index_names
+    if !user_signed_in?
+      @styles = Style.where(global: true)
+    else
+      @styles = Style.where("global = ? OR user_id = ?", true, current_user.id)
+    end
+
+    render json: @styles.select("id, name").sort_by { |style| style.name.downcase }
+  end
+
   # GET /styles/1
   def show
     render json: @style, methods: :recipe_count, include: [:yeasts]
@@ -36,7 +46,7 @@ class StylesController < ApplicationController
     end
 
     if @style.save
-      render json: @style, status: :created, location: @style
+      render json: @style, status: :created
     else
       render json: @style.errors, status: :unprocessable_entity
     end

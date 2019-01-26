@@ -3,6 +3,8 @@ import { AngularTokenService } from 'angular-token';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ContactService } from './../../static-pages/contact-us/contact.service';
 
 @Component({
   selector: 'app-header',
@@ -10,6 +12,11 @@ import { Title } from '@angular/platform-browser';
   styleUrls: ['./app-header.component.scss']
 })
 export class AppHeaderComponent implements OnInit {
+
+  headerBugReport = {
+    title: 'Bug Report',
+    message: ''
+  };
 
   headerSignIn = {
     login: '',
@@ -20,11 +27,28 @@ export class AppHeaderComponent implements OnInit {
   signInErrors: string[] = [];
 
   constructor(private _title: Title, public _authService: AuthService, private _router: Router,
-    public _authTokenService: AngularTokenService) {
+    public _authTokenService: AngularTokenService, public _modalService: NgbModal,
+    private _contactService: ContactService) {
     this._title.setTitle('My Homebrew Recipes');
   }
 
   ngOnInit() {
+  }
+
+  sendContact(contact) {
+    this._contactService.sendContact(contact)
+      .subscribe((res) => {
+        if (res.status === 201) {
+          this.headerBugReport = {
+            title: 'Bug Report',
+            message: ''
+          };
+          window.alert('Message sent.');
+        }
+      },
+      err => {
+        window.alert('Ironically, there was an error sending your message. Please feel free to yell at us on github.com/buildabeer/buildabeer');
+      });
   }
 
   logOut() {

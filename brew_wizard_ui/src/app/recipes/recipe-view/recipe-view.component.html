@@ -15,7 +15,6 @@
     <a type="button" class="dropdown-item" *ngIf="(_authService.currentUserMatchOrGlobal(_designer.recipe_user_id))" (click)="deleteRecipe()">Delete Recipe</a>
   </div>
 
-
   <div id="pdf" class="size-limit">
     <div class="card col-12">
       <div class="container">
@@ -96,7 +95,7 @@
 
         <div class="row">
           <div class="col-12">
-            <p><i title="Rice or barley hulls are advised for high gravity and high adjunct beers." *ngIf="_designer.riceHullsRequired()" class="fas fa-exclamation-triangle img-responsive warning"></i><b>Ingredients</b></p>
+            <p><span ngbTooltip="Rice or barley hulls are advised for high gravity and high adjunct beers." *ngIf="_designer.riceHullsRequired()"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span><b>Ingredients</b></p>
           </div>
           <div class="col-12" *ngIf="_designer.used_waters.length < 1 && _designer.used_malts.length < 1 && _designer.used_hops.length < 1 && _designer.used_yeast.length < 1 && _designer.used_miscellaneous.length < 1">
             <p><b>No ingredients have been added.</b></p>
@@ -114,8 +113,8 @@
                 <td>{{ malt.name }}{{ _designer.recipe.recipe_malts_attributes[i].malt_usage === 'Mash' ? '' : ' (' + _designer.recipe.recipe_malts_attributes[i].malt_usage + ')' }}</td>
                 <td>{{ _designer.maltTypes ? _designer.maltTypes[malt.malt_type_id-1].name : '' }}</td>
                 <td>
-                  <span *ngIf="_designer.inputConversion(_designer.recipe.recipe_malts_attributes[i].quantity, 'malts') / _designer.getTotalMaltWeight() * 100 > malt.max_percent">
-                    <i title="The suggested max percent of this malt is {{ malt.max_percent }}%. The recipe is currently using a higher percent than that." class="fas fa-exclamation-triangle img-responsive warning"></i>
+                  <span ngbTooltip="The suggested max percent of this malt is {{ malt.max_percent }}%. The recipe is currently using a higher percent than that." *ngIf="_designer.inputConversion(_designer.recipe.recipe_malts_attributes[i].quantity, 'malts') / _designer.getTotalMaltWeight() * 100 > malt.max_percent">
+                    <i class="fas fa-exclamation-triangle img-responsive warning"></i>
                   </span>
                   {{ _designer.inputConversion(_designer.recipe.recipe_malts_attributes[i].quantity, 'malts') / _designer.getTotalMaltWeight() * 100 | number:'1.0-1' }}%
                 </td>
@@ -127,8 +126,8 @@
                 <td>{{ misc.miscellaneous_type }}</td>
                 <td>--</td>
                 <td>
-                  <span *ngIf="misc.quantity_label === _designer.recipe.recipe_miscellaneous_attributes[i].quantity_label && _designer.abs((_designer.recipe.recipe_miscellaneous_attributes[i].quantity / _designer.recipe.batch_size) - (misc.amount / misc.batch_size)) / (misc.amount / misc.batch_size) > .05">
-                    <i title="The suggested quantity for this ingredient is {{ misc.amount }} {{ misc.amount_label }} per {{ misc.batch_size }}." class="fas fa-exclamation-triangle img-responsive warning"></i>
+                  <span ngbTooltip="The suggested quantity for this ingredient is {{ misc.amount }} {{ misc.amount_label }} per {{ misc.batch_size }}." *ngIf="misc.quantity_label === _designer.recipe.recipe_miscellaneous_attributes[i].quantity_label && _designer.abs((_designer.recipe.recipe_miscellaneous_attributes[i].quantity / _designer.recipe.batch_size) - (misc.amount / misc.batch_size)) / (misc.amount / misc.batch_size) > .05">
+                    <i class="fas fa-exclamation-triangle img-responsive warning"></i>
                   </span>
                   {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity | number:'1.0-2' }} {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity_label }}</td>
               </tr>
@@ -178,8 +177,8 @@
             </table>
             <div>Total malt: {{ _designer.checkPoundsToGrams(_designer.getTotalMaltWeight(), 'malts') | number:'1.1-2' }} {{ _designer.measurement.malts === 'us' ? 'lbs' : 'kg' }}</div>
             <div>Total hops:
-              <span *ngIf="_designer.getTotalHopWeight() > (8 * _designer.inputConversion(_designer.recipe.batch_size, 'liquid') / 5)">
-                <i title="It is suggested to use at most {{_designer.checkPoundsToGrams(8, 'hops')}} {{ _designer.measurement.hops === 'us' ? 'oz' : 'g' }} of hops per {{_designer.checkGallonsToLiters(5)}} {{ (_designer.measurement.liquid === 'us' ? 'gallons' : 'liters') }} in the batch ({{8 * _designer.inputConversion(_designer.recipe.batch_size, 'liquid') / 5}} oz)." class="fas fa-exclamation-triangle img-responsive warning"></i>
+              <span ngbTooltip="It is suggested to use at most {{_designer.checkPoundsToGrams(8, 'hops')}} {{ _designer.measurement.hops === 'us' ? 'oz' : 'g' }} of hops per {{_designer.checkGallonsToLiters(5)}} {{ (_designer.measurement.liquid === 'us' ? 'gallons' : 'liters') }} in the batch ({{8 * _designer.inputConversion(_designer.recipe.batch_size, 'liquid') / 5}} oz)." *ngIf="_designer.getTotalHopWeight() > (8 * _designer.inputConversion(_designer.recipe.batch_size, 'liquid') / 5)">
+                <i class="fas fa-exclamation-triangle img-responsive warning"></i>
               </span>{{ _designer.checkPoundsToGrams(_designer.getTotalHopWeight(), 'hops') | number:'1.1-2' }} {{ _designer.measurement.hops === 'us' ? 'oz' : 'g' }}
             </div>
             <div>Total yeast: {{ _designer.getTotalYeast() | number:'1.1-2' }} pkgs - {{ _designer.getTotalYeastCells() | number:'1.1-1' }} billion cells</div>
@@ -265,7 +264,9 @@
 
         <div class="row">
           <div class="col-12">
-            <span class="help-icon" title="Note: The ratio here is calculated using raw, unrounded numbers for the purpose of accuracy.">&#9432; </span>
+            <span ngbTooltip="Note: The ratio here is calculated using raw, unrounded numbers for the purpose of accuracy.">
+              <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
+            </span>
             <span>Bitterness ratio: {{ _designer.calculateIBU(_designer.measurement.ibu) / (_designer.getEstimatedOG() - 1) / 1000 | number:'1.0-3' }} IBU/SG</span>
           </div>
         </div>
@@ -282,78 +283,114 @@
         <div class="row">
           <table class="table table-sm table-hover">
             <tr *ngIf="_designer.water_profile_select && _designer.currentWater() && _designer.used_water_profile">
-              <th class="text-center"><span class="help-icon" title="{{_designer.agentTitle('main')}}">&#9432; </span></th>
+              <th class="text-center">
+                <span ngbTooltip="{{_designer.agentTitle('main')}}">
+                  <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
+                </span>
+              </th>
               <th class="text-right">
-                <span *ngIf="_designer.agentPortion('ph')" class="help-icon" title="{{_designer.agentTitle('ph')}}">&#9432; </span>
-                <span *ngIf="!_designer.agentPortion('ph')"><i title="{{_designer.agentTitle('ph')}}" class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                <span *ngIf="_designer.agentPortion('ph')" ngbTooltip="{{_designer.agentTitle('ph')}}">
+                  <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
+                </span>
+                <span ngbTooltip="{{_designer.agentTitle('ph')}}" *ngIf="!_designer.agentPortion('ph')"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span>
                 pH
               </th>
               <th class="text-right">
-                <span *ngIf="_designer.currentWater().calcium >= _designer.used_water_profile.calcium_min && _designer.currentWater().calcium <= _designer.used_water_profile.calcium_max" class="help-icon" title="{{_designer.agentTitle('ca')}}\n\nThe desired quantity for the current profile is between {{ _designer.used_water_profile.calcium_min }} and {{ _designer.used_water_profile.calcium_max }} ppm.">&#9432; </span>
-                <span *ngIf="_designer.currentWater().calcium > _designer.used_water_profile.calcium_max || _designer.currentWater().calcium < _designer.used_water_profile.calcium_min"><i title="{{_designer.agentTitle('ca')}}" class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                <span *ngIf="_designer.currentWater().calcium >= _designer.used_water_profile.calcium_min && _designer.currentWater().calcium <= _designer.used_water_profile.calcium_max" ngbTooltip="{{_designer.agentTitle('ca')}}&#013;&#010;&#013;&#010;The desired quantity for the current profile is between {{ _designer.used_water_profile.calcium_min }} and {{ _designer.used_water_profile.calcium_max }} ppm.">
+                  <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
+                </span>
+                <span ngbTooltip="{{_designer.agentTitle('ca')}}" *ngIf="_designer.currentWater().calcium > _designer.used_water_profile.calcium_max || _designer.currentWater().calcium < _designer.used_water_profile.calcium_min"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span>
                 Ca
               </th>
               <th class="text-right">
-                <span *ngIf="_designer.currentWater().magnesium >= _designer.used_water_profile.magnesium_min && _designer.currentWater().magnesium <= _designer.used_water_profile.magnesium_max" class="help-icon" title="{{_designer.agentTitle('ca')}}\n\nThe desired quantity for the current profile is between {{ _designer.used_water_profile.magnesium_min }} and {{ _designer.used_water_profile.magnesium_max }} ppm.">&#9432; </span>
-                <span *ngIf="_designer.currentWater().magnesium > _designer.used_water_profile.magnesium_max || _designer.currentWater().magnesium < _designer.used_water_profile.magnesium_min"><i title="{{_designer.agentTitle('mg')}}" class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                <span *ngIf="_designer.currentWater().magnesium >= _designer.used_water_profile.magnesium_min && _designer.currentWater().magnesium <= _designer.used_water_profile.magnesium_max" ngbTooltip="{{_designer.agentTitle('ca')}}&#013;&#010;&#013;&#010;The desired quantity for the current profile is between {{ _designer.used_water_profile.magnesium_min }} and {{ _designer.used_water_profile.magnesium_max }} ppm.">
+                  <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
+                </span>
+                <span ngbTooltip="{{_designer.agentTitle('mg')}}" *ngIf="_designer.currentWater().magnesium > _designer.used_water_profile.magnesium_max || _designer.currentWater().magnesium < _designer.used_water_profile.magnesium_min"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span>
                 Mg
               </th>
               <th class="text-right">
-                <span *ngIf="_designer.currentWater().sodium >= 0 && _designer.currentWater().sodium <= 150" class="help-icon" title="{{_designer.agentTitle('ca')}}\n\nThe desired quantity for the current profile is between 0 and 150 ppm.">&#9432; </span>
-                <span *ngIf="_designer.currentWater().sodium > 150 || _designer.currentWater().sodium < 0"><i title="{{_designer.agentTitle('na')}}" class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                <span *ngIf="_designer.currentWater().sodium >= 0 && _designer.currentWater().sodium <= 150" ngbTooltip="{{_designer.agentTitle('ca')}}&#013;&#010;&#013;&#010;The desired quantity for the current profile is between 0 and 150 ppm.">
+                  <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
+                </span>
+                <span ngbTooltip="{{_designer.agentTitle('na')}}" *ngIf="_designer.currentWater().sodium > 150 || _designer.currentWater().sodium < 0"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span>
                 Na
               </th>
               <th class="text-right">
-                <span *ngIf="_designer.currentWater().sulfate >= _designer.used_water_profile.sulfate_min && _designer.currentWater().sulfate <= _designer.used_water_profile.sulfate_max" class="help-icon" title="{{_designer.agentTitle('ca')}}\n\nThe desired quantity for the current profile is between {{ _designer.used_water_profile.sulfate_min }} and {{ _designer.used_water_profile.sulfate_max }} ppm.">&#9432; </span>
-                <span *ngIf="_designer.currentWater().sulfate > _designer.used_water_profile.sulfate_max || _designer.currentWater().sulfate < _designer.used_water_profile.sulfate_min"><i title="{{_designer.agentTitle('so4')}}" class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                <span *ngIf="_designer.currentWater().sulfate >= _designer.used_water_profile.sulfate_min && _designer.currentWater().sulfate <= _designer.used_water_profile.sulfate_max" ngbTooltip="{{_designer.agentTitle('ca')}}&#013;&#010;&#013;&#010;The desired quantity for the current profile is between {{ _designer.used_water_profile.sulfate_min }} and {{ _designer.used_water_profile.sulfate_max }} ppm.">
+                  <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
+                </span>
+                <span ngbTooltip="{{_designer.agentTitle('so4')}}" *ngIf="_designer.currentWater().sulfate > _designer.used_water_profile.sulfate_max || _designer.currentWater().sulfate < _designer.used_water_profile.sulfate_min"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span>
                 SO4
               </th>
               <th class="text-right">
-                <span *ngIf="_designer.currentWater().chloride >= _designer.used_water_profile.chloride_min && _designer.currentWater().chloride <= _designer.used_water_profile.chloride_max" class="help-icon" title="{{_designer.agentTitle('ca')}}\n\nThe desired quantity for the current profile is between {{ _designer.used_water_profile.chloride_min }} and {{ _designer.used_water_profile.chloride_max }} ppm.">&#9432; </span>
-                <span *ngIf="_designer.currentWater().chloride > _designer.used_water_profile.chloride_max || _designer.currentWater().chloride < _designer.used_water_profile.chloride_min"><i title="{{_designer.agentTitle('cl')}}" class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                <span *ngIf="_designer.currentWater().chloride >= _designer.used_water_profile.chloride_min && _designer.currentWater().chloride <= _designer.used_water_profile.chloride_max" ngbTooltip="{{_designer.agentTitle('ca')}}&#013;&#010;&#013;&#010;The desired quantity for the current profile is between {{ _designer.used_water_profile.chloride_min }} and {{ _designer.used_water_profile.chloride_max }} ppm.">
+                  <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
+                </span>
+                <span ngbTooltip="{{_designer.agentTitle('cl')}}" *ngIf="_designer.currentWater().chloride > _designer.used_water_profile.chloride_max || _designer.currentWater().chloride < _designer.used_water_profile.chloride_min"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span>
                 Cl
               </th>
               <th class="text-right">
-                <span *ngIf="_designer.currentWater().bicarbonate >= _designer.used_water_profile.alkalinity_min && _designer.currentWater().bicarbonate <= _designer.used_water_profile.alkalinity_max" class="help-icon" title="{{_designer.agentTitle('ca')}}\n\nThe desired quantity for the current profile is between {{ _designer.used_water_profile.alkalinity_min }} and {{ _designer.used_water_profile.alkalinity_max }} ppm.">&#9432; </span>
-                <span *ngIf="_designer.currentWater().bicarbonate > _designer.used_water_profile.alkalinity_max || _designer.currentWater().bicarbonate < _designer.used_water_profile.alkalinity_min"><i title="{{_designer.agentTitle('hco3')}}" class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                <span *ngIf="_designer.currentWater().bicarbonate >= _designer.used_water_profile.alkalinity_min && _designer.currentWater().bicarbonate <= _designer.used_water_profile.alkalinity_max" ngbTooltip="{{_designer.agentTitle('ca')}}&#013;&#010;&#013;&#010;The desired quantity for the current profile is between {{ _designer.used_water_profile.alkalinity_min }} and {{ _designer.used_water_profile.alkalinity_max }} ppm.">
+                  <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
+                </span>
+                <span ngbTooltip="{{_designer.agentTitle('hco3')}}" *ngIf="_designer.currentWater().bicarbonate > _designer.used_water_profile.alkalinity_max || _designer.currentWater().bicarbonate < _designer.used_water_profile.alkalinity_min"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span>
                 HCO3
               </th>
             </tr>
             <tr *ngIf="!_designer.water_profile_select">
-              <th class="text-center"><span class="help-icon" title="{{_designer.agentTitle('main')}}">&#9432; </span></th>
+              <th class="text-center">
+                <span ngbTooltip="{{_designer.agentTitle('main')}}">
+                  <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
+                </span>
+              </th>
               <th class="text-right">
-                <span *ngIf="_designer.agentPortion('ph')" class="help-icon" title="{{_designer.agentTitle('ph')}}">&#9432; </span>
-                <span *ngIf="!_designer.agentPortion('ph')"><i title="{{_designer.agentTitle('ph')}}" class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                <span *ngIf="_designer.agentPortion('ph')" ngbTooltip="{{_designer.agentTitle('ph')}}">
+                  <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
+                </span>
+                <span ngbTooltip="{{_designer.agentTitle('ph')}}" *ngIf="!_designer.agentPortion('ph')"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span>
                 pH
               </th>
               <th class="text-right">
-                <span *ngIf="_designer.agentPortion('ca')" class="help-icon" title="{{_designer.agentTitle('ca')}}">&#9432; </span>
-                <span *ngIf="!_designer.agentPortion('ca')"><i title="{{_designer.agentTitle('ca')}}" class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                <span *ngIf="_designer.agentPortion('ca')" ngbTooltip="{{_designer.agentTitle('ca')}}">
+                  <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
+                </span>
+                <span ngbTooltip="{{_designer.agentTitle('ca')}}" *ngIf="!_designer.agentPortion('ca')"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span>
                 Ca
               </th>
               <th class="text-right">
-                <span *ngIf="_designer.agentPortion('mg')" class="help-icon" title="{{_designer.agentTitle('mg')}}">&#9432; </span>
-                <span *ngIf="!_designer.agentPortion('mg')" [ngClass]="{'error': (_designer.currentWater() && _designer.currentWater().magnesium >= 125), 'warning': (_designer.currentWater() && _designer.currentWater().magnesium < 125)}"><i title="{{_designer.agentTitle('mg')}}" class="fas fa-exclamation-triangle img-responsive"></i></span>
+                <span *ngIf="_designer.agentPortion('mg')" ngbTooltip="{{_designer.agentTitle('mg')}}">
+                  <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
+                </span>
+                <span ngbTooltip="{{_designer.agentTitle('mg')}}" *ngIf="!_designer.agentPortion('mg')" [ngClass]="{'error': (_designer.currentWater() && _designer.currentWater().magnesium >= 125), 'warning': (_designer.currentWater() && _designer.currentWater().magnesium < 125)}"><i class="fas fa-exclamation-triangle img-responsive"></i></span>
                 Mg
               </th>
               <th class="text-right">
-                <span *ngIf="_designer.agentPortion('na')" class="help-icon" title="{{_designer.agentTitle('na')}}">&#9432; </span>
-                <span *ngIf="!_designer.agentPortion('na')"><i title="{{_designer.agentTitle('na')}}" class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                <span *ngIf="_designer.agentPortion('na')" ngbTooltip="{{_designer.agentTitle('na')}}">
+                  <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
+                </span>
+                <span ngbTooltip="{{_designer.agentTitle('na')}}" *ngIf="!_designer.agentPortion('na')"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span>
                 Na
               </th>
               <th class="text-right">
-                <span *ngIf="_designer.agentPortion('so4')" class="help-icon" title="{{_designer.agentTitle('so4')}}">&#9432; </span>
-                <span *ngIf="!_designer.agentPortion('so4')"><i title="{{_designer.agentTitle('so4')}}" class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                <span *ngIf="_designer.agentPortion('so4')" ngbTooltip="{{_designer.agentTitle('so4')}}">
+                  <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
+                </span>
+                <span ngbTooltip="{{_designer.agentTitle('so4')}}" *ngIf="!_designer.agentPortion('so4')"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span>
                 SO4
               </th>
               <th class="text-right">
-                <span *ngIf="_designer.agentPortion('cl')" class="help-icon" title="{{_designer.agentTitle('cl')}}">&#9432; </span>
-                <span *ngIf="!_designer.agentPortion('cl')"><i title="{{_designer.agentTitle('cl')}}" class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                <span *ngIf="_designer.agentPortion('cl')" ngbTooltip="{{_designer.agentTitle('cl')}}">
+                  <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
+                </span>
+                <span ngbTooltip="{{_designer.agentTitle('cl')}}" *ngIf="!_designer.agentPortion('cl')"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span>
                 Cl
               </th>
               <th class="text-right">
-                <span *ngIf="_designer.agentPortion('hco3')" class="help-icon" title="{{_designer.agentTitle('hco3')}}">&#9432; </span>
-                <span *ngIf="!_designer.agentPortion('hco3')"><i title="{{_designer.agentTitle('hco3')}}" class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                <span *ngIf="_designer.agentPortion('hco3')" ngbTooltip="{{_designer.agentTitle('hco3')}}">
+                  <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
+                </span>
+                <span ngbTooltip="{{_designer.agentTitle('hco3')}}" *ngIf="!_designer.agentPortion('hco3')"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span>
                 HCO3
               </th>
             </tr>
@@ -391,7 +428,7 @@
         </div>
 
         <div class="row" *ngIf="_designer.used_water_profile && _designer.used_waters[0] && _designer.water_profile_select">
-          <app-radar-chart [canvas_id]="'profileChart'" [boundary]="_designer.used_water_profile" [current_water]="_designer.currentWater()"></app-radar-chart>
+          <app-radar-chart [canvas_id]="'profileChartPdf'" [boundary]="_designer.used_water_profile" [current_water]="_designer.currentWater()"></app-radar-chart>
         </div>
         <div class="row">
 
@@ -400,8 +437,10 @@
               <div class="row">
                 <div class="col-12">
 
-                  <span *ngIf="_designer.ra >= -60 && _designer.ra <= 200" class="help-icon" title="RA is the amount of alkalinity left after a chemical reaction occurs between calcium, magnesium and malt phosphate. A positive value results in a higher mash pH, while a negative value results in a lower mash pH. Typical values lie in the range of -60 to 200.">&#9432; </span>
-                  <span *ngIf="_designer.ra < -60 || _designer.ra > 200"><i title="RA is the amount of alkalinity left after a chemical reaction occurs between calcium, magnesium and malt phosphate. A positive value results in a higher mash pH, while a negative value results in a lower mash pH. Typical values lie in the range of -60 to 200." class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                  <span *ngIf="_designer.ra >= -60 && _designer.ra <= 200" ngbTooltip="RA is the amount of alkalinity left after a chemical reaction occurs between calcium, magnesium and malt phosphate. A positive value results in a higher mash pH, while a negative value results in a lower mash pH. Typical values lie in the range of -60 to 200.">
+                    <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
+                  </span>
+                  <span ngbTooltip="RA is the amount of alkalinity left after a chemical reaction occurs between calcium, magnesium and malt phosphate. A positive value results in a higher mash pH, while a negative value results in a lower mash pH. Typical values lie in the range of -60 to 200." *ngIf="_designer.ra < -60 || _designer.ra > 200"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span>
 
                   <label for="ra_slider">RA:</label>
                   <label for="ra_slider">{{ _designer.ra }}</label>
@@ -417,8 +456,10 @@
               <div class="row">
                 <div class="col-12">
 
-                  <span *ngIf="_designer.ra >= _designer.used_water_profile.ra_min && _designer.ra <= _designer.used_water_profile.ra_max" class="help-icon" title="The desired RA range for this profile is {{ _designer.used_water_profile.ra_min }} to {{ _designer.used_water_profile.ra_max }}.\n\nRA is the amount of alkalinity left after a chemical reaction occurs between calcium, magnesium and malt phosphate. A positive value results in a higher mash pH, while a negative value results in a lower mash pH. Typical values lie in the range of -60 to 200.">&#9432; </span>
-                  <span *ngIf="_designer.ra < _designer.used_water_profile.ra_min || _designer.ra > _designer.used_water_profile.ra_max"><i title="The desired RA range for this profile is {{ _designer.used_water_profile.ra_min }} to {{ _designer.used_water_profile.ra_max }}.&#013;&#013;RA is the amount of alkalinity left after a chemical reaction occurs between calcium, magnesium and malt phosphate. A positive value results in a higher mash pH, while a negative value results in a lower mash pH. Typical values lie in the range of -60 to 200." class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                  <span *ngIf="_designer.ra >= _designer.used_water_profile.ra_min && _designer.ra <= _designer.used_water_profile.ra_max" ngbTooltip="The desired RA range for this profile is {{ _designer.used_water_profile.ra_min }} to {{ _designer.used_water_profile.ra_max }}.&#013;&#010;&#013;&#010;RA is the amount of alkalinity left after a chemical reaction occurs between calcium, magnesium and malt phosphate. A positive value results in a higher mash pH, while a negative value results in a lower mash pH. Typical values lie in the range of -60 to 200.">
+                    <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
+                  </span>
+                  <span ngbTooltip="The desired RA range for this profile is {{ _designer.used_water_profile.ra_min }} to {{ _designer.used_water_profile.ra_max }}.&#013;&#010;&#013;&#010;RA is the amount of alkalinity left after a chemical reaction occurs between calcium, magnesium and malt phosphate. A positive value results in a higher mash pH, while a negative value results in a lower mash pH. Typical values lie in the range of -60 to 200." *ngIf="_designer.ra < _designer.used_water_profile.ra_min || _designer.ra > _designer.used_water_profile.ra_max"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span>
 
                   <label for="ra_slider">RA:</label>
                   <label for="ra_slider">{{ _designer.ra }}</label>
@@ -435,8 +476,10 @@
               <div class="row">
                 <div class="col-12">
 
-                  <span *ngIf="_designer.so4_cl_ratio >= 0.5 && _designer.so4_cl_ratio <= 9" class="help-icon" title="The ratio of sulfate to chloride effects the maltiness of the beer. A ratio less than 1 will accentuate the maltiness, while a ratior greater than 1 will accentuate bitterness. The typical range for this ratio is from 0.5 to 9, however it only really has an effect with ppms greater than 50.">&#9432; </span>
-                  <span *ngIf="(_designer.so4_cl_ratio < 0.5 || _designer.so4_cl_ratio > 9) && (_designer.currentWater().sulfate + _designer.currentWater().chloride > 50)"><i title="The ratio of sulfate to chloride effects the maltiness of the beer. A ratio less than 1 will accentuate the maltiness, while a ratior greater than 1 will accentuate bitterness. The typical range for this ratio is from 0.5 to 9, however it only really has an effect with ppms greater than 50." class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                  <span *ngIf="_designer.so4_cl_ratio >= 0.5 && _designer.so4_cl_ratio <= 9" ngbTooltip="The ratio of sulfate to chloride effects the maltiness of the beer. A ratio less than 1 will accentuate the maltiness, while a ratio greater than 1 will accentuate bitterness. The typical range for this ratio is from 0.5 to 9, however it only really has an effect with ppms greater than 50.">
+                    <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
+                  </span>
+                  <span ngbTooltip="The ratio of sulfate to chloride effects the maltiness of the beer. A ratio less than 1 will accentuate the maltiness, while a ratio greater than 1 will accentuate bitterness. The typical range for this ratio is from 0.5 to 9, however it only really has an effect with ppms greater than 50." *ngIf="(_designer.so4_cl_ratio < 0.5 || _designer.so4_cl_ratio > 9) && (_designer.currentWater().sulfate + _designer.currentWater().chloride > 50)"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span>
                   <label for="so4cl-slider">SO4:Cl</label>
                   <label for="so4cl-slider">{{ _designer.so4_cl_ratio }}</label>
                 </div>
@@ -451,7 +494,7 @@
             <div class="container">
               <div class="row">
                 <div class="col-12">
-                  <span *ngIf="_designer.getEstimatedPh() > 5.6 || _designer.getEstimatedPh() < 5.2"><i title="Mash pH should be between 5.2 and 5.6 in order to promote maximum enzyme efficiency and improve potential yeast health. Check the pH 10-15 minutes into the mash on a room temperature sample." class="fas fa-exclamation-triangle img-responsive warning"></i></span>
+                  <span ngbTooltip="Mash pH should be between 5.2 and 5.6 in order to promote maximum enzyme efficiency and improve potential yeast health. Check the pH 10-15 minutes into the mash on a room temperature sample." *ngIf="_designer.getEstimatedPh() > 5.6 || _designer.getEstimatedPh() < 5.2"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span>
                   <label for="mashph-slider">Mash pH:</label>
                   <label for="mashph-slider">{{ _designer.getEstimatedPh() | number:'1.1-2' }}</label>
                 </div>
@@ -495,7 +538,12 @@
                 <th>Water Addition Temp (&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }})</th>
               </tr>
               <tr *ngFor="let step of _designer.getMashWaterInfo()['step_info']; let i = index ">
-                <td><span *ngIf="step.step_name === 'Steeping'" class="help-icon" title="Steeping is done with extract brewing, generally beginning when the water temperature reaches 140 degrees, and lasting for about 20 minutes as the temperature reaches 170 degrees.">&#9432; </span>{{ step.step_name }}</td>
+                <td>
+                  <span *ngIf="step.step_name === 'Steeping'" ngbTooltip="Steeping is done with extract brewing, generally beginning when the water temperature reaches 140 degrees, and lasting for about 20 minutes as the temperature reaches 170 degrees.">
+                    <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
+                  </span>
+                  {{ step.step_name }}
+                </td>
                 <td>{{ _designer.checkFahrenheitToCelsius(step.step_temp) | number:'1.1-2' }}</td>
                 <td>{{ step.step_time }}</td>
                 <td *ngIf="i === 0 || _designer.recipe.mash_type !== 'decoction'">{{ step.water_amount | number:'1.1-2' }}</td>

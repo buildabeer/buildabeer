@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
+import { ContactService } from './contact.service';
 
-import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-contact-us',
@@ -23,19 +22,13 @@ export class ContactUsComponent implements OnInit {
 
   contactErrors: string[] = [];
 
-  constructor(private _http: Http) { }
+  constructor(private _contactService: ContactService) { }
 
   ngOnInit() {
   }
 
-  sendContact(): Observable<Response> {
-    return this._http.post(environment.token_auth_config.apiBase + '/contact_us', this.contact)
-      .map((response: Response) => response)
-      .catch(this.handleError);
-  }
-
   contactSubmit(): void {
-    this.sendContact()
+    this._contactService.sendContact(this.contact)
       .subscribe((res) => {
         if (res.status === 201) {
           this.contact = {
@@ -51,10 +44,5 @@ export class ContactUsComponent implements OnInit {
       err => {
         this.contactErrors = err.errors;
       });
-  }
-
-  handleError(error: Response) {
-    console.error(error);
-    return Observable.throwError(error);
   }
 }

@@ -19,6 +19,26 @@ export class StyleService {
       .catch(this.handleError);
   }
 
+  getStyleNames(): any {
+    return this.http.get(`${environment.token_auth_config.apiBase}/style_names`)
+      .map((response: any) => response)
+      .catch(this.handleError);
+  }
+
+  getStyleYeastRelations(): any {
+    return this.http.get(`${environment.token_auth_config.apiBase}/style_yeast_relations`)
+      .map((response: any) => response)
+      .catch(this.handleError);
+  }
+
+  deleteStyleYeastRelation(first_id, second_id): any {
+    return this.http.delete(`${environment.token_auth_config.apiBase}/style_yeast_relations/` + first_id + '-' + second_id);
+  }
+
+  createStyleYeastRelation(style_yeast_relation: any): any {
+    return this.http.post(`${environment.token_auth_config.apiBase}/style_yeast_relations/`, { style_yeast_relation });
+  }
+
   getWaterProfiles(): Observable<any[]> {
     return this.http.get(`${environment.token_auth_config.apiBase}/water_profiles`)
       .map((response: any[]) => response)

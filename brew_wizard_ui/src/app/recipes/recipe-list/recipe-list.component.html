@@ -103,8 +103,10 @@
 
   <div class="row title-bar">
     <p class="text-light offset-1 name">Name</p>
-    <p class="text-light offset-5 offset-sm-7 offset-md-8 help-icon" title="Private items are ones that you personally created and are only available for you to use, while global items are available for all users.">&#9432;</p>
-    <p class="text-light">Status</p>
+    <span class="offset-9" ngbTooltip="Private items are ones that you personally created and are only available for you to use, while global items are available for all users.">
+      <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
+    </span>
+    <p class="text-light"> Status</p>
   </div>
 
   <div class="tab-content" id="myTabContent">

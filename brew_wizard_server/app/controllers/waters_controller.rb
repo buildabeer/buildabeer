@@ -28,7 +28,7 @@ class WatersController < ApplicationController
     end
 
     if @water.save
-      render json: @water, status: :created, location: @water
+      render json: @water, status: :created
     else
       render json: @water.errors, status: :unprocessable_entity
     end

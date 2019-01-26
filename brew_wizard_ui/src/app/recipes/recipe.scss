@@ -22,6 +22,10 @@
   }
 }
 
+.tooltip-inner {
+  white-space: pre-line;
+}
+
 .non-par {
   margin-bottom: 0px;
 }
@@ -162,6 +166,11 @@ a.dropdown-item:hover {
   background-color: $dark;
 }
 
+p.mini {
+  margin-top: -7px;
+  color: black;
+}
+
 a.nav-link.active {
   background-color: $dark;
   border: 2px solid $primary;
@@ -173,7 +182,7 @@ a.nav-link.active {
   border: 1px solid $primary;
   margin: -1, 0, -1, 0;
   padding: 5px;
-  max-height: 47px;
+  max-height: 55px;
   max-width: 47px;
 }
 

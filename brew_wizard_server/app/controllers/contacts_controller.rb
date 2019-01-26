@@ -5,6 +5,9 @@ class ContactsController < ApplicationController
     @contact = Contact.new(contact_params)
     if current_user
       @contact.user_id = current_user.id
+      if !@contact.email
+        @contact.email = current_user.email
+      end
     end
 
     if @contact.save

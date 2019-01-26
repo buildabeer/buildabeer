@@ -18,7 +18,7 @@ class CalendarEventsController < ApplicationController
     @calendar_event.user_id = current_user.id
 
     if @calendar_event.save
-      render json: @calendar_event, status: :created, location: @calendar_event
+      render json: @calendar_event, status: :created
     else
       render json: @calendar_event.errors, status: :unprocessable_entity
     end
@@ -44,7 +44,7 @@ class CalendarEventsController < ApplicationController
     end
 
     if success.all?
-      render json: @calendar_events, status: :created#, location: @calendar_events
+      render json: @calendar_events, status: :created
     else
       render json: @calendar_events.map(&:errors), status: :unprocessable_entity
     end

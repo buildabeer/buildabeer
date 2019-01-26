@@ -25,18 +25,33 @@ Rails.application.routes.draw do
   get '/mash_steps/:id', to: 'mash_steps#show'
 
   get '/styles/:id', to: 'styles#show'
+  get '/style_names', to: 'styles#index_names'
   put '/styles/:id', to: 'styles#update'
   resources :styles
 
   get '/hops/:id', to: 'hops#show'
+  get '/hop_names', to: 'hops#index_names'
   put '/hops/:id', to: 'hops#update'
   resources :hops
+
+  get '/hop_relations', to: 'hop_relations#index'
+  post '/hop_relations', to: 'hop_relations#create'
+  delete '/hop_relations/:id', to: 'hop_relations#destroy'
+
+  get '/yeast_relations', to: 'yeast_relations#index'
+  post '/yeast_relations', to: 'yeast_relations#create'
+  delete '/yeast_relations/:id', to: 'yeast_relations#destroy'
+
+  get '/style_yeast_relations', to: 'style_yeast_relations#index'
+  post '/style_yeast_relations', to: 'style_yeast_relations#create'
+  delete '/style_yeast_relations/:id', to: 'style_yeast_relations#destroy'
 
   get '/miscellaneous/:id', to: 'miscellaneous#show'
   put '/miscellaneous/:id', to: 'miscellaneous#update'
   resources :miscellaneous
 
   get '/yeasts/:id', to: 'yeasts#show'
+  get '/yeast_names', to: 'yeasts#index_names'
   put '/yeasts/:id', to: 'yeasts#update'
   resources :yeasts
 
