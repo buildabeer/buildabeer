@@ -40,4 +40,5 @@ export interface IRecipe {
   recipe_acids_attributes: {id: number, acid_id: number, quantity: number}[];
   recipe_sparge_acids_attributes: {id: number, acid_id: number, quantity: number}[];
   recipe_mashes_attributes: {id: number, mash_step_id: number, time: number, temperature: number, name: string, used: boolean}[];
+  yeast_starters_attributes: {id: number, aeration_method: string, gravity: number, volume: number}[];
 }

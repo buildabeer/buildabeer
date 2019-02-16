@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181002221509) do
+ActiveRecord::Schema.define(version: 20190127191537) do
 
   create_table "acids", force: :cascade do |t|
     t.string "name"
@@ -361,6 +361,13 @@ ActiveRecord::Schema.define(version: 20181002221509) do
     t.integer "water_profile_id"
   end
 
+  create_table "styles_yeasts", force: :cascade do |t|
+    t.integer "yeast_id"
+    t.integer "style_id"
+    t.index ["style_id"], name: "index_styles_yeasts_on_style_id"
+    t.index ["yeast_id"], name: "index_styles_yeasts_on_yeast_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "provider", default: "email", null: false
     t.string "uid", default: "", null: false
@@ -456,6 +463,16 @@ ActiveRecord::Schema.define(version: 20181002221509) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["yeast_id", "yeast_relation_id"], name: "index_yeast_relations_on_yeast_id_and_yeast_relation_id", unique: true
+  end
+
+  create_table "yeast_starters", force: :cascade do |t|
+    t.integer "recipe_id"
+    t.string "aeration_method"
+    t.float "gravity"
+    t.float "volume"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["recipe_id"], name: "index_yeast_starters_on_recipe_id"
   end
 
   create_table "yeasts", force: :cascade do |t|

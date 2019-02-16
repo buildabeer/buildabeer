@@ -853,9 +853,6 @@
                     </select>
                   </div>
                   <div class="col-12 pad-bottom">
-                    <span ngbTooltip="{{_designer.getSpargeInfo()}}">
-                      <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
-                    </span>
                     <span ngbTooltip="{{_designer.getMashInfo()}}">
                       <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
                     </span>
@@ -872,9 +869,6 @@
               <div class="container" *ngIf="_designer.infusion_step && _designer.recipe.mash_type === 'none' && _designer.recipe.recipe_type !== 'Extract'">
                 <div class="row">
                   <div class="col-1">
-                    <span ngbTooltip="{{_designer.getSpargeInfo()}}">
-                      <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
-                    </span>
                     <span ngbTooltip="Suggested temperature range: 148-158&#010;Suggested time range: 45-90&#010;A single infusion mash is a single temperature range that is with alpha- and beta- amylase optimal temperature. Higher in the range favors maltier beers with more body, while lower temperatures favor beers that are cleaner with a thin body.">
                       <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
                     </span>
@@ -903,9 +897,6 @@
                     <input class="form-check-input" id="mash_step" type="checkbox" value="" [(ngModel)]="step.used">
                   </div>
                   <div class="col-1">
-                    <span ngbTooltip="{{_designer.getSpargeInfo()}}">
-                      <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
-                    </span>
                     <span ngbTooltip="Suggested temperature range: {{_designer.mash_steps[i].min_temp}}-{{_designer.mash_steps[i].max_temp}}&#010;Suggested time range: {{_designer.mash_steps[i].min_time}}-{{_designer.mash_steps[i].max_time}}&#010;{{ _designer.mash_steps[i].description }}">
                       <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
                     </span>
@@ -1111,7 +1102,7 @@
                 <div class="row pad-bottom">
                   <div class="col-6">
                     <span ngbTooltip="{{_designer.optimalYeastTemperatureMessage(1)}}" *ngIf="!_designer.optimalYeastTemperatureCheck(1)"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span>
-                    <label for="primaryTemp">Temperature
+                    <label for="primaryTemp">Temp
                       <select (change)="_designer.measurementChange('temperature')" id="temperature-measurement" class="tiny-element" [(ngModel)]="_designer.measurement.temperature">
                         <option value="us">(&deg;F)</option>
                         <option value="metric">(&deg;C)</option>
@@ -1241,6 +1232,43 @@
                 </div>
               </div>
 
+              <h3 class="underline"><span ngbTooltip="There is currently not enough yeast, consider using a starter to increase your yeast count from {{ _designer.getTotalYeastCells() }} to {{ _designer.yeastNeeded() }}." *ngIf="_designer.getTotalYeastCells() < _designer.yeastNeeded();"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span> Yeast Starter</h3>
+              <div class="container-fluid pad-bottom">
+                <div class="row pad-bottom border-bottom" *ngFor="let starter of _designer.recipe.yeast_starters_attributes; let i = index">
+                  <div class="col-8">
+                    <p>Step #{{ i + 1 }}</p>
+                  </div>
+                  <div class="col-4">
+                    <button class="btn btn-secondary mini-cancel" (click)="_designer.removeYeastStarter(i)">&#8854;</button>
+                  </div>
+                  <div class="col-4">
+                    <label for="s_aerate">Aeration</label>
+                    <select name="s_aerate" class="item-selector form-control" [(ngModel)]="starter.aeration_method">
+                      <option value="stir">Stir Plate</option>
+                      <option value="shake">Manually Shake</option>
+                      <option value="none">None</option>
+                    </select>
+                  </div>
+                  <div class="col-4">
+                    <label for="s_gravity">Gravity</label>
+                    <input name="s_gravity" type="number" class="form-control" step="0.001" [(ngModel)]="starter.gravity" min="1" max="2">
+                  </div>
+                  <div class="col-4">
+                    <label for="s_dme">DME ({{ _designer.measurement.malts === 'us' ? 'lbs' : 'kg' }})</label>
+                    <input name="s_dme" type="number" class="form-control" disabled="true" value="{{ _designer.calculateStarterDME(i) }}">
+                  </div>
+                  <div class="col-6">
+                    <label for="s_volume">Volume ({{ _designer.measurement.liquid === 'us' ? 'qt' : 'l' }})</label>
+                    <input name="s_volume" type="number" class="form-control" [(ngModel)]="starter.volume" min="0">
+                  </div>
+                  <div class="col-6">
+                    <label for="s_cells">Cells (billion)</label>
+                    <input name="s_cells" type="number" class="form-control" disabled="true" value="{{ _designer.getTotalNewYeastCells(i) }}">
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-primary" (click)="_designer.addYeastStarterStep()">Add Starter Step</button>
+
               <h3 class="underline">Carbonation</h3>
 
               <div class="container">
@@ -1257,16 +1285,13 @@
                     </select>
                   </div>
                   <div class="col-4">
-                    <label for="carbTemperature">Temperature (&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }})</label>
+                    <label for="carbTemperature">Temp (&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }})</label>
                     <input type="number" id="carbTemperature" class="form-control" min="_designer.inputConversion(33)" max="_designer.inputConversion(124)" [(ngModel)]="_designer.recipe.storage_temperature">
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="col-8">
-                    <span ngbTooltip="{{_designer.getSpargeInfo()}}">
-                      <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
-                    </span>
                     <label for="storage">
                       <span ngbTooltip="{{_designer.getCarbonationWithDescription()}}">
                         <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
@@ -1655,7 +1680,7 @@
                             <p>
                               <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#ingredientsCollapse" aria-expanded="true" aria-controls="ingredientsCollapse" (click)="ingredients_collapse=!ingredients_collapse">{{ !ingredients_collapse ? '+' : '-' }}
                               </button>
-                              <b>Ingredients</b>
+                              <span ngbTooltip="Rice or barley hulls are advised for high gravity and high adjunct beers." *ngIf="_designer.riceHullsRequired()"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span><b>Ingredients</b>
                             </p>
                           </div>
                         </div>
@@ -1664,87 +1689,95 @@
                             <p><b>No ingredients have been added.</b></p>
                           </div>
                           <div class="col-12" *ngIf="_designer.used_waters.length > 0 || _designer.used_malts.length > 0 || _designer.used_hops.length > 0 || _designer.used_yeast.length > 0 || _designer.used_miscellaneous.length > 0">
-                <table class="table table-sm table-hover">
-                  <tr>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>%/IBU/Cells</th>
-                    <th>Quantity</th>
-                  </tr>
+                            <table class="table table-sm table-hover">
+                              <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>%/IBU/Cells</th>
+                                <th>Quantity</th>
+                              </tr>
 
-                  <tr *ngFor="let malt of _designer.used_malts; let i = index ">
-                    <td>{{ malt.name }}{{ _designer.recipe.recipe_malts_attributes[i].malt_usage === 'Mash' ? '' : ' (' + _designer.recipe.recipe_malts_attributes[i].malt_usage + ')' }}</td>
-                    <td>{{ _designer.maltTypes ? _designer.maltTypes[malt.malt_type_id-1].name : '' }}</td>
-                    <td>
-                      <span ngbTooltip="The suggested max percent of this malt is {{ malt.max_percent }}%. The recipe is currently using a higher percent than that." *ngIf="_designer.inputConversion(_designer.recipe.recipe_malts_attributes[i].quantity, 'malts') / _designer.getTotalMaltWeight() * 100 > malt.max_percent">
-                        <i class="fas fa-exclamation-triangle img-responsive warning"></i>
-                      </span>
-                      {{ _designer.inputConversion(_designer.recipe.recipe_malts_attributes[i].quantity, 'malts') / _designer.getTotalMaltWeight() * 100 | number:'1.0-1' }}%
-                    </td>
-                    <td>{{ _designer.recipe.recipe_malts_attributes[i].quantity | number:'1.0-1' }} {{ _designer.measurement.malts === 'us' ? 'lbs' : 'kg' }}</td>
-                  </tr>
+                              <tr *ngFor="let malt of _designer.used_malts; let i = index ">
+                                <td>{{ malt.name }}{{ _designer.recipe.recipe_malts_attributes[i].malt_usage === 'Mash' ? '' : ' (' + _designer.recipe.recipe_malts_attributes[i].malt_usage + ')' }}</td>
+                                <td>{{ _designer.maltTypes ? _designer.maltTypes[malt.malt_type_id-1].name : '' }}</td>
+                                <td>
+                                  <span ngbTooltip="The suggested max percent of this malt is {{ malt.max_percent }}%. The recipe is currently using a higher percent than that." *ngIf="_designer.inputConversion(_designer.recipe.recipe_malts_attributes[i].quantity, 'malts') / _designer.getTotalMaltWeight() * 100 > malt.max_percent">
+                                    <i class="fas fa-exclamation-triangle img-responsive warning"></i>
+                                  </span>
+                                  {{ _designer.inputConversion(_designer.recipe.recipe_malts_attributes[i].quantity, 'malts') / _designer.getTotalMaltWeight() * 100 | number:'1.0-1' }}%
+                                </td>
+                                <td>{{ _designer.recipe.recipe_malts_attributes[i].quantity | number:'1.0-1' }} {{ _designer.measurement.malts === 'us' ? 'lbs' : 'kg' }}</td>
+                              </tr>
 
-                  <tr *ngFor="let misc of _designer.used_miscellaneous; let i = index ">
-                    <td>{{ misc.name }} ({{ misc.usage  }} {{ _designer.recipe.recipe_miscellaneous_attributes[i].time | number:'1.0-2' }})</td>
-                    <td>{{ misc.miscellaneous_type }}</td>
-                    <td>--</td>
-                    <td>
-                      <span ngbTooltip="The suggested quantity for this ingredient is {{ misc.amount }} {{ misc.amount_label }} per {{ misc.batch_size }}." *ngIf="misc.quantity_label === _designer.recipe.recipe_miscellaneous_attributes[i].quantity_label && _designer.abs((_designer.recipe.recipe_miscellaneous_attributes[i].quantity / _designer.recipe.batch_size) - (misc.amount / misc.batch_size)) / (misc.amount / misc.batch_size) > .05">
-                        <i class="fas fa-exclamation-triangle img-responsive warning"></i>
-                      </span>
-                      {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity | number:'1.0-2' }} {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity_label }}</td>
-                  </tr>
+                              <tr *ngFor="let misc of _designer.used_miscellaneous; let i = index ">
+                                <td>{{ misc.name }} ({{ misc.usage  }} {{ _designer.recipe.recipe_miscellaneous_attributes[i].time | number:'1.0-2' }})</td>
+                                <td>{{ misc.miscellaneous_type }}</td>
+                                <td>--</td>
+                                <td>
+                                  <span ngbTooltip="The suggested quantity for this ingredient is {{ misc.amount }} {{ misc.amount_label }} per {{ misc.batch_size }}." *ngIf="misc.quantity_label === _designer.recipe.recipe_miscellaneous_attributes[i].quantity_label && _designer.abs((_designer.recipe.recipe_miscellaneous_attributes[i].quantity / _designer.recipe.batch_size) - (misc.amount / misc.batch_size)) / (misc.amount / misc.batch_size) > .05">
+                                    <i class="fas fa-exclamation-triangle img-responsive warning"></i>
+                                  </span>
+                                  {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity | number:'1.0-2' }} {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity_label }}</td>
+                              </tr>
 
-                  <tr *ngFor="let hop of _designer.used_hops; let i = index ">
-                    <td>{{ hop.name }} ({{ _designer.displayHopInfo(_designer.recipe.recipe_hops_attributes[i].usage, _designer.recipe.recipe_hops_attributes[i].time) }})</td>
-                    <td>{{ hop.hop_type }}</td>
-                    <td>{{ _designer.individualIBU(_designer.recipe.recipe_hops_attributes[i], i, _designer.measurement['ibu']) | number:'1.1-1' }} IBUs</td>
-                    <td>{{ _designer.recipe.recipe_hops_attributes[i].quantity | number:'1.0-1' }} {{ _designer.measurement.hops === 'us' ? "oz" : "g" }}</td>
-                  </tr>
+                              <tr *ngFor="let hop of _designer.used_hops; let i = index ">
+                                <td>{{ hop.name }} ({{ _designer.displayHopInfo(_designer.recipe.recipe_hops_attributes[i].usage, _designer.recipe.recipe_hops_attributes[i].time) }})</td>
+                                <td>{{ hop.hop_type }}</td>
+                                <td>{{ _designer.individualIBU(_designer.recipe.recipe_hops_attributes[i], i, _designer.measurement['ibu']) | number:'1.1-1' }} IBUs</td>
+                                <td>{{ _designer.recipe.recipe_hops_attributes[i].quantity | number:'1.0-1' }} {{ _designer.measurement.hops === 'us' ? "oz" : "g" }}</td>
+                              </tr>
 
-                  <tr *ngFor="let yeast of _designer.used_yeast; let i = index ">
-                    <td>{{ yeast.name }}{{ yeast.lab ? " - " + yeast.lab : "" }}</td>
-                    <td>Yeast - {{ yeast.form }}</td>
-                    <!-- <td>{{ _designer.recipe.recipe_yeasts_attributes[i].fermentation_stage === 1 ? 'Primary' : 'Secondary' }}, {{ _designer.recipe.recipe_yeasts_attributes[i].fermentation_stage === 1 ? _designer.recipe.primary_ferm_temp : _designer.recipe.secondary_ferm_temp }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }}</td> -->
-                    <td>{{ _designer.recipe.recipe_yeasts_attributes[i].quantity * yeast.cell_count }} billion</td>
-                    <td>{{ _designer.recipe.recipe_yeasts_attributes[i].quantity | number:'1.0-1' }} pkgs</td>
-                  </tr>
+                              <tr *ngFor="let yeast of _designer.used_yeast; let i = index ">
+                                <td>{{ yeast.name }}{{ yeast.lab ? " - " + yeast.lab : "" }}</td>
+                                <td>Yeast - {{ yeast.form }}</td>
+                                <!-- <td>{{ _designer.recipe.recipe_yeasts_attributes[i].fermentation_stage === 1 ? 'Primary' : 'Secondary' }}, {{ _designer.recipe.recipe_yeasts_attributes[i].fermentation_stage === 1 ? _designer.recipe.primary_ferm_temp : _designer.recipe.secondary_ferm_temp }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }}</td> -->
+                                <td>{{ _designer.recipe.recipe_yeasts_attributes[i].quantity * yeast.cell_count }} billion</td>
+                                <td>{{ _designer.recipe.recipe_yeasts_attributes[i].quantity | number:'1.0-1' }} pkgs</td>
+                              </tr>
 
-                  <tr *ngFor="let water of _designer.used_waters; let i = index ">
-                    <td>{{ water.name }}</td>
-                    <td>Water</td>
-                    <td>--</td>
-                    <td>{{ _designer.recipe.recipe_waters_attributes[i].quantity | number:'1.0-1' }} {{ (_designer.measurement.liquid === 'us' ? "gallons" : "liters") }}</td>
-                  </tr>
+                              <tr *ngFor="let water of _designer.used_waters; let i = index ">
+                                <td>{{ water.name }}</td>
+                                <td>Water</td>
+                                <td>--</td>
+                                <td>{{ _designer.recipe.recipe_waters_attributes[i].quantity | number:'1.0-1' }} {{ (_designer.measurement.liquid === 'us' ? "gallons" : "liters") }}</td>
+                              </tr>
 
-                  <tr *ngFor="let agent of _designer.getActiveAgents()">
-                    <td>{{ agent.name }}</td>
-                    <td>Water Agent</td>
-                    <td>--</td>
-                    <td>{{ agent.quantity | number:'1.0-1' }} {{ _designer.measurement.agents === 'us' ? "ounces" : "grams" }}</td>
-                  </tr>
+                              <tr *ngFor="let agent of _designer.getActiveAgents()">
+                                <td>{{ agent.name }}</td>
+                                <td>Water Agent</td>
+                                <td>--</td>
+                                <td>{{ agent.quantity | number:'1.0-1' }} {{ _designer.measurement.agents === 'us' ? "ounces" : "grams" }}</td>
+                              </tr>
 
-                  <tr *ngFor="let acid of _designer.used_acids; let i = index ">
-                    <td>{{ acid.name }}</td>
-                    <td>Mash Acid</td>
-                    <td>--</td>
-                    <td>{{ _designer.recipe.recipe_acids_attributes[i].quantity | number:'1.0-1' }} {{ _designer.measurement.agents === 'us' ? "teaspoons" : "milliliters" }}</td>
-                  </tr>
+                              <tr *ngFor="let acid of _designer.used_acids; let i = index ">
+                                <td>{{ acid.name }}</td>
+                                <td>Mash Acid</td>
+                                <td>--</td>
+                                <td>{{ _designer.recipe.recipe_acids_attributes[i].quantity | number:'1.0-1' }} {{ _designer.measurement.agents === 'us' ? "teaspoons" : "milliliters" }}</td>
+                              </tr>
 
-                  <tr *ngFor="let acid of _designer.used_sparge_acids; let i = index ">
-                    <td>{{ acid.name }}</td>
-                    <td>Sparge Acid</td>
-                    <td>--</td>
-                    <td>{{ _designer.recipe.recipe_acids_attributes[i].quantity | number:'1.0-1' }} {{ _designer.measurement.agents === 'us' ? "teaspoons" : "milliliters" }}</td>
-                  </tr>
-                </table>
+                              <tr *ngFor="let acid of _designer.used_sparge_acids; let i = index ">
+                                <td>{{ acid.name }}</td>
+                                <td>Sparge Acid</td>
+                                <td>--</td>
+                                <td>{{ _designer.recipe.recipe_acids_attributes[i].quantity | number:'1.0-1' }} {{ _designer.measurement.agents === 'us' ? "teaspoons" : "milliliters" }}</td>
+                              </tr>
+
+                              <tr *ngIf="_designer.recipe.yeast_starters_attributes.length > 0">
+                                <td>DME</td>
+                                <td>DME</td>
+                                <td>0</td>
+                                <td>{{ _designer.checkPoundsToGrams(_designer.starterDMETotal()) | number:'1.0-3' }} {{ _designer.measurement.malts === 'us' ? 'lbs' : 'kg' }}</td>
+                              </tr>
+                            </table>
                             <div>Total malt: {{ _designer.checkPoundsToGrams(_designer.getTotalMaltWeight(), 'malts') | number:'1.1-2' }} {{ _designer.measurement.malts === 'us' ? 'lbs' : 'kg' }}</div>
                             <div>Total hops:
                               <span ngbTooltip="It is suggested to use at most {{_designer.checkPoundsToGrams(8, 'hops')}} {{ _designer.measurement.hops === 'us' ? 'oz' : 'g' }} of hops per {{_designer.checkGallonsToLiters(5)}} {{ (_designer.measurement.liquid === 'us' ? 'gallons' : 'liters') }} in the batch ({{8 * _designer.inputConversion(_designer.recipe.batch_size, 'liquid') / 5}} oz)." *ngIf="_designer.getTotalHopWeight() > (8 * _designer.inputConversion(_designer.recipe.batch_size, 'liquid') / 5)">
                                 <i class="fas fa-exclamation-triangle img-responsive warning"></i>
                               </span>{{ _designer.checkPoundsToGrams(_designer.getTotalHopWeight(), 'hops') | number:'1.1-2' }} {{ _designer.measurement.hops === 'us' ? 'oz' : 'g' }}
                             </div>
-                            <div>Total yeast: {{ _designer.getTotalYeast() | number:'1.1-2' }} pkgs - {{ _designer.getTotalYeastCells() | number:'1.1-1' }} billion cells</div>
+                            <div>Total yeast: {{ _designer.getTotalYeast() | number:'1.1-2' }} pkgs - {{ _designer.getTotalYeastCells() | number:'1.1-1' }} billion cells <span ngbTooltip="There is currently not enough yeast, consider using a starter to increase your yeast count from {{ _designer.getTotalYeastCells() }} to {{ _designer.yeastNeeded() }}." *ngIf="_designer.getTotalYeastCells() < _designer.yeastNeeded();"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span></div>
+                            <div *ngIf="_designer.getTotalStarterYeast() > _designer.getTotalYeast()">Yeast after starter: {{ _designer.getTotalStarterYeast() | number:'1.1-2' }} billion cells</div>
                           </div>
                         </div>
                       </div>
@@ -1823,6 +1856,32 @@
                         </div>
                       </div>
                       <div class="container collapse show" id="yeastCollapse">
+                        <div class="row" *ngIf="_designer.recipe.yeast_starters_attributes.length > 0">
+                          <div class="col-12">
+                            <p>Yeast starter:</p>
+                          </div>
+                          <div class="col-12">
+                            <table>
+                              <tr>
+                                <th>Volume ({{ _designer.measurement.liquid === 'us' ? 'qt' : 'l' }})</th>
+                                <th>DME ({{ _designer.measurement.malts === 'us' ? 'lbs' : 'kg' }})</th>
+                                <th>Aeration</th>
+                                <th>Final Cells (billions)</th>
+                              </tr>
+                              <tr *ngFor="let starter of _designer.recipe.yeast_starters_attributes; let i = index">
+                                <td>{{ starter.volume | number:'1.0-2' }}</td>
+                                <td>{{ _designer.calculateStarterDME(i) | number:'1.0-3' }}</td>
+                                <td>{{ starter.aeration }}</td>
+                                <td>{{ _designer.getTotalNewYeastCells(i) | number:'1.0-1' }}</td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                        <div class="row" *ngIf="_designer.recipe.yeast_starters_attributes.length === 0">
+                          <div class="col-12">
+                            <p>No yeast starter for this recipe.</p>
+                          </div>
+                        </div>
                         <div class="row">
                           <div class="col-12">
                             <p>Finish strategy: {{ _designer.recipe.storage_type }} at {{ _designer.recipe.storage_temperature | number:'1.0-1' }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }} with {{ _designer.recipe.carbonation_with }} ({{ _designer.getVolumesQuantity() | number:'1.1-2' }} {{ _designer.volumesLabel() }})</p>
@@ -2424,7 +2483,10 @@
               <div class="col-12">
                 <p>
                   <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#ingredientsCollapse2" aria-expanded="true" aria-controls="ingredientsCollapse2" (click)="ingredients_collapse=!ingredients_collapse">{{ !ingredients_collapse ? '+' : '-' }}
-                  </button>
+                  </button>+
+                  <span ngbTooltip="Rice or barley hulls are advised for high gravity and high adjunct beers." *ngIf="_designer.riceHullsRequired()">
+                    <i class="fas fa-exclamation-triangle img-responsive warning"></i>
+                  </span>
                   <b>Ingredients</b>
                 </p>
               </div>
@@ -2507,6 +2569,13 @@
                     <td>--</td>
                     <td>{{ _designer.recipe.recipe_acids_attributes[i].quantity | number:'1.0-1' }} {{ _designer.measurement.agents === 'us' ? "teaspoons" : "milliliters" }}</td>
                   </tr>
+
+                  <tr *ngIf="_designer.recipe.yeast_starters_attributes.length > 0">
+                    <td>DME</td>
+                    <td>DME</td>
+                    <td>0</td>
+                    <td>{{ _designer.checkPoundsToGrams(_designer.starterDMETotal()) | number:'1.0-3' }} {{ _designer.measurement.malts === 'us' ? 'lbs' : 'kg' }}</td>
+                  </tr>
                 </table>
                 <div>Total malt: {{ _designer.checkPoundsToGrams(_designer.getTotalMaltWeight(), 'malts') | number:'1.1-2' }} {{ _designer.measurement.malts === 'us' ? 'lbs' : 'kg' }}</div>
                 <div>Total hops:
@@ -2514,7 +2583,8 @@
                     <i class="fas fa-exclamation-triangle img-responsive warning"></i>
                   </span>{{ _designer.checkPoundsToGrams(_designer.getTotalHopWeight(), 'hops') | number:'1.1-2' }} {{ _designer.measurement.hops === 'us' ? 'oz' : 'g' }}
                 </div>
-                <div>Total yeast: {{ _designer.getTotalYeast() | number:'1.1-2' }} pkgs - {{ _designer.getTotalYeastCells() | number:'1.1-1' }} billion cells</div>
+                <div>Total yeast: {{ _designer.getTotalYeast() | number:'1.1-2' }} pkgs - {{ _designer.getTotalYeastCells() | number:'1.1-1' }} billion cells <span ngbTooltip="There is currently not enough yeast, consider using a starter to increase your yeast count from {{ _designer.getTotalYeastCells() }} to {{ _designer.yeastNeeded() }}." *ngIf="_designer.getTotalYeastCells() < _designer.yeastNeeded();"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span></div>
+                <div *ngIf="_designer.getTotalStarterYeast() > _designer.getTotalYeast()">Yeast after starter: {{ _designer.getTotalStarterYeast() | number:'1.1-2' }} billion cells</div>
               </div>
             </div>
           </div>
@@ -2593,6 +2663,32 @@
             </div>
           </div>
           <div class="container collapse show" id="yeastCollapse2">
+            <div class="row" *ngIf="_designer.recipe.yeast_starters_attributes.length > 0">
+              <div class="col-12">
+                <p>Yeast starter:</p>
+              </div>
+              <div class="col-12">
+                <table>
+                  <tr>
+                    <th>Volume ({{ _designer.measurement.liquid === 'us' ? 'qt' : 'l' }})</th>
+                    <th>DME ({{ _designer.measurement.malts === 'us' ? 'lbs' : 'kg' }})</th>
+                    <th>Aeration</th>
+                    <th>Final Cells (billions)</th>
+                  </tr>
+                  <tr *ngFor="let starter of _designer.recipe.yeast_starters_attributes; let i = index">
+                    <td>{{ starter.volume | number:'1.0-2' }}</td>
+                    <td>{{ _designer.calculateStarterDME(i) | number:'1.0-3' }}</td>
+                    <td>{{ starter.aeration }}</td>
+                    <td>{{ _designer.getTotalNewYeastCells(i) | number:'1.0-1' }}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="row" *ngIf="_designer.recipe.yeast_starters_attributes.length === 0">
+              <div class="col-12">
+                <p>No yeast starter for this recipe.</p>
+              </div>
+            </div>
             <div class="row">
               <div class="col-12">
                 <p>Finish strategy: {{ _designer.recipe.storage_type }} at {{ _designer.recipe.storage_temperature | number:'1.0-1' }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }} with {{ _designer.recipe.carbonation_with }} ({{ _designer.getVolumesQuantity() | number:'1.1-2' }} {{ _designer.volumesLabel() }})</p>
@@ -2877,6 +2973,13 @@
                 <td>--</td>
                 <td>{{ _designer.recipe.recipe_acids_attributes[i].quantity | number:'1.0-1' }} {{ _designer.measurement.agents === 'us' ? "teaspoons" : "milliliters" }}</td>
               </tr>
+
+              <tr *ngIf="_designer.recipe.yeast_starters_attributes.length > 0">
+                <td>DME</td>
+                <td>DME</td>
+                <td>0</td>
+                <td>{{ _designer.checkPoundsToGrams(_designer.starterDMETotal()) | number:'1.0-3' }} {{ _designer.measurement.malts === 'us' ? 'lbs' : 'kg' }}</td>
+              </tr>
             </table>
             <div>Total malt: {{ _designer.checkPoundsToGrams(_designer.getTotalMaltWeight(), 'malts') | number:'1.1-2' }} {{ _designer.measurement.malts === 'us' ? 'lbs' : 'kg' }}</div>
             <div>Total hops:
@@ -2884,7 +2987,8 @@
                 <i class="fas fa-exclamation-triangle img-responsive warning"></i>
               </span>{{ _designer.checkPoundsToGrams(_designer.getTotalHopWeight(), 'hops') | number:'1.1-2' }} {{ _designer.measurement.hops === 'us' ? 'oz' : 'g' }}
             </div>
-            <div>Total yeast: {{ _designer.getTotalYeast() | number:'1.1-2' }} pkgs - {{ _designer.getTotalYeastCells() | number:'1.1-1' }} billion cells</div>
+            <div>Total yeast: {{ _designer.getTotalYeast() | number:'1.1-2' }} pkgs - {{ _designer.getTotalYeastCells() | number:'1.1-1' }} billion cells <span ngbTooltip="There is currently not enough yeast, consider using a starter to increase your yeast count from {{ _designer.getTotalYeastCells() }} to {{ _designer.yeastNeeded() }}." *ngIf="_designer.getTotalYeastCells() < _designer.yeastNeeded();"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span></div>
+            <div *ngIf="_designer.getTotalStarterYeast() > _designer.getTotalYeast()">Yeast after starter: {{ _designer.getTotalStarterYeast() | number:'1.1-2' }} billion cells</div>
           </div>
         </div>
 
@@ -3260,6 +3364,29 @@
         <div class="row">
           <div class="col-12">
             <p><b>Yeast</b></p>
+          </div>
+
+          <div class="col-12" *ngIf="_designer.recipe.yeast_starters_attributes.length > 0">
+            <p>Yeast starter:</p>
+          </div>
+          <div class="col-12" *ngIf="_designer.recipe.yeast_starters_attributes.length > 0">
+            <table>
+              <tr>
+                <th>Volume ({{ _designer.measurement.liquid === 'us' ? 'qt' : 'l' }})</th>
+                <th>DME ({{ _designer.measurement.malts === 'us' ? 'lbs' : 'kg' }})</th>
+                <th>Aeration</th>
+                <th>Final Cells (billions)</th>
+              </tr>
+              <tr *ngFor="let starter of _designer.recipe.yeast_starters_attributes; let i = index">
+                <td>{{ starter.volume | number:'1.0-2' }}</td>
+                <td>{{ _designer.calculateStarterDME(i) | number:'1.0-3' }}</td>
+                <td>{{ starter.aeration }}</td>
+                <td>{{ _designer.getTotalNewYeastCells(i) | number:'1.0-1' }}</td>
+              </tr>
+            </table>
+          </div>
+          <div class="col-12" *ngIf="_designer.recipe.yeast_starters_attributes.length === 0">
+            <p>No yeast starter for this recipe.</p>
           </div>
 
           <div class="col-12">

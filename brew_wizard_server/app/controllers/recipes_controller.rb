@@ -25,7 +25,8 @@ class RecipesController < ApplicationController
     end
 
     if params["category_number"] && params["subcategory"]
-      @recipes = @recipes.joins(:style).merge(Style.where("subcategory = ? AND category_number = ?", params["subcategory"], params["category_number"]))
+      @recipes = @recipes.joins(:style).merge(Style.where("subcategory = ? AND category_number = ?", 
+        params["subcategory"], params["category_number"]))
     end
 
     page_count = (@recipes.length / 20).floor + 1
@@ -49,7 +50,8 @@ class RecipesController < ApplicationController
     water_agents: {}, recipe_hops: {}, hops: { include: { hop_relations: {} } }, recipe_yeasts: {},
     recipe_mashes: {}, mash_steps: {}, target_water: {}, recipe_acids: {}, acids: {},
     recipe_sparge_acids: {}, sparge_acids: {},
-    recipe_miscellaneous: {}, miscellaneous: {}, yeasts: { include: { yeast_relations: {} } } }
+    recipe_miscellaneous: {}, miscellaneous: {}, yeasts: { include: { yeast_relations: {} } },
+    yeast_starters: {} }
   end
 
   def count
@@ -102,82 +104,25 @@ class RecipesController < ApplicationController
       @recipe["recipe_date"] = @recipe["recipe_date"].to_date
     end
 
-    #mark waters for destruction
-    water_save_ids = []
-    recipe_params['recipe_waters_attributes'].each do |water|
-      water_save_ids << water['id']
-    end
-    @recipe.recipe_waters.each do |water|
-      water.mark_for_destruction if !water_save_ids.include? water.id
-    end
-
-    #mark water agents for destruction
-    agent_save_ids = []
-    recipe_params['recipe_water_agents_attributes'].each do |agent|
-      agent_save_ids << agent['id']
-    end
-    @recipe.recipe_water_agents.each do |agent|
-      agent.mark_for_destruction if !agent_save_ids.include? agent.id
-    end
-
-    #mark hops for destruction
-    hop_save_ids = []
-    recipe_params['recipe_hops_attributes'].each do |hop|
-      hop_save_ids << hop['id']
-    end
-    @recipe.recipe_hops.each do |hop|
-      hop.mark_for_destruction if !hop_save_ids.include? hop.id
-    end
-
-    #mark malts for destruction
-    malt_save_ids = []
-    recipe_params['recipe_malts_attributes'].each do |malt|
-      malt_save_ids << malt['id']
-    end
-    @recipe.recipe_malts.each do |malt|
-      malt.mark_for_destruction if !malt_save_ids.include? malt.id
-    end
-
-    #mark mash steps for destruction
-    mash_step_save_ids = []
-    recipe_params['recipe_mashes_attributes'].each do |mash_step|
-      mash_step_save_ids << mash_step['id']
-    end
-    @recipe.recipe_mashes.each do |mash_step|
-      mash_step.mark_for_destruction if !mash_step_save_ids.include? mash_step.id
-    end
-
-    #mark yeast for destruction
-    yeast_save_ids = []
-    recipe_params['recipe_yeasts_attributes'].each do |yeast|
-      yeast_save_ids << yeast['id']
-    end
-    @recipe.recipe_yeasts.each do |yeast|
-      yeast.mark_for_destruction if !yeast_save_ids.include? yeast.id
-    end
-
-    #mark acids for destruction
-    acid_save_ids = []
-    recipe_params['recipe_acids_attributes'].each do |acid|
-      acid_save_ids << acid['id']
-    end
-    @recipe.recipe_acids.each do |acid|
-      acid.mark_for_destruction if !acid_save_ids.include? acid.id
-    end
-
-    #mark sparge acids for destruction
-    sparge_acid_save_ids = []
-    recipe_params['recipe_sparge_acids_attributes'].each do |acid|
-      acid_save_ids << acid['id']
-    end
-    @recipe.recipe_acids.each do |acid|
-      acid.mark_for_destruction if !acid_save_ids.include? acid.id
-    end
+    mark_list = %w(yeast_starters recipe_acids recipe_yeasts 
+                   recipe_mashes recipe_malts recipe_hops recipe_water_agents
+                   recipe_waters)
+    mark_list.each { |m_list| black_mark(m_list, recipe_params) }
 
     if((@recipe.user_id == current_user.id) || (@recipe["global"] && current_user.admin?)) && @recipe.update(recipe_params)
       render json: @recipe
     else
       render json: @recipe.errors, status: :unprocessable_entity
+    end
+  end
+
+  def black_mark(attribute, recipe_params)
+    save_ids = []
+    recipe_params[attribute + '_attributes'].each do |param|
+      save_ids << param['id']
+    end
+    @recipe.public_send(attribute).each do |param|
+      param.mark_for_destruction if !save_ids.include? param.id
     end
   end
 
@@ -224,6 +169,7 @@ class RecipesController < ApplicationController
         recipe_acids_attributes: [:id, :acid_id, :quantity],
         recipe_sparge_acids_attributes: [:id, :acid_id, :quantity],
         recipe_mashes_attributes: [:id, :mash_step_id, :temperature, :time],
-        recipe_miscellaneous_attributes: [:id, :miscellaneou_id, :quantity, :quantity_label, :time, :usage])
+        recipe_miscellaneous_attributes: [:id, :miscellaneou_id, :quantity, :quantity_label, :time, :usage],
+        yeast_starters_attributes: [:id, :aeration_method, :gravity, :volume])
     end
 end

@@ -281,6 +281,7 @@ export class DesignerService {
       recipe_miscellaneous_attributes: [],
       recipe_yeasts_attributes: [],
       recipe_mashes_attributes: [],
+      yeast_starters_attributes: [],
       mash_ratio: this.checkMashRatioUnits(2.0),
       secondary_fermentation: false,
       primary_ferm_days: 14,
@@ -680,6 +681,7 @@ export class DesignerService {
       recipe_miscellaneous_attributes: [],
       recipe_yeasts_attributes: [],
       recipe_mashes_attributes: [],
+      yeast_starters_attributes: [],
       mash_ratio: this.checkMashRatioUnits(2.0),
       secondary_fermentation: false,
       primary_ferm_days: 14,
@@ -732,6 +734,7 @@ export class DesignerService {
           this.recipe.efficiency = recipeData.efficiency;
           this.recipe.recipe_type = recipeData.recipe_type;
           this.recipe.mash_type = recipeData.mash_type;
+          this.recipe.yeast_starters_attributes = recipeData.yeast_starters;
 
           this.used_waters = recipeData.waters;
           this.used_hops = recipeData.hops;
@@ -970,6 +973,7 @@ export class DesignerService {
       recipe_miscellaneous_attributes: [],
       recipe_yeasts_attributes: [],
       recipe_mashes_attributes: [],
+      yeast_starters_attributes: [],
       mash_ratio: this.checkMashRatioUnits(2.0),
       secondary_fermentation: false,
       primary_ferm_days: 14,
@@ -1022,6 +1026,7 @@ export class DesignerService {
           this.recipe.efficiency = recipeData.efficiency;
           this.recipe.recipe_type = recipeData.recipe_type;
           this.recipe.mash_type = recipeData.mash_type;
+          this.recipe.yeast_starters_attributes = recipeData.yeast_starters;
 
           this.used_waters = recipeData.waters;
           this.used_acids = recipeData.acids;
@@ -1540,8 +1545,7 @@ export class DesignerService {
   addWaterGallons(): number {
     let sum = 0;
     this.recipe.recipe_waters_attributes.forEach((water) => {
-      sum += this.inputConversion(
-water.quantity, 'liquid');
+      sum += this.inputConversion(water.quantity, 'liquid');
     });
     return sum;
   }
@@ -1552,12 +1556,10 @@ water.quantity, 'liquid');
     }
 
     if (this.used_equipment) {
-      return this.inputConversion(
-this.recipe.batch_size, 'liquid')
+      return this.inputConversion(this.recipe.batch_size, 'liquid')
       + this.used_equipment.wl_boil + (this.recipe.secondary_fermentation ? .1 : 0);
     }
-    return this.inputConversion(
-this.recipe.batch_size, 'liquid') + (this.recipe.secondary_fermentation ? .1 : 0);
+    return this.inputConversion(this.recipe.batch_size, 'liquid') + (this.recipe.secondary_fermentation ? .1 : 0);
   }
 
   estimatePreGallons(): number {
@@ -1608,35 +1610,22 @@ this.recipe.batch_size, 'liquid') + (this.recipe.secondary_fermentation ? .1 : 0
         calcium_to_add = profile.calcium - (profile.bicarbonate - hco3final) / 3.05;
       }
       current_water.ph += (Math.pow(10, profile.ph) * this.inputConversion(
-
 this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
-      current_water.calcium += (calcium_to_add * this.inputConversion(
-this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
-      current_water.magnesium += (profile.magnesium * this.inputConversion(
-this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
-      current_water.sodium += (profile.sodium * this.inputConversion(
-this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
-      current_water.sulfate += (profile.sulfate * this.inputConversion(
-this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
-      current_water.chloride += (profile.chloride * this.inputConversion(
-this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
-      current_water.bicarbonate += (hco3final * this.inputConversion(
-this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
+      current_water.calcium += (calcium_to_add * this.inputConversion(this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
+      current_water.magnesium += (profile.magnesium * this.inputConversion(this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
+      current_water.sodium += (profile.sodium * this.inputConversion(this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
+      current_water.sulfate += (profile.sulfate * this.inputConversion(this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
+      current_water.chloride += (profile.chloride * this.inputConversion(this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
+      current_water.bicarbonate += (hco3final * this.inputConversion(this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
     });
 
     this.agents.forEach((agent, i) => {
-      current_water.calcium += (agent.calcium * this.inputConversion(
-this.recipe.recipe_water_agents_attributes[i].quantity, 'agents') / total_gallons);
-      current_water.magnesium += (agent.magnesium * this.inputConversion(
-this.recipe.recipe_water_agents_attributes[i].quantity, 'agents') / total_gallons);
-      current_water.sodium += (agent.sodium * this.inputConversion(
-this.recipe.recipe_water_agents_attributes[i].quantity, 'agents') / total_gallons);
-      current_water.sulfate += (agent.sulfate * this.inputConversion(
-this.recipe.recipe_water_agents_attributes[i].quantity, 'agents') / total_gallons);
-      current_water.chloride += (agent.chloride * this.inputConversion(
-this.recipe.recipe_water_agents_attributes[i].quantity, 'agents') / total_gallons);
-      current_water.bicarbonate += (agent.bicarbonate * this.inputConversion(
-this.recipe.recipe_water_agents_attributes[i].quantity, 'agents') / total_gallons);
+      current_water.calcium += (agent.calcium * this.inputConversion(this.recipe.recipe_water_agents_attributes[i].quantity, 'agents') / total_gallons);
+      current_water.magnesium += (agent.magnesium * this.inputConversion(this.recipe.recipe_water_agents_attributes[i].quantity, 'agents') / total_gallons);
+      current_water.sodium += (agent.sodium * this.inputConversion(this.recipe.recipe_water_agents_attributes[i].quantity, 'agents') / total_gallons);
+      current_water.sulfate += (agent.sulfate * this.inputConversion(this.recipe.recipe_water_agents_attributes[i].quantity, 'agents') / total_gallons);
+      current_water.chloride += (agent.chloride * this.inputConversion(this.recipe.recipe_water_agents_attributes[i].quantity, 'agents') / total_gallons);
+      current_water.bicarbonate += (agent.bicarbonate * this.inputConversion(this.recipe.recipe_water_agents_attributes[i].quantity, 'agents') / total_gallons);
     });
 
     current_water.ph = Math.log10(current_water.ph);
@@ -1905,8 +1894,7 @@ this.recipe.recipe_water_agents_attributes[i].quantity, 'agents') / total_gallon
   getTotalMaltWeight(): number {
     let weight = 0;
     this.recipe.recipe_malts_attributes.forEach((m) => {
-      weight += this.inputConversion(
-m.quantity, 'malts');
+      weight += this.inputConversion(m.quantity, 'malts');
     });
 
     return weight;
@@ -1923,12 +1911,10 @@ m.quantity, 'malts');
 
       activate_steps.push({
         water_amount: this.checkGallonsToLiters(this.estimateGallonsNeeded()),
-        water_temp: this.inputConversion(
-mash_step_temp, 'temperature'),
+        water_temp: this.inputConversion(mash_step_temp, 'temperature'),
         step_name: 'Steeping',
         step_time: 20,
-        step_temp: this.inputConversion(
-mash_step_temp, 'temperature'),
+        step_temp: this.inputConversion(mash_step_temp, 'temperature'),
       });
 
       total_water = activate_steps[0].water_amount;
@@ -1937,14 +1923,10 @@ mash_step_temp, 'temperature'),
       activate_steps.push({
         water_amount: this.checkPoundsToGrams(this.getTotalGrainWeight(), 'malts') * this.recipe.mash_ratio,
         water_temp: Math.max(
-          (.2 / this.recipe.mash_ratio) * (this.inputConversion(
-            mash_step_temp, 'temperature') - 72) + this.inputConversion(
-              mash_step_temp, 'temperature'), this.inputConversion(
-                mash_step_temp, 'temperature')),
+          (.2 / this.recipe.mash_ratio) * (this.inputConversion(            mash_step_temp, 'temperature') - 72) + this.inputConversion(              mash_step_temp, 'temperature'), this.inputConversion(                mash_step_temp, 'temperature')),
         step_name: 'Infusion',
         step_time: 20,
-        step_temp: this.inputConversion(
-mash_step_temp, 'temperature'),
+        step_temp: this.inputConversion(mash_step_temp, 'temperature'),
       });
 
       total_water = activate_steps[0].water_amount;
@@ -1954,27 +1936,20 @@ mash_step_temp, 'temperature'),
           const new_step: { step_name: string, step_temp: number, step_time: number, water_amount: number, water_temp: number } = {
             step_name: '', step_temp: 0, step_time: 0, water_amount: 0, water_temp: 0 };
           new_step.step_name = mash_step.name;
-          new_step.step_temp = this.inputConversion(
-mash_step.temperature, 'temperature');
+          new_step.step_temp = this.inputConversion(mash_step.temperature, 'temperature');
           new_step.step_time = mash_step.time;
 
           if (!strike_temp) {
             new_step.water_amount = this.checkPoundsToGrams(this.getTotalGrainWeight(), 'malts') * this.recipe.mash_ratio;
-            strike_temp = Math.max((.2 / this.recipe.mash_ratio) * (this.inputConversion(
-              mash_step.temperature, 'temperature') - 72) + this.inputConversion(
-                mash_step.temperature, 'temperature'), this.inputConversion(
-mash_step.temperature, 'temperature'));
+            strike_temp = Math.max((.2 / this.recipe.mash_ratio) * (this.inputConversion(              mash_step.temperature, 'temperature') - 72) + this.inputConversion(                mash_step.temperature, 'temperature'), this.inputConversion(mash_step.temperature, 'temperature'));
             new_step.water_temp = strike_temp;
           } else {
-            new_step.water_amount = (this.inputConversion(
-              mash_step.temperature, 'temperature') - previous_temp) * (.2
-                * this.getTotalGrainWeight() + total_water) / (212 - this.inputConversion(
-                mash_step.temperature, 'temperature'));
+            new_step.water_amount = (this.inputConversion(              mash_step.temperature, 'temperature') - previous_temp) * (.2
+                * this.getTotalGrainWeight() + total_water) / (212 - this.inputConversion(                mash_step.temperature, 'temperature'));
             new_step.water_temp = 212;
           }
           total_water += new_step.water_amount;
-          previous_temp = this.inputConversion(
-mash_step.temperature, 'temperature');
+          previous_temp = this.inputConversion(mash_step.temperature, 'temperature');
           activate_steps.push(new_step);
         }
       });
@@ -1985,33 +1960,25 @@ mash_step.temperature, 'temperature');
           const new_step: { step_name: string, step_temp: number, step_time: number, water_amount: number, water_temp: number } = {
             step_name: '', step_temp: 0, step_time: 0, water_amount: 0, water_temp: 0 };
           new_step.step_name = mash_step.name;
-          new_step.step_temp = this.inputConversion(
-mash_step.temperature, 'temperature');
+          new_step.step_temp = this.inputConversion(mash_step.temperature, 'temperature');
           new_step.step_time = mash_step.time;
 
           if (!strike_temp) {
             new_step.water_amount = this.checkPoundsToGrams(this.getTotalGrainWeight(), 'malts') * this.recipe.mash_ratio;
-            strike_temp = Math.max((.2 / this.recipe.mash_ratio) * (this.inputConversion(
-mash_step.temperature, 'temperature') - 72) + this.inputConversion(
-mash_step.temperature, 'temperature'), this.inputConversion(
-mash_step.temperature, 'temperature'));
+            strike_temp = Math.max((.2 / this.recipe.mash_ratio) * (this.inputConversion(mash_step.temperature, 'temperature') - 72) + this.inputConversion(mash_step.temperature, 'temperature'), this.inputConversion(mash_step.temperature, 'temperature'));
             new_step.water_temp = strike_temp;
           } else {
-            new_step.water_amount = (new_step.step_temp - previous_temp) / (this.inputConversion(
-212, 'temperature') - previous_temp - this.inputConversion(
-18, 'temperature')) * 100;
+            new_step.water_amount = (new_step.step_temp - previous_temp) / (this.inputConversion(212, 'temperature') - previous_temp - this.inputConversion(18, 'temperature')) * 100;
             new_step.water_temp = 212;
           }
           total_water += new_step.water_amount;
-          previous_temp = this.inputConversion(
-mash_step.temperature, 'temperature');
+          previous_temp = this.inputConversion(mash_step.temperature, 'temperature');
           activate_steps.push(new_step);
         }
       });
     }
 
-    return { 'sparge_amount': this.estimateGallonsNeeded() - this.inputConversion(
-      total_water, 'liquid') / (this.measurement.liquid === 'us' ? 4 : 1), 'step_info': activate_steps };
+    return { 'sparge_amount': this.estimateGallonsNeeded() - this.inputConversion(      total_water, 'liquid') / (this.measurement.liquid === 'us' ? 4 : 1), 'step_info': activate_steps };
   }
 
   getUsedMashSteps(): any[] {
@@ -2035,9 +2002,7 @@ mash_step.temperature, 'temperature');
   getBeerColorValue(): number {
     let srmValue = 0;
     this.recipe.recipe_malts_attributes.forEach((malt) => {
-      srmValue += (this.inputConversion(
-malt.color, 'color') * this.inputConversion(
-malt.quantity, 'malts'));
+      srmValue += (this.inputConversion(malt.color, 'color') * this.inputConversion(malt.quantity, 'malts'));
     });
 
     srmValue = 1.4922 * Math.pow(srmValue / this.estimatedPostBoilGallons(), .6859);
@@ -2046,8 +2011,7 @@ malt.quantity, 'malts'));
   }
 
   getBeerColor(): string {
-    const srm = this.inputConversion(
-this.getBeerColorValue(), 'color');
+    const srm = this.inputConversion(this.getBeerColorValue(), 'color');
 
     if (srm > 30) {
       return '#050B0A';
@@ -2147,8 +2111,7 @@ this.getBeerColorValue(), 'color');
     this.used_malts.forEach((m, i) => {
       if (this.recipe.recipe_malts_attributes[i].malt_usage === 'Mash'
       && (this.maltTypes[m.malt_type_id - 1].name === 'Grain' || this.maltTypes[m.malt_type_id - 1].name === 'Adjunct')) {
-        weight += this.inputConversion(
-this.recipe.recipe_malts_attributes[i].quantity, 'malts');
+        weight += this.inputConversion(this.recipe.recipe_malts_attributes[i].quantity, 'malts');
       }
     });
 
@@ -2164,8 +2127,7 @@ this.recipe.recipe_malts_attributes[i].quantity, 'malts');
         if (malt.name.match(/hull/i) && this.recipe.recipe_malts_attributes[i].quantity > 0) {
           hulls_found = true;
         }
-        adjunct_total += this.inputConversion(
-this.recipe.recipe_malts_attributes[i].quantity, 'malts');
+        adjunct_total += this.inputConversion(this.recipe.recipe_malts_attributes[i].quantity, 'malts');
       }
     });
 
@@ -2192,11 +2154,9 @@ this.recipe.recipe_malts_attributes[i].quantity, 'malts');
           return;
         }
 
-        og += (.046 * this.recipe.efficiency / 100 * malt.malt_yield / 100 * this.inputConversion(
-this.recipe.recipe_malts_attributes[i].quantity, 'malts'));
+        og += (.046 * this.recipe.efficiency / 100 * malt.malt_yield / 100 * this.inputConversion(this.recipe.recipe_malts_attributes[i].quantity, 'malts'));
       } else {
-        og += (.046 * malt.malt_yield / 100 * this.inputConversion(
-this.recipe.recipe_malts_attributes[i].quantity, 'malts'));
+        og += (.046 * malt.malt_yield / 100 * this.inputConversion(this.recipe.recipe_malts_attributes[i].quantity, 'malts'));
       }
     });
 
@@ -2242,11 +2202,9 @@ this.recipe.recipe_malts_attributes[i].quantity, 'malts'));
     }
     let mash_thickness: number;
     if (water_amount) {
-      mash_thickness = this.inputConversion(
-water_amount, 'liquid') / this.getTotalGrainWeight();
+      mash_thickness = this.inputConversion(water_amount, 'liquid') / this.getTotalGrainWeight();
     } else {
-      mash_thickness = this.inputConversion(
-this.recipe.mash_ratio, 'ratio');
+      mash_thickness = this.inputConversion(this.recipe.mash_ratio, 'ratio');
     }
     mash_thickness = mash_thickness * 3.785 * 2.2 / 4; // (L/kg)
     const s_ra = .037 + .014 * mash_thickness;
@@ -2290,8 +2248,7 @@ this.recipe.mash_ratio, 'ratio');
 
   getStrikeWaterAffect(): number {
     const percentage_distilled = 0;
-    let mash_thickness = this.inputConversion(
-this.recipe.mash_ratio, 'ratio');
+    let mash_thickness = this.inputConversion(this.recipe.mash_ratio, 'ratio');
     mash_thickness = mash_thickness * 3.785 * 2.2 / 4; // (L/kg)
     const s_ra = .037 + .014 * mash_thickness;
     const nutrients = this.currentWater();
@@ -2323,13 +2280,11 @@ this.recipe.mash_ratio, 'ratio');
 
     this.used_malts.forEach((malt, i) => {
       if (this.recipe.recipe_malts_attributes[i].malt_usage === 'Mash' && malt.name.match(/acid/i)) {
-        acid_ounces += this.inputConversion(
-this.recipe.recipe_malts_attributes[i].quantity, 'malts') * 16;
+        acid_ounces += this.inputConversion(this.recipe.recipe_malts_attributes[i].quantity, 'malts') * 16;
       }
     });
     const strength_percent = .03;
-    const strike_volume_liters = this.inputConversion(
-this.recipe.mash_ratio, 'ratio') * 3.785 / 4 * this.getTotalGrainWeight();
+    const strike_volume_liters = this.inputConversion(this.recipe.mash_ratio, 'ratio') * 3.785 / 4 * this.getTotalGrainWeight();
     if (strike_volume_liters === 0) {
       return 0;
     }
@@ -2339,8 +2294,7 @@ this.recipe.mash_ratio, 'ratio') * 3.785 / 4 * this.getTotalGrainWeight();
     let acid_alkalinity_meql = 0;
 
     this.used_acids.forEach((acid, i) => {
-      acid_alkalinity_meql += -acid.strength / 100 * acid.density / acid.molecular_weight * 1000 * this.inputConversion(
-this.recipe.recipe_acids_attributes[i].quantity, 'liquid_agent') / strike_volume_liters;
+      acid_alkalinity_meql += -acid.strength / 100 * acid.density / acid.molecular_weight * 1000 * this.inputConversion(this.recipe.recipe_acids_attributes[i].quantity, 'liquid_agent') / strike_volume_liters;
     });
 
     return malt_alkalinity_meql + acid_alkalinity_meql;
@@ -2350,13 +2304,11 @@ this.recipe.recipe_acids_attributes[i].quantity, 'liquid_agent') / strike_volume
     let acid_ounces = 0;
     this.used_malts.forEach((malt, i) => {
       if (this.recipe.recipe_malts_attributes[i].malt_usage === 'Mash' && malt.name.match(/acid/i)) {
-        acid_ounces += this.inputConversion(
-this.recipe.recipe_malts_attributes[i].quantity, 'malts') * 16;
+        acid_ounces += this.inputConversion(this.recipe.recipe_malts_attributes[i].quantity, 'malts') * 16;
       }
     });
     const strength_percent = .03;
-    const strike_volume_liters = this.inputConversion(
-this.recipe.mash_ratio, 'ratio') * 3.785 / 4 * this.getTotalGrainWeight();
+    const strike_volume_liters = this.inputConversion(this.recipe.mash_ratio, 'ratio') * 3.785 / 4 * this.getTotalGrainWeight();
     if (strike_volume_liters === 0) {
       return 0;
     }
@@ -2389,10 +2341,8 @@ this.recipe.mash_ratio, 'ratio') * 3.785 / 4 * this.getTotalGrainWeight();
     const phosphoric_density = 1.05;
     const lactic_density = 1.21;
 
-    const phosphoric_alkalinity_meql = -phosphoric_strength * phosphoric_density / 98 * 1000 * this.inputConversion(
-phosphoric_acid, 'liquid_agent') / strike_volume_liters;
-    const lactic_alkalinity_meql = -lactic_strength * lactic_density / 90.09 * 1000 * this.inputConversion(
-lactic_acid, 'liquid_agent') / strike_volume_liters;
+    const phosphoric_alkalinity_meql = -phosphoric_strength * phosphoric_density / 98 * 1000 * this.inputConversion(phosphoric_acid, 'liquid_agent') / strike_volume_liters;
+    const lactic_alkalinity_meql = -lactic_strength * lactic_density / 90.09 * 1000 * this.inputConversion(lactic_acid, 'liquid_agent') / strike_volume_liters;
 
     return malt_alkalinity_meql + phosphoric_alkalinity_meql + lactic_alkalinity_meql;
   }
@@ -2522,13 +2472,11 @@ lactic_acid, 'liquid_agent') / strike_volume_liters;
       bigness = 1.65 * Math.pow(0.000125, this.getEstimatedOG() - 1);
       boil_factor = (1 - Math.exp(-.04 * hop.time)) / 4.15;
       utilization = bigness * boil_factor;
-      add_ibu = hop.alpha * this.inputConversion(
-        hop.quantity, 'hops') * 74.89 / this.estimatedPostBoilGallons();
+      add_ibu = hop.alpha * this.inputConversion(        hop.quantity, 'hops') * 74.89 / this.estimatedPostBoilGallons();
       add_ibu = add_ibu * utilization;
     } else if (method === 'rager') {
       utilization = (18.11 + (13.65 * Math.tanh((hop.time - 31.32) / 18.37))) / 100;
-      add_ibu = (this.inputConversion(
-        hop.quantity, 'hops') * utilization * (hop.alpha / 100) * 7489) /
+      add_ibu = (this.inputConversion(        hop.quantity, 'hops') * utilization * (hop.alpha / 100) * 7489) /
         (this.estimatedPostBoilGallons() * (1 + Math.max(0, (this.getEstimatedOG() - 1.050) / .2)));
     } else if (method === 'garetz') {
       const desired_ibus = (this.calculateIBU('tinseth') + this.calculateIBU('rager')) / 2;
@@ -2544,15 +2492,13 @@ lactic_acid, 'liquid_agent') / strike_volume_liters;
       const ca: number = gf * hf * tf;
 
       utilization = 7.2994 + (15.0746 * Math.tanh((hop.time - 21.86) / 24.71));
-      add_ibu = (utilization * this.inputConversion(
-        hop.quantity, 'hops') * hop.alpha * .749) / (this.estimatedPostBoilGallons() * ca);
+      add_ibu = (utilization * this.inputConversion(        hop.quantity, 'hops') * hop.alpha * .749) / (this.estimatedPostBoilGallons() * ca);
     } else if (method === 'daniels') {
       bigness = 1.65 * Math.pow(0.000125, this.getEstimatedOG() - 1);
       boil_factor = (1 - Math.exp(-.04 * hop.time)) / 4.15;
       utilization = bigness * boil_factor;
 
-      add_ibu = utilization / 100 * this.inputConversion(
-        hop.quantity, 'hops') * hop.alpha * 7489 / this.estimatedPostBoilGallons();
+      add_ibu = utilization / 100 * this.inputConversion(        hop.quantity, 'hops') * hop.alpha * 7489 / this.estimatedPostBoilGallons();
     }
 
     if (hop.form === 'Pellet') {
@@ -2568,8 +2514,7 @@ lactic_acid, 'liquid_agent') / strike_volume_liters;
   getTotalHopWeight(): number {
     let weight = 0;
     this.recipe.recipe_hops_attributes.forEach((w) => {
-      weight += this.inputConversion(
-        w.quantity, 'hops');
+      weight += this.inputConversion(        w.quantity, 'hops');
     });
 
     return weight;
@@ -2621,8 +2566,10 @@ lactic_acid, 'liquid_agent') / strike_volume_liters;
     }
   }
 
-  getUsedMiscellaneous(stage_used): { quantity: number, quantity_label: string, name: string, time: number, time_label: string }[] {
-    const used_miscellaneous: { quantity: number, quantity_label: string, name: string, time: number, time_label: string }[] = [];
+  getUsedMiscellaneous(stage_used): { quantity: number, quantity_label: string, name: string,
+                                      time: number, time_label: string }[] {
+    const used_miscellaneous: { quantity: number, quantity_label: string, name: string,
+                                time: number, time_label: string }[] = [];
     this.recipe.recipe_miscellaneous_attributes.forEach((misc, i) => {
       if (misc.usage === stage_used) {
         used_miscellaneous.push({ quantity: misc.quantity, quantity_label: misc.quantity_label,
@@ -2634,6 +2581,129 @@ lactic_acid, 'liquid_agent') / strike_volume_liters;
   }
 
   // yeast
+
+  starterDMETotal(): number {
+    let total = 0;
+    for (let i = 0; i < this.recipe.yeast_starters_attributes.length; i++) {
+      total += this.calculateStarterDME(i);
+    }
+    return total;
+  }
+
+  addYeastStarterStep() {
+    this.recipe.yeast_starters_attributes.push({ id: null, aeration_method: 'none', gravity: 1.036,
+                                          volume: this.inputConversion(2 / 3.78541 * 4, 'liquidquart')});
+  }
+
+  removeYeastStarter(i: number) {
+    this.recipe.yeast_starters_attributes.splice(i, 1);
+  }
+
+  calculateStarterDME(i: number): number {
+    return this.inputConversion((this.recipe.yeast_starters_attributes[i].gravity - 1) * 1000 *
+      this.checkGallonsToLiters(this.recipe.yeast_starters_attributes[i].volume, true) / 4 / 44, 'malts');
+  }
+
+  calculateStarterTotalCells(i: number): number {
+    return 0;
+  }
+
+  viableCells(): number {
+    // .97 * .8 * months * (1 - days / 30 * 20 * .01)
+    return 0;
+  }
+
+  getTotalStarterYeast(): number {
+    return this.getTotalNewYeastCells(this.recipe.yeast_starters_attributes.length - 1);
+  }
+
+  getTotalNewYeastCells(i: number): number {
+    let old_cells;
+    if (i < 0) {
+      return 0;
+    } else if (i === 0) {
+      old_cells = this.getTotalYeastCells();
+    } else {
+      old_cells = this.getTotalNewYeastCells(i - 1);
+    }
+
+    if (old_cells === 0) {
+      return 0;
+    }
+
+    let new_cells = this.getNewYeastCells(i, old_cells);
+
+    let growth_factor = new_cells / old_cells;
+    return new_cells + old_cells;
+  }
+
+  getNewYeastCells(i: number, old_cells: number): number {
+    return this.getEGrams(i) * this.getYeastGrowthRate(i, old_cells);
+  }
+
+  getYeastGrowthRate(i: number, old_cells: number): number {
+    let cells_over_egrams = old_cells / this.getEGrams(i);
+    switch (this.recipe.yeast_starters_attributes[i].aeration_method) {
+      case 'stir':
+        if (cells_over_egrams > 3.5) {
+          return 0;
+        } else if (cells_over_egrams < 1.4) {
+          return 1.4;
+        } else {
+          return 2.33 - (.67 * cells_over_egrams);
+        }
+      case 'shake':
+        if (cells_over_egrams > 3.5) {
+          return 0;
+        } else {
+          return .62;
+        }
+      case 'none':
+        if (cells_over_egrams > 3.5) {
+          return 0;
+        } else {
+          return .4;
+        }
+      default:
+        return 0;
+    }
+  }
+
+  getEGrams(i: number): number {
+    return (this.recipe.yeast_starters_attributes[i].gravity - 1) *
+            this.checkGallonsToLiters(this.recipe.yeast_starters_attributes[i].volume, true) *
+            1000 * 2.72715;
+            // 2.72715 is #grams of extract / point of starter gravity / liter
+  }
+
+  yeastNeeded(): number {
+    let pitch_factor = this.getPitchFactor();
+    let batch_size = this.recipe.batch_size * 3.78541;
+
+    return pitch_factor * batch_size * this.convertToPlato(this.getEstimatedOG());
+  }
+
+  getPitchFactor(): number {
+    let pf = 0;
+    this.used_yeast.forEach((yeast) => {
+      let new_pf = 0;
+      if (yeast.yeast_type === 'lager') {
+        new_pf = 1.5;
+      } else {
+        new_pf = .75;
+      }
+
+      if (pf === 0) {
+        pf = new_pf;
+      } else {
+        if (pf !== new_pf) {
+          pf = 1;
+        }
+      }
+    });
+
+    return pf;
+  }
 
   onAddYeast(add_yeast, stage): void {
     setTimeout(() => {
@@ -2719,10 +2789,9 @@ lactic_acid, 'liquid_agent') / strike_volume_liters;
   }
 
   optimalYeastTemperatureCheck(stage): boolean {
-    const temperature = this.inputConversion(
-(stage === 1) ? this.inputConversion(
-this.recipe.primary_ferm_temp, 'temperature') : this.inputConversion(
-this.recipe.secondary_ferm_temp, 'temperature'), 'temperature');
+    const temperature = this.inputConversion((stage === 1) ? 
+                        this.inputConversion(this.recipe.primary_ferm_temp, 'temperature') : 
+                        this.inputConversion(this.recipe.secondary_ferm_temp, 'temperature'), 'temperature');
     const range = this.optimalYeastTemperature(stage);
     if (range.min > temperature || range.max < temperature) {
       return false;
@@ -2760,12 +2829,9 @@ this.recipe.secondary_ferm_temp, 'temperature'), 'temperature');
 
     switch (this.recipe.carbonation_with) {
       case 'pressure':
-        quantity = -16.6999 - 0.0101059 * this.inputConversion(
-this.recipe.storage_temperature, 'temperature') +
-            0.00116512 * Math.pow(this.inputConversion(
-this.recipe.storage_temperature, 'temperature'), 2) + 0.173354 *
-            this.inputConversion(
-this.recipe.storage_temperature, 'temperature') * this.recipe.carbonation_volumes + 4.24267 *
+        quantity = -16.6999 - 0.0101059 * this.inputConversion(this.recipe.storage_temperature, 'temperature') +
+            0.00116512 * Math.pow(this.inputConversion(this.recipe.storage_temperature, 'temperature'), 2) + 0.173354 *
+            this.inputConversion(this.recipe.storage_temperature, 'temperature') * this.recipe.carbonation_volumes + 4.24267 *
             this.recipe.carbonation_volumes - 0.0684226 * Math.pow(this.recipe.carbonation_volumes, 2);
         return this.checkPsiToKpa(quantity);
       case 'cornsugar':
@@ -2786,19 +2852,15 @@ this.recipe.storage_temperature, 'temperature') * this.recipe.carbonation_volume
         break;
       case 'gyle':
         const carbonation_beer = (1.013) * Math.pow(2.71828182845904,
-          (-10.73797 + (2617.25 / (this.fahrToCels(this.inputConversion(
-this.recipe.storage_temperature, 'temperature')) + 273.15)))) * 10;
-        quantity = 1.95 * 4 * this.inputConversion(
-this.recipe.batch_size, 'liquid') * (this.recipe.carbonation_volumes - carbonation_beer / 2) /
+          (-10.73797 + (2617.25 / (this.fahrToCels(this.inputConversion(this.recipe.storage_temperature, 'temperature')) + 273.15)))) * 10;
+        quantity = 1.95 * 4 * this.inputConversion(this.recipe.batch_size, 'liquid') * (this.recipe.carbonation_volumes - carbonation_beer / 2) /
 (this.getEstimatedOG() - this.getEstimatedFG()) / 1000;
         return this.checkGallonsToLiters(quantity, true);
     }
 
-    const dissolved_co2 = ((-0.9753) * Math.log(this.inputConversion(
-this.recipe.storage_temperature, 'temperature')) + 4.9648);
+    const dissolved_co2 = ((-0.9753) * Math.log(this.inputConversion(this.recipe.storage_temperature, 'temperature')) + 4.9648);
     const co2_factor = this.recipe.carbonation_volumes - dissolved_co2;
-    const vol_factor = this.inputConversion(
-this.recipe.batch_size, 'liquid') * 3.78541;
+    const vol_factor = this.inputConversion(this.recipe.batch_size, 'liquid') * 3.78541;
     quantity = co2_factor * sugar_factor * vol_factor * sugar_volume_factor /
     (this.measurement.malts === 'us' ? 28.34952 : 1); // 28.34952 is gram to oz
     return this.recipe.storage_type === 'keg' ? (quantity / 2) : quantity;
@@ -2881,8 +2943,7 @@ this.recipe.batch_size, 'liquid') * 3.78541;
       brewer: this.recipe.brewer,
       recipe_date: this.recipe.recipe_date,
       version: this.recipe.version,
-      batch_size: this.inputConversion(
-this.recipe.batch_size, 'liquid'),
+      batch_size: this.inputConversion(this.recipe.batch_size, 'liquid'),
       boil_time: this.recipe.boil_time,
       equipment_id: this.recipe.equipment_id,
       water_profile_id: this.recipe.water_profile_id,
@@ -2895,14 +2956,11 @@ this.recipe.batch_size, 'liquid'),
       mash_type: this.recipe.mash_type,
       global: this.recipe.global,
       storage_type: this.recipe.storage_type,
-      storage_temperature: this.inputConversion(
-this.recipe.storage_temperature, 'temperature'),
+      storage_temperature: this.inputConversion(this.recipe.storage_temperature, 'temperature'),
       carbonation_volumes: this.recipe.carbonation_volumes,
       carbonation_with: this.recipe.carbonation_with,
-      primary_ferm_temp: this.inputConversion(
-this.recipe.primary_ferm_temp, 'temperature'),
-      secondary_ferm_temp: this.inputConversion(
-this.recipe.secondary_ferm_temp, 'temperature'),
+      primary_ferm_temp: this.inputConversion(this.recipe.primary_ferm_temp, 'temperature'),
+      secondary_ferm_temp: this.inputConversion(this.recipe.secondary_ferm_temp, 'temperature'),
       secondary_fermentation: this.recipe.secondary_fermentation,
       primary_ferm_days: this.recipe.primary_ferm_days,
       secondary_ferm_days: this.recipe.secondary_ferm_days,
@@ -2915,8 +2973,8 @@ this.recipe.secondary_ferm_temp, 'temperature'),
       recipe_miscellaneous_attributes: JSON.parse(JSON.stringify(this.recipe.recipe_miscellaneous_attributes)),
       recipe_yeasts_attributes: JSON.parse(JSON.stringify(this.recipe.recipe_yeasts_attributes)),
       recipe_mashes_attributes: JSON.parse(JSON.stringify(this.getUsedMashSteps())),
-      mash_ratio: this.inputConversion(
-this.recipe.mash_ratio, 'ratio'),
+      yeast_starters_attributes: JSON.parse(JSON.stringify(this.recipe.yeast_starters_attributes)),
+      mash_ratio: this.inputConversion(this.recipe.mash_ratio, 'ratio'),
       efficiency: this.recipe.efficiency,
       recipe_type: this.recipe.recipe_type,
       user_nickname: ''
@@ -2927,25 +2985,24 @@ this.recipe.mash_ratio, 'ratio'),
     }
 
     recipe.recipe_waters_attributes.forEach((recipe_water) => {
-      recipe_water.quantity = this.inputConversion(
-recipe_water.quantity, 'liquid');
+      recipe_water.quantity = this.inputConversion(recipe_water.quantity, 'liquid');
     });
 
     recipe.recipe_water_agents_attributes.forEach((recipe_agent, i) => {
-      recipe_agent.quantity = this.inputConversion(
-recipe_agent.quantity, 'agent');
+      recipe_agent.quantity = this.inputConversion(recipe_agent.quantity, 'agent');
     });
 
     recipe.recipe_water_agents_attributes.forEach((recipe_agent, i) => {
-      recipe_agent.quantity = this.inputConversion(
-recipe_agent.quantity, 'liquid_agent');
+      recipe_agent.quantity = this.inputConversion(recipe_agent.quantity, 'liquid_agent');
     });
 
     recipe.recipe_malts_attributes.forEach((recipe_malt) => {
-      recipe_malt.quantity = this.inputConversion(
-recipe_malt.quantity, 'malts');
-      recipe_malt.color = this.inputConversion(
-recipe_malt.color, 'color');
+      recipe_malt.quantity = this.inputConversion(recipe_malt.quantity, 'malts');
+      recipe_malt.color = this.inputConversion(recipe_malt.color, 'color');
+    });
+
+    recipe.yeast_starters_attributes.forEach((yeast_starter) => {
+      yeast_starter.volume = this.inputConversion(yeast_starter.volume, 'liquidquart');
     });
 
     recipe.recipe_miscellaneous_attributes.forEach((recipe_misc) => {
@@ -2959,13 +3016,11 @@ recipe_malt.color, 'color');
     });
 
     recipe.recipe_mashes_attributes.forEach((recipe_mash) => {
-      recipe_mash.temperature = this.inputConversion(
-recipe_mash.temperature, 'temperature');
+      recipe_mash.temperature = this.inputConversion(recipe_mash.temperature, 'temperature');
     });
 
     recipe.recipe_hops_attributes.forEach((recipe_hop) => {
-      recipe_hop.quantity = this.inputConversion(
-recipe_hop.quantity, 'hops');
+      recipe_hop.quantity = this.inputConversion(recipe_hop.quantity, 'hops');
     });
 
     return recipe;
@@ -3219,14 +3274,15 @@ recipe_hop.quantity, 'hops');
       primary_ferm_temp: this.checkFahrenheitToCelsius(50),
       secondary_ferm_temp: this.checkFahrenheitToCelsius(50),
       recipe_waters_attributes: [],
-      recipe_water_agents_attributes: this.recipe.recipe_water_agents_attributes,
+      recipe_water_agents_attributes: [],
       recipe_acids_attributes: [],
       recipe_sparge_acids_attributes: [],
       recipe_malts_attributes: [],
       recipe_hops_attributes: [],
       recipe_miscellaneous_attributes: [],
       recipe_yeasts_attributes: [],
-      recipe_mashes_attributes: this.recipe.recipe_mashes_attributes,
+      recipe_mashes_attributes: [],
+      yeast_starters_attributes: [],
       mash_ratio: this.checkMashRatioUnits(2.0),
       secondary_fermentation: false,
       primary_ferm_days: 14,
@@ -3326,9 +3382,12 @@ recipe_hop.quantity, 'hops');
     }
   }
 
+  convertToPlato(gravity): number {
+    return 135.997 * gravity ** 3 - 630.272 * gravity ** 2 + 1111.14 * gravity - 616.868;
+  }
+
   // convert to default (usually us)
-  inputConversion(
-amount, type): number {
+  inputConversion(amount, type): number {
     if (type === 'hops') {
       return this.measurement.hops === 'us' ? amount : amount / 28.3495;
     } else if (type === 'malts') {
@@ -3339,6 +3398,8 @@ amount, type): number {
       return this.measurement.agents === 'metric' ? amount : amount * .202884;
     } else if (type === 'liquid') {
       return this.measurement.liquid === 'us' ? amount : amount / 3.78541;
+    } else if (type === 'liquidquart') {
+      return this.measurement.liquid === 'us' ? amount : amount / 3.78541 * 4;
     } else if (type === 'temperature') {
       return this.measurement.temperature === 'us' ? amount : amount * 9 / 5 + 32;
     } else if (type === 'pressure') {
@@ -3674,16 +3735,14 @@ amount, type): number {
     recipe_json.recipe['miscs'] = [];
     this.getActiveAgents().forEach((agent, i) => {
       let agent_amount = 0;
-      agent_amount = this.inputConversion(
-agent.quantity, 'agent');
+      agent_amount = this.inputConversion(agent.quantity, 'agent');
       recipe_json.recipe['miscs'].push({
         name: agent.name,
         version: 1,
         type: 'Water Agent',
         use: 'Mash',
         time: 0,
-        amount: this.convertToXml(this.inputConversion(
-agent.quantity, 'agents'), 'agents'),
+        amount: this.convertToXml(this.inputConversion(agent.quantity, 'agents'), 'agents'),
       });
     });
     recipe.recipe_miscellaneous_attributes.forEach((misc, i) => {
