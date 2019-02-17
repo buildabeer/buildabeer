@@ -2827,6 +2827,10 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
     let sugar_factor = 4;
     let sugar_volume_factor = 1;
 
+    if (this.recipe.storage_type === "bottle" && this.recipe.carbonation_with === "pressure") {
+      this.recipe.carbonation_with = "cornsugar";
+    }
+
     switch (this.recipe.carbonation_with) {
       case 'pressure':
         quantity = -16.6999 - 0.0101059 * this.inputConversion(this.recipe.storage_temperature, 'temperature') +
@@ -3246,6 +3250,10 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
     this.recipe.recipe_sparge_acids_attributes.forEach((acid) => {
       acid.quantity = this.roundHundredth(acid.quantity * new_water_amount / old_water_amount);
     });
+
+    this.recipe.yeast_starters_attributes.forEach((s) => {
+      s.volume = this.roundHundredth(s.volume * new_water_amount / old_water_amount);
+    });
   }
 
   clearRecipe(): void {
@@ -3497,12 +3505,18 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
         this.recipe.recipe_waters_attributes.forEach((water) => {
           water.quantity = water.quantity / 3.78541;
         });
+        this.recipe.yeast_starters_attributes.forEach((s) => {
+          s.volume = s.volume * 4 / 3.78541;
+        })
         this.recipe.mash_ratio = this.recipe.mash_ratio / 3.78541 * 4;
       } else if (this.measurement.liquid === 'metric') {
         this.recipe.batch_size = this.recipe.batch_size * 3.78541;
         this.recipe.recipe_waters_attributes.forEach((water) => {
           water.quantity = water.quantity * 3.78541;
         });
+        this.recipe.yeast_starters_attributes.forEach((s) => {
+          s.volume = s.volume / 4 * 3.78541;
+        })
         this.recipe.mash_ratio = this.recipe.mash_ratio * 3.78541 / 4;
       }
       this.setStrikeAmount();
