@@ -1232,7 +1232,7 @@
                 </div>
               </div>
 
-              <h3 class="underline"><span ngbTooltip="There is currently not enough yeast, consider using a starter to increase your yeast count from {{ _designer.getTotalYeastCells() }} to {{ _designer.yeastNeeded() }}." *ngIf="_designer.getTotalYeastCells() < _designer.yeastNeeded();"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span> Yeast Starter</h3>
+              <h3 class="underline"><span ngbTooltip="There is currently not enough yeast, consider using a starter to increase your yeast count from {{ _designer.getTotalStarterYeast() }} to {{ _designer.yeastNeeded() }}." *ngIf="_designer.getTotalStarterYeast() < _designer.yeastNeeded();"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span> Yeast Starter</h3>
               <div class="container-fluid pad-bottom">
                 <div class="row pad-bottom border-bottom" *ngFor="let starter of _designer.recipe.yeast_starters_attributes; let i = index">
                   <div class="col-8">
@@ -1259,7 +1259,7 @@
                   </div>
                   <div class="col-6">
                     <label for="s_volume">Volume ({{ _designer.measurement.liquid === 'us' ? 'qt' : 'l' }})</label>
-                    <input name="s_volume" type="number" class="form-control" [(ngModel)]="starter.volume" min="0">
+                    <input name="s_volume" type="number" step=".01" class="form-control" [(ngModel)]="starter.volume" min="0">
                   </div>
                   <div class="col-6">
                     <label for="s_cells">Cells (billion)</label>
@@ -1776,7 +1776,7 @@
                                 <i class="fas fa-exclamation-triangle img-responsive warning"></i>
                               </span>{{ _designer.checkPoundsToGrams(_designer.getTotalHopWeight(), 'hops') | number:'1.1-2' }} {{ _designer.measurement.hops === 'us' ? 'oz' : 'g' }}
                             </div>
-                            <div>Total yeast: {{ _designer.getTotalYeast() | number:'1.1-2' }} pkgs - {{ _designer.getTotalYeastCells() | number:'1.1-1' }} billion cells <span ngbTooltip="There is currently not enough yeast, consider using a starter to increase your yeast count from {{ _designer.getTotalYeastCells() }} to {{ _designer.yeastNeeded() }}." *ngIf="_designer.getTotalYeastCells() < _designer.yeastNeeded();"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span></div>
+                            <div>Total yeast: {{ _designer.getTotalYeast() | number:'1.1-2' }} pkgs - {{ _designer.getTotalYeastCells() | number:'1.1-1' }} billion cells <span ngbTooltip="There is currently not enough yeast, consider using a starter to increase your yeast count from {{ _designer.getTotalStarterYeast() }} to {{ _designer.yeastNeeded() }}." *ngIf="_designer.getTotalStarterYeast() < _designer.yeastNeeded();"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span></div>
                             <div *ngIf="_designer.getTotalStarterYeast() > _designer.getTotalYeast()">Yeast after starter: {{ _designer.getTotalStarterYeast() | number:'1.1-2' }} billion cells</div>
                           </div>
                         </div>
@@ -1856,6 +1856,14 @@
                         </div>
                       </div>
                       <div class="container collapse show" id="yeastCollapse">
+                        <div class="row">
+                          <div class="col-12">
+                            <p>Primary fermentation: {{ _designer.recipe.primary_ferm_temp | number:'1.0-1' }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }} for {{ _designer.recipe.primary_ferm_days }} days</p>
+                            <ul>
+                              <li *ngFor="let yeast of _designer.getUsedYeast(1)">{{ yeast.name }}{{ yeast.lab ? " - " + yeast.lab : "" }}</li>
+                            </ul>
+                          </div>
+                        </div>
                         <div class="row" *ngIf="_designer.recipe.yeast_starters_attributes.length > 0">
                           <div class="col-12">
                             <p>Yeast starter:</p>
@@ -1882,25 +1890,17 @@
                             <p>No yeast starter for this recipe.</p>
                           </div>
                         </div>
-                        <div class="row">
-                          <div class="col-12">
-                            <p>Finish strategy: {{ _designer.recipe.storage_type }} at {{ _designer.recipe.storage_temperature | number:'1.0-1' }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }} with {{ _designer.recipe.carbonation_with }} ({{ _designer.getVolumesQuantity() | number:'1.1-2' }} {{ _designer.volumesLabel() }})</p>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-12">
-                            <p>Primary fermentation: {{ _designer.recipe.primary_ferm_temp | number:'1.0-1' }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }} for {{ _designer.recipe.primary_ferm_days }} days</p>
-                            <ul>
-                              <li *ngFor="let yeast of _designer.getUsedYeast(1)">{{ yeast.name }}{{ yeast.lab ? " - " + yeast.lab : "" }}</li>
-                            </ul>
-                          </div>
-                        </div>
                         <div class="row" *ngIf="_designer.recipe.secondary_fermentation">
                           <div class="col-12">
                             <p>Secondary fermentation: {{ _designer.recipe.secondary_ferm_temp | number:'1.0-1' }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }} for {{ _designer.recipe.secondary_ferm_days }} days</p>
                             <ul>
                               <li *ngFor="let yeast of _designer.getUsedYeast(2)">{{ yeast.name }}{{ yeast.lab ? " - " + yeast.lab : "" }}</li>
                             </ul>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-12">
+                            <p>Finish strategy: {{ _designer.recipe.storage_type }} at {{ _designer.recipe.storage_temperature | number:'1.0-1' }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }} with {{ _designer.recipe.carbonation_with }} ({{ _designer.getVolumesQuantity() | number:'1.1-2' }} {{ _designer.volumesLabel() }})</p>
                           </div>
                         </div>
                       </div>
@@ -2483,7 +2483,7 @@
               <div class="col-12">
                 <p>
                   <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#ingredientsCollapse2" aria-expanded="true" aria-controls="ingredientsCollapse2" (click)="ingredients_collapse=!ingredients_collapse">{{ !ingredients_collapse ? '+' : '-' }}
-                  </button>+
+                  </button>
                   <span ngbTooltip="Rice or barley hulls are advised for high gravity and high adjunct beers." *ngIf="_designer.riceHullsRequired()">
                     <i class="fas fa-exclamation-triangle img-responsive warning"></i>
                   </span>
@@ -2583,7 +2583,7 @@
                     <i class="fas fa-exclamation-triangle img-responsive warning"></i>
                   </span>{{ _designer.checkPoundsToGrams(_designer.getTotalHopWeight(), 'hops') | number:'1.1-2' }} {{ _designer.measurement.hops === 'us' ? 'oz' : 'g' }}
                 </div>
-                <div>Total yeast: {{ _designer.getTotalYeast() | number:'1.1-2' }} pkgs - {{ _designer.getTotalYeastCells() | number:'1.1-1' }} billion cells <span ngbTooltip="There is currently not enough yeast, consider using a starter to increase your yeast count from {{ _designer.getTotalYeastCells() }} to {{ _designer.yeastNeeded() }}." *ngIf="_designer.getTotalYeastCells() < _designer.yeastNeeded();"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span></div>
+                <div>Total yeast: {{ _designer.getTotalYeast() | number:'1.1-2' }} pkgs - {{ _designer.getTotalYeastCells() | number:'1.1-1' }} billion cells <span ngbTooltip="There is currently not enough yeast, consider using a starter to increase your yeast count from {{ _designer.getTotalStarterYeast() }} to {{ _designer.yeastNeeded() }}." *ngIf="_designer.getTotalStarterYeast() < _designer.yeastNeeded();"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span></div>
                 <div *ngIf="_designer.getTotalStarterYeast() > _designer.getTotalYeast()">Yeast after starter: {{ _designer.getTotalStarterYeast() | number:'1.1-2' }} billion cells</div>
               </div>
             </div>
@@ -2663,6 +2663,14 @@
             </div>
           </div>
           <div class="container collapse show" id="yeastCollapse2">
+            <div class="row">
+              <div class="col-12">
+                <p>Primary fermentation: {{ _designer.recipe.primary_ferm_temp | number:'1.0-1' }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }} for {{ _designer.recipe.primary_ferm_days }} days</p>
+                <ul>
+                  <li *ngFor="let yeast of _designer.getUsedYeast(1)">{{ yeast.name }}{{ yeast.lab ? " - " + yeast.lab : "" }}</li>
+                </ul>
+              </div>
+            </div>
             <div class="row" *ngIf="_designer.recipe.yeast_starters_attributes.length > 0">
               <div class="col-12">
                 <p>Yeast starter:</p>
@@ -2689,25 +2697,17 @@
                 <p>No yeast starter for this recipe.</p>
               </div>
             </div>
-            <div class="row">
-              <div class="col-12">
-                <p>Finish strategy: {{ _designer.recipe.storage_type }} at {{ _designer.recipe.storage_temperature | number:'1.0-1' }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }} with {{ _designer.recipe.carbonation_with }} ({{ _designer.getVolumesQuantity() | number:'1.1-2' }} {{ _designer.volumesLabel() }})</p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-12">
-                <p>Primary fermentation: {{ _designer.recipe.primary_ferm_temp | number:'1.0-1' }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }} for {{ _designer.recipe.primary_ferm_days }} days</p>
-                <ul>
-                  <li *ngFor="let yeast of _designer.getUsedYeast(1)">{{ yeast.name }}{{ yeast.lab ? " - " + yeast.lab : "" }}</li>
-                </ul>
-              </div>
-            </div>
             <div class="row" *ngIf="_designer.recipe.secondary_fermentation">
               <div class="col-12">
                 <p>Secondary fermentation: {{ _designer.recipe.secondary_ferm_temp | number:'1.0-1' }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }} for {{ _designer.recipe.secondary_ferm_days }} days</p>
                 <ul>
                   <li *ngFor="let yeast of _designer.getUsedYeast(2)">{{ yeast.name }}{{ yeast.lab ? " - " + yeast.lab : "" }}</li>
                 </ul>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <p>Finish strategy: {{ _designer.recipe.storage_type }} at {{ _designer.recipe.storage_temperature | number:'1.0-1' }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }} with {{ _designer.recipe.carbonation_with }} ({{ _designer.getVolumesQuantity() | number:'1.1-2' }} {{ _designer.volumesLabel() }})</p>
               </div>
             </div>
           </div>
@@ -2987,7 +2987,7 @@
                 <i class="fas fa-exclamation-triangle img-responsive warning"></i>
               </span>{{ _designer.checkPoundsToGrams(_designer.getTotalHopWeight(), 'hops') | number:'1.1-2' }} {{ _designer.measurement.hops === 'us' ? 'oz' : 'g' }}
             </div>
-            <div>Total yeast: {{ _designer.getTotalYeast() | number:'1.1-2' }} pkgs - {{ _designer.getTotalYeastCells() | number:'1.1-1' }} billion cells <span ngbTooltip="There is currently not enough yeast, consider using a starter to increase your yeast count from {{ _designer.getTotalYeastCells() }} to {{ _designer.yeastNeeded() }}." *ngIf="_designer.getTotalYeastCells() < _designer.yeastNeeded();"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span></div>
+            <div>Total yeast: {{ _designer.getTotalYeast() | number:'1.1-2' }} pkgs - {{ _designer.getTotalYeastCells() | number:'1.1-1' }} billion cells <span ngbTooltip="There is currently not enough yeast, consider using a starter to increase your yeast count from {{ _designer.getTotalStarterYeast() }} to {{ _designer.yeastNeeded() }}." *ngIf="_designer.getTotalStarterYeast() < _designer.yeastNeeded();"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span></div>
             <div *ngIf="_designer.getTotalStarterYeast() > _designer.getTotalYeast()">Yeast after starter: {{ _designer.getTotalStarterYeast() | number:'1.1-2' }} billion cells</div>
           </div>
         </div>
@@ -3366,6 +3366,13 @@
             <p><b>Yeast</b></p>
           </div>
 
+          <div class="col-12">
+            <p>Primary fermentation: {{ _designer.recipe.primary_ferm_temp | number:'1.0-1' }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }} for {{ _designer.recipe.primary_ferm_days }} days</p>
+            <ul>
+              <li *ngFor="let yeast of _designer.getUsedYeast(1)">{{ yeast.name }}{{ yeast.lab ? " - " + yeast.lab : "" }}</li>
+            </ul>
+          </div>
+
           <div class="col-12" *ngIf="_designer.recipe.yeast_starters_attributes.length > 0">
             <p>Yeast starter:</p>
           </div>
@@ -3389,22 +3396,15 @@
             <p>No yeast starter for this recipe.</p>
           </div>
 
-          <div class="col-12">
-            <p>Finish strategy: {{ _designer.recipe.storage_type }} at {{ _designer.recipe.storage_temperature | number:'1.0-1' }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }} with {{ _designer.recipe.carbonation_with }} ({{ _designer.getVolumesQuantity() | number:'1.1-2' }} {{ _designer.volumesLabel() }})</p>
-          </div>
-
-          <div class="col-12">
-            <p>Primary fermentation: {{ _designer.recipe.primary_ferm_temp | number:'1.0-1' }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }} for {{ _designer.recipe.primary_ferm_days }} days</p>
-            <ul>
-              <li *ngFor="let yeast of _designer.getUsedYeast(1)">{{ yeast.name }}{{ yeast.lab ? " - " + yeast.lab : "" }}</li>
-            </ul>
-          </div>
-
           <div class="col-12" *ngIf="_designer.recipe.secondary_fermentation">
             <p>Secondary fermentation: {{ _designer.recipe.secondary_ferm_temp | number:'1.0-1' }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }} for {{ _designer.recipe.secondary_ferm_days }} days</p>
             <ul>
               <li *ngFor="let yeast of _designer.getUsedYeast(2)">{{ yeast.name }}{{ yeast.lab ? " - " + yeast.lab : "" }}</li>
             </ul>
+          </div>
+
+          <div class="col-12">
+            <p>Finish strategy: {{ _designer.recipe.storage_type }} at {{ _designer.recipe.storage_temperature | number:'1.0-1' }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }} with {{ _designer.recipe.carbonation_with }} ({{ _designer.getVolumesQuantity() | number:'1.1-2' }} {{ _designer.volumesLabel() }})</p>
           </div>
         </div>
 
