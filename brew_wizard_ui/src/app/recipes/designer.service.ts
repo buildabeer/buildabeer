@@ -849,7 +849,7 @@ export class DesignerService {
 
           this.recipe.recipe_yeasts_attributes = recipeData.recipe_yeasts;
           this.recipe.recipe_acids_attributes = recipeData.recipe_acids;
-          this.recipe.recipe_sparge_acids_attributes = recipeData.recipe_acids;
+          this.recipe.recipe_sparge_acids_attributes = recipeData.recipe_sparge_acids;
 
           this._agentService.getAgents()
             .retryWhen((err) => {
