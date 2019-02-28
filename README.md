@@ -50,10 +50,11 @@ Angular: typescript, sublime-tslinter
     `ng serve`
 
     open a browser and navigate to 'localhost:4200' 
-        NOTE: the back end will not be running yet so you may see errors
+    
+    NOTE: the back end will not be running yet so you may see errors
 9. Install rvm for the back end (rails) server
-    visit https://rvm.io/rvm/install
-    (If you're on Ubuntu, use this instead: https://github.com/rvm/ubuntu_rvm)
+    
+    visit https://rvm.io/rvm/install  (If you're on Ubuntu, visit https://github.com/rvm/ubuntu_rvm)
 10. Install ruby
 
     `rvm install ruby-2.4.1`
