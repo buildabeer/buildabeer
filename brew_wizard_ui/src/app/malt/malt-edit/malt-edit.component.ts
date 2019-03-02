@@ -46,7 +46,7 @@ export class MaltEditComponent implements OnInit {
       .subscribe(maltTypeData => {
           this.maltTypes = maltTypeData;
           if (this.maltTypes.length === 0) {
-            window.alert('No malt types found.');
+            window.alert('No fermentable types found.');
           }
         },
         error => {
@@ -68,7 +68,7 @@ export class MaltEditComponent implements OnInit {
         if (error.status === 401) {
           window.alert('You must log in first.');
         } else {
-          window.alert('There was an error processing your request, please try again later.');
+          window.alert('There was an error processing your request. Please try again later.');
         }
         console.error(error);
       });

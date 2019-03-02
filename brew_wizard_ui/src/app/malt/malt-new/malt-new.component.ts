@@ -56,14 +56,14 @@ export class MaltNewComponent implements OnInit {
       .subscribe(maltTypeData => {
           this.maltTypes = maltTypeData;
           if (this.maltTypes.length === 0) {
-            window.alert('No malt types found.');
+            window.alert('No fermentable types found.');
           }
         },
         error => {
           if (error.status === 401) {
             window.alert('You must log in first.');
           } else {
-            window.alert('Problem with the service. Please try against later.');
+            window.alert('Problem with the service. Please try again later.');
           }
           console.error(error);
       });
@@ -97,7 +97,7 @@ export class MaltNewComponent implements OnInit {
         if (error.status === 401) {
           window.alert('You must log in first.');
         } else {
-          window.alert('There was an error adding the malt, please try again later.');
+          window.alert('There was an error adding the fermentable. Please try again later.');
         }
         console.error(error);
       });

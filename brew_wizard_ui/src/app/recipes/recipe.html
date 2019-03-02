@@ -769,11 +769,11 @@
                   <div class="col-10 pad-bottom">
                     <input class="form-check-input" id="matchMalts" type="checkbox" value="" [(ngModel)]="_designer.match_malt">
                     <label class="form-check-label" for="matchMalts">
-                      Automatically adjust malts
+                      Automatically adjust fermentables
                     </label>
                   </div>
 
-                  <h5 class="col-7 border-bottom">Malt Used
+                  <h5 class="col-7 border-bottom">Fermentable Used
                     <select (change)="_designer.measurementChange('malt')" id="malt-measurement" class="tiny-element" [(ngModel)]="_designer.measurement['malts']">
                       <option value="us">(lb)</option>
                       <option value="metric">(g)</option>
@@ -783,7 +783,7 @@
 
                 <div class="row pad-top border-bottom pad-bottom" *ngFor="let m of _designer.used_malts; let i = index ">
                   <div class="col-1 no-pad">
-                    <button class="btn btn-primary" title="View malt details." (click)="_designer.openDetail(maltDetailPopup, i)"><i class="fas fa-sticky-note"></i></button>
+                    <button class="btn btn-primary" title="View fermentable details." (click)="_designer.openDetail(maltDetailPopup, i)"><i class="fas fa-sticky-note"></i></button>
                   </div>
                   <div class="col-8 no-right-pad">
                     <p class="item-name ">{{ m.name }}</p>
@@ -812,7 +812,7 @@
 
                 <div class="row pad-bottom pad-top">
                   <div class="col-1 no-pad">
-                    <span ngbTooltip="Add Malt">
+                    <span ngbTooltip="Add Fermentable">
                       <i id="icon" class="fas fa-1x fa-info-circle blue"></i>
                     </span>
                   </div>
@@ -1701,7 +1701,7 @@
                                 <td>{{ malt.name }}{{ _designer.recipe.recipe_malts_attributes[i].malt_usage === 'Mash' ? '' : ' (' + _designer.recipe.recipe_malts_attributes[i].malt_usage + ')' }}</td>
                                 <td>{{ _designer.maltTypes ? _designer.maltTypes[malt.malt_type_id-1].name : '' }}</td>
                                 <td>
-                                  <span ngbTooltip="The suggested max percent of this malt is {{ malt.max_percent }}%. The recipe is currently using a higher percent than that." *ngIf="_designer.inputConversion(_designer.recipe.recipe_malts_attributes[i].quantity, 'malts') / _designer.getTotalMaltWeight() * 100 > malt.max_percent">
+                                  <span ngbTooltip="The suggested max percent of this fermentable is {{ malt.max_percent }}%. The recipe is currently using a higher percent than that." *ngIf="_designer.inputConversion(_designer.recipe.recipe_malts_attributes[i].quantity, 'malts') / _designer.getTotalMaltWeight() * 100 > malt.max_percent">
                                     <i class="fas fa-exclamation-triangle img-responsive warning"></i>
                                   </span>
                                   {{ _designer.inputConversion(_designer.recipe.recipe_malts_attributes[i].quantity, 'malts') / _designer.getTotalMaltWeight() * 100 | number:'1.0-1' }}%
@@ -1770,7 +1770,7 @@
                                 <td>{{ _designer.checkPoundsToGrams(_designer.starterDMETotal()) | number:'1.0-3' }} {{ _designer.measurement.malts === 'us' ? 'lbs' : 'kg' }}</td>
                               </tr>
                             </table>
-                            <div>Total malt: {{ _designer.checkPoundsToGrams(_designer.getTotalMaltWeight(), 'malts') | number:'1.1-2' }} {{ _designer.measurement.malts === 'us' ? 'lbs' : 'kg' }}</div>
+                            <div>Total fermentables: {{ _designer.checkPoundsToGrams(_designer.getTotalMaltWeight(), 'malts') | number:'1.1-2' }} {{ _designer.measurement.malts === 'us' ? 'lbs' : 'kg' }}</div>
                             <div>Total hops:
                               <span ngbTooltip="It is suggested to use at most {{_designer.checkPoundsToGrams(8, 'hops')}} {{ _designer.measurement.hops === 'us' ? 'oz' : 'g' }} of hops per {{_designer.checkGallonsToLiters(5)}} {{ (_designer.measurement.liquid === 'us' ? 'gallons' : 'liters') }} in the batch ({{8 * _designer.inputConversion(_designer.recipe.batch_size, 'liquid') / 5}} oz)." *ngIf="_designer.getTotalHopWeight() > (8 * _designer.inputConversion(_designer.recipe.batch_size, 'liquid') / 5)">
                                 <i class="fas fa-exclamation-triangle img-responsive warning"></i>
@@ -2508,7 +2508,7 @@
                     <td>{{ malt.name }}{{ _designer.recipe.recipe_malts_attributes[i].malt_usage === 'Mash' ? '' : ' (' + _designer.recipe.recipe_malts_attributes[i].malt_usage + ')' }}</td>
                     <td>{{ _designer.maltTypes ? _designer.maltTypes[malt.malt_type_id-1].name : '' }}</td>
                     <td>
-                      <span ngbTooltip="The suggested max percent of this malt is {{ malt.max_percent }}%. The recipe is currently using a higher percent than that." *ngIf="_designer.inputConversion(_designer.recipe.recipe_malts_attributes[i].quantity, 'malts') / _designer.getTotalMaltWeight() * 100 > malt.max_percent">
+                      <span ngbTooltip="The suggested max percent of this fermentable is {{ malt.max_percent }}%. The recipe is currently using a higher percent than that." *ngIf="_designer.inputConversion(_designer.recipe.recipe_malts_attributes[i].quantity, 'malts') / _designer.getTotalMaltWeight() * 100 > malt.max_percent">
                         <i class="fas fa-exclamation-triangle img-responsive warning"></i>
                       </span>
                       {{ _designer.inputConversion(_designer.recipe.recipe_malts_attributes[i].quantity, 'malts') / _designer.getTotalMaltWeight() * 100 | number:'1.0-1' }}%
@@ -2577,7 +2577,7 @@
                     <td>{{ _designer.checkPoundsToGrams(_designer.starterDMETotal()) | number:'1.0-3' }} {{ _designer.measurement.malts === 'us' ? 'lbs' : 'kg' }}</td>
                   </tr>
                 </table>
-                <div>Total malt: {{ _designer.checkPoundsToGrams(_designer.getTotalMaltWeight(), 'malts') | number:'1.1-2' }} {{ _designer.measurement.malts === 'us' ? 'lbs' : 'kg' }}</div>
+                <div>Total fermentables: {{ _designer.checkPoundsToGrams(_designer.getTotalMaltWeight(), 'malts') | number:'1.1-2' }} {{ _designer.measurement.malts === 'us' ? 'lbs' : 'kg' }}</div>
                 <div>Total hops:
                   <span ngbTooltip="It is suggested to use at most {{_designer.checkPoundsToGrams(8, 'hops')}} {{ _designer.measurement.hops === 'us' ? 'oz' : 'g' }} of hops per {{_designer.checkGallonsToLiters(5)}} {{ (_designer.measurement.liquid === 'us' ? 'gallons' : 'liters') }} in the batch ({{8 * _designer.inputConversion(_designer.recipe.batch_size, 'liquid') / 5}} oz)." *ngIf="_designer.getTotalHopWeight() > (8 * _designer.inputConversion(_designer.recipe.batch_size, 'liquid') / 5)">
                     <i class="fas fa-exclamation-triangle img-responsive warning"></i>
@@ -2912,7 +2912,7 @@
                 <td>{{ malt.name }}{{ _designer.recipe.recipe_malts_attributes[i].malt_usage === 'Mash' ? '' : ' (' + _designer.recipe.recipe_malts_attributes[i].malt_usage + ')' }}</td>
                 <td>{{ _designer.maltTypes ? _designer.maltTypes[malt.malt_type_id-1].name : '' }}</td>
                 <td>
-                  <span ngbTooltip="The suggested max percent of this malt is {{ malt.max_percent }}%. The recipe is currently using a higher percent than that." *ngIf="_designer.inputConversion(_designer.recipe.recipe_malts_attributes[i].quantity, 'malts') / _designer.getTotalMaltWeight() * 100 > malt.max_percent">
+                  <span ngbTooltip="The suggested max percent of this fermentable is {{ malt.max_percent }}%. The recipe is currently using a higher percent than that." *ngIf="_designer.inputConversion(_designer.recipe.recipe_malts_attributes[i].quantity, 'malts') / _designer.getTotalMaltWeight() * 100 > malt.max_percent">
                     <i class="fas fa-exclamation-triangle img-responsive warning"></i>
                   </span>
                   {{ _designer.inputConversion(_designer.recipe.recipe_malts_attributes[i].quantity, 'malts') / _designer.getTotalMaltWeight() * 100 | number:'1.0-1' }}%
@@ -2981,7 +2981,7 @@
                 <td>{{ _designer.checkPoundsToGrams(_designer.starterDMETotal()) | number:'1.0-3' }} {{ _designer.measurement.malts === 'us' ? 'lbs' : 'kg' }}</td>
               </tr>
             </table>
-            <div>Total malt: {{ _designer.checkPoundsToGrams(_designer.getTotalMaltWeight(), 'malts') | number:'1.1-2' }} {{ _designer.measurement.malts === 'us' ? 'lbs' : 'kg' }}</div>
+            <div>Total fermentables: {{ _designer.checkPoundsToGrams(_designer.getTotalMaltWeight(), 'malts') | number:'1.1-2' }} {{ _designer.measurement.malts === 'us' ? 'lbs' : 'kg' }}</div>
             <div>Total hops:
               <span ngbTooltip="It is suggested to use at most {{_designer.checkPoundsToGrams(8, 'hops')}} {{ _designer.measurement.hops === 'us' ? 'oz' : 'g' }} of hops per {{_designer.checkGallonsToLiters(5)}} {{ (_designer.measurement.liquid === 'us' ? 'gallons' : 'liters') }} in the batch ({{8 * _designer.inputConversion(_designer.recipe.batch_size, 'liquid') / 5}} oz)." *ngIf="_designer.getTotalHopWeight() > (8 * _designer.inputConversion(_designer.recipe.batch_size, 'liquid') / 5)">
                 <i class="fas fa-exclamation-triangle img-responsive warning"></i>

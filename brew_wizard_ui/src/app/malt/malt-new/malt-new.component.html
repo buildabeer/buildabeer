@@ -1,9 +1,9 @@
-<button type="button" class="btn btn-primary float-right d-none d-md-block" *ngIf="(_authService.userSignedIn())" (click)="open(newMalt)">+ Add Malt</button>
+<button type="button" class="btn btn-primary float-right d-none d-md-block" *ngIf="(_authService.userSignedIn())" (click)="open(newMalt)">+ Add Fermentable</button>
 <button type="button" class="btn btn-primary float-right d-md-none" *ngIf="(_authService.userSignedIn())" (click)="open(newMalt)">+</button>
 
 <ng-template #newMalt let-c="close" let-d="dismiss">
   <div class="modal-header">
-    <h4 class="modal-title">New Malt</h4>
+    <h4 class="modal-title">New Fermentable</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>

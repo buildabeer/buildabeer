@@ -1248,11 +1248,11 @@ export class DesignerService {
       return;
     }
     if (this.loading_malttypes) {
-      this.loading_message = 'Loading malt types...';
+      this.loading_message = 'Loading fermentable types...';
       return;
     }
     if (this.loading_malts) {
-      this.loading_message = 'Loading malts...';
+      this.loading_message = 'Loading fermentables...';
       return;
     }
     if (this.loading_styles) {
@@ -3994,7 +3994,7 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
             }
           });
           if (!found) {
-            error_list.push('Malt named ' + malt_node.getElementsByTagName('NAME')[0].innerHTML + ' was not found.');
+            error_list.push('Fermentable named ' + malt_node.getElementsByTagName('NAME')[0].innerHTML + ' was not found.');
           }
         }
         break;
