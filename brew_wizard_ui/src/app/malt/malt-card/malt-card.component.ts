@@ -34,8 +34,8 @@ export class MaltCardComponent implements OnInit {
 
   deleteCard(): void {
     const recipe_message: string = this.malt.recipe_count > 0
-    ? 'This malt is used ' + this.malt.recipe_count + ' times, are you sure you want to delete it?'
-    : 'Are you sure you want to delete this malt?';
+    ? 'This fermentable is used ' + this.malt.recipe_count + ' times, are you sure you want to delete it?'
+    : 'Are you sure you want to delete this fermentable?';
     if (window.confirm(recipe_message)) {
       this._maltService.deleteMalt(this.malt.id)
         .subscribe((res) => {
@@ -48,7 +48,7 @@ export class MaltCardComponent implements OnInit {
           if (error.status === 401) {
             window.alert('You must log in first.');
           } else {
-            window.alert('There was an error deleting the malt malt, please try again later.');
+            window.alert('There was an error deleting the fermentable. Please try again later.');
           }
           console.error(error);
         });
