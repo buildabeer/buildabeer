@@ -35,7 +35,7 @@ export class MaltComponent implements OnInit {
       })
       .subscribe((maltData) => {
         if (maltData === null) {
-          this.errorMessage = 'Specified malt was not found.';
+          this.errorMessage = 'Specified fermentable was not found.';
         } else {
 
           this._maltService.getTypeById(maltData.malt_type_id)
@@ -51,7 +51,7 @@ export class MaltComponent implements OnInit {
             })
             .subscribe((maltType) => {
               if (maltType === null) {
-                this.errorMessage = 'Type was not found for specified malt.';
+                this.errorMessage = 'Type was not found for specified fermentable.';
               } else {
                 this.malt_type = maltType.name;
               }
@@ -64,7 +64,7 @@ export class MaltComponent implements OnInit {
           if (error.status === 401) {
             this.errorMessage = 'You must log in first.';
           } else {
-            this.errorMessage = 'Problem with the service. Please try against later.';
+            this.errorMessage = 'Problem with the service. Please try again later.';
           }
           console.error(error);
       });

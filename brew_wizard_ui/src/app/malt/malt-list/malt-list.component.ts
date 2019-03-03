@@ -14,7 +14,7 @@ export class MaltListComponent implements OnInit {
   displayedMalts: IMalt[] = [];
   maltTypes: string[] = [];
   search = '';
-  title = 'Malts';
+  title = 'Fermentables';
   selectedMaltCountDropdown = 'All';
   selectedMaltTypeDropdown = 0;
   errorMessage = 'Loading data...';
