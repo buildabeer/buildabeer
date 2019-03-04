@@ -43,7 +43,7 @@ export class MaltListComponent implements OnInit {
           if (error.status === 401) {
             this.errorMessage = 'You must log in first.';
           } else {
-            this.errorMessage = 'Problem with the service. Please try against later.';
+            this.errorMessage = 'Problem with the service. Please try again later.';
           }
           console.error(error);
       });
@@ -68,7 +68,7 @@ export class MaltListComponent implements OnInit {
           if (error.status === 401) {
             this.errorMessage = 'You must log in first.';
           } else {
-            this.errorMessage = 'Problem with the service. Please try against later.';
+            this.errorMessage = 'Problem with the service. Please try again later.';
           }
           console.error(error);
       });
@@ -88,9 +88,11 @@ export class MaltListComponent implements OnInit {
         this.selectedMaltCountDropdown === 'Local'));
     }
 
+    //2019 IRS: changed to equivilance, not exact match for the filter comparison
+    //See issue #40
     if (this.selectedMaltTypeDropdown != 0) {
       this.displayedMalts = this.displayedMalts
-        .filter(m => (m.malt_type_id === this.selectedMaltTypeDropdown));
+        .filter(m => (m.malt_type_id == this.selectedMaltTypeDropdown));
     }
   }
 

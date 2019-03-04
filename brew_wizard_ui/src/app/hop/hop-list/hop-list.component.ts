@@ -54,7 +54,7 @@ export class HopListComponent implements OnInit {
           if (error.status === 401) {
             this.errorMessage = 'You must log in first.';
           } else {
-            this.errorMessage = 'Problem with the service. Please try against later.';
+            this.errorMessage = 'Problem with the service. Please try again later.';
           }
           console.error(error);
       });
