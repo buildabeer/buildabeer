@@ -14,27 +14,27 @@ export class MaltService {
   constructor(private http: HttpClient) { }
 
   getMalts(): Observable<IMalt[]> {
-    return this.http.get(`${environment.token_auth_config.apiBase}/malts`)
+    return this.http.get(`${environment.token_auth_config.apiBase}/fermentables`)
       .map((response: IMalt[]) => response)
       .catch(this.handleError);
   }
 
   getMalt(maltId: number): Observable<IMalt> {
-    return this.http.get(`${environment.token_auth_config.apiBase}/malts/` + maltId)
+    return this.http.get(`${environment.token_auth_config.apiBase}/fermentables/` + maltId)
       .map((response: IMalt) => response)
       .catch(this.handleError);
   }
 
   createMalt(malt: IMalt): any {
-    return this.http.post(`${environment.token_auth_config.apiBase}/malts/`, {malt});
+    return this.http.post(`${environment.token_auth_config.apiBase}/fermentables/`, {malt});
   }
 
   editMalt(maltId: number, malt: IMalt): any {
-    return this.http.put(`${environment.token_auth_config.apiBase}/malts/` + maltId, {malt});
+    return this.http.put(`${environment.token_auth_config.apiBase}/fermentables/` + maltId, {malt});
   }
 
   deleteMalt(maltId: number): any {
-    return this.http.delete(`${environment.token_auth_config.apiBase}/malts/` + maltId);
+    return this.http.delete(`${environment.token_auth_config.apiBase}/fermentables/` + maltId);
   }
 
   getMashSteps(): any {

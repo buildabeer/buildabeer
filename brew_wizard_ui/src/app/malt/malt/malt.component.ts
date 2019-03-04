@@ -71,6 +71,6 @@ export class MaltComponent implements OnInit {
   }
 
   onBackButtonClick(): void {
-    this._router.navigate(['/malts']);
+    this._router.navigate(['/fermentables']);
   }
 }

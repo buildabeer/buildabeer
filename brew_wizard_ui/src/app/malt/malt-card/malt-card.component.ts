@@ -29,7 +29,7 @@ export class MaltCardComponent implements OnInit {
     public _router: Router, public _authService: AuthService) { }
 
   ngOnInit() {
-    this.isCollapsed = (this._router.url === '/malts');
+    this.isCollapsed = (this._router.url === '/fermentables');
   }
 
   deleteCard(): void {
@@ -39,8 +39,8 @@ export class MaltCardComponent implements OnInit {
     if (window.confirm(recipe_message)) {
       this._maltService.deleteMalt(this.malt.id)
         .subscribe((res) => {
-          if (this._router.url !== '/malts') {
-            this._router.navigate(['/malts']);
+          if (this._router.url !== '/fermentables') {
+            this._router.navigate(['/fermentables']);
           } else {
             this.uponMaltDelete.emit({malt: this.malt});
           }
