@@ -762,7 +762,7 @@
             </div>
 
             <div class="tab-pane fade show" id="malt-tab" role="tabpanel" aria-labelledby="pills-malt-tab">
-              <h3 class="underline">Malt</h3>
+              <h3 class="underline">Fermentables</h3>
 
               <div class="container">
                 <div class="row">
@@ -773,7 +773,7 @@
                     </label>
                   </div>
 
-                  <h5 class="col-7 border-bottom">Fermentable Used
+                  <h5 class="col-7 border-bottom">Fermentables Used
                     <select (change)="_designer.measurementChange('malt')" id="malt-measurement" class="tiny-element" [(ngModel)]="_designer.measurement['malts']">
                       <option value="us">(lb)</option>
                       <option value="metric">(g)</option>
@@ -1995,7 +1995,7 @@
                     </select>
                   </div>
                   <div class="col-12">
-                    <label for="malt-measurement">Weight (Malts)</label>
+                    <label for="malt-measurement">Weight (Fermentables)</label>
                     <select (change)="_designer.measurementChange('malt')" id="malt-measurement" class="item-selector form-control" [(ngModel)]="_designer.measurement['malts']">
                       <option value="us">Pounds</option>
                       <option value="metric">Grams</option>

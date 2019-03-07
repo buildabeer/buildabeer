@@ -115,11 +115,11 @@ const routes: Routes = [
     component: AcidComponent
   },
   {
-    path: 'malts',
+    path: 'fermentables',
     component: MaltListComponent
   },
   {
-    path: 'malts/:id',
+    path: 'fermentables/:id',
     component: MaltComponent
   },
   {

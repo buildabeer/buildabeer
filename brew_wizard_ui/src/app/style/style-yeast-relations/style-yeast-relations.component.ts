@@ -44,7 +44,7 @@ export class StyleYeastRelationsComponent implements OnInit {
         },
         error => {
           this.relations_complete = true;
-          this.errorMessage = 'Problem with the service. Please try against later.';
+          this.errorMessage = 'Problem with the service. Please try again later.';
           console.error(error);
       });
 
@@ -67,7 +67,7 @@ export class StyleYeastRelationsComponent implements OnInit {
         },
         error => {
           this.yeast_name_complete = true;
-          this.errorMessage = 'Problem with the service. Please try against later.';
+          this.errorMessage = 'Problem with the service. Please try again later.';
           console.error(error);
       });
 
@@ -90,7 +90,7 @@ export class StyleYeastRelationsComponent implements OnInit {
         },
         error => {
           this.style_name_complete = true;
-          this.errorMessage = 'Problem with the service. Please try against later.';
+          this.errorMessage = 'Problem with the service. Please try again later.';
           console.error(error);
       });
   }

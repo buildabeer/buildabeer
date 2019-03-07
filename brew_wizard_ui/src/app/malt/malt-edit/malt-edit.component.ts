@@ -53,7 +53,7 @@ export class MaltEditComponent implements OnInit {
           if (error.status === 401) {
             window.alert('You must log in first.');
           } else {
-            window.alert('Problem with the service. Please try against later.');
+            window.alert('Problem with the service. Please try again later.');
           }
           console.error(error);
       });

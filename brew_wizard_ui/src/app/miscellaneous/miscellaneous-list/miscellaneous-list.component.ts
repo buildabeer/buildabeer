@@ -46,7 +46,7 @@ export class MiscellaneousListComponent implements OnInit {
           this.errorMessage = 'No data found.';
         },
         error => {
-          this.errorMessage = 'Problem with the service. Please try against later.';
+          this.errorMessage = 'Problem with the service. Please try again later.';
           console.error(error);
       });
   }

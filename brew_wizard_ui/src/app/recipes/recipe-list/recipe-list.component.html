@@ -72,7 +72,7 @@
       <div class="row">
         <form class="form-inline text-center col-sm-6 offset-sm-3 pad-bottom">
           <label class="pad-right-small" for="styleCategoriesSelectSmall">Category </label>
-          <select id="styleCategoriesSelect" class="form-control" [(ngModel)]="selectedStyleCategoryDropdown" [ngModelOptions]="{standalone: true}" (change)="updateRecipeList()">
+          <select id="styleCategoriesSelectSmall" class="form-control" [(ngModel)]="selectedStyleCategoryDropdown" [ngModelOptions]="{standalone: true}" (change)="updateRecipeList()">
             <option [ngValue]="null">Any ({{ getTotalRecipeCount() }})</option>
             <option *ngFor="let category of style_list" [ngValue]="category">{{ category.style.category_number.toString() + category.style.subcategory + ' - ' + category.style.category_name }} ({{ category.count }})</option>
           </select>

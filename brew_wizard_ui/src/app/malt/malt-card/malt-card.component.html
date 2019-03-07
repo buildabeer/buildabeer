@@ -5,7 +5,7 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-11 col-md-11 col-sm-10 col-xs-12">
-        <button type="button" class="btn btn-outline-primary expansion-button" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseItem" *ngIf="_router.url === '/malts'">
+        <button type="button" class="btn btn-outline-primary expansion-button" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseItem" *ngIf="_router.url === '/fermentables'">
           {{ !isCollapsed? "-" : "+" }}
         </button>
 

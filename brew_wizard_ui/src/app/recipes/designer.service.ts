@@ -931,7 +931,7 @@ export class DesignerService {
           if (error.status === 401) {
             console.error('You must log in first.');
           } else {
-            console.error('Problem with the service. Please try against later.');
+            console.error('Problem with the service. Please try again later.');
           }
           this.error = true;
           console.error(error);
@@ -1223,7 +1223,7 @@ export class DesignerService {
           if (error.status === 401) {
             console.error('You must log in first.');
           } else {
-            console.error('Problem with the service. Please try against later.');
+            console.error('Problem with the service. Please try again later.');
           }
           this.error = true;
           console.error(error);
