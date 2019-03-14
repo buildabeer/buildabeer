@@ -61,6 +61,14 @@
   padding-left: 12px;
 }
 
+.status {
+  padding-left: 50%;
+  text-align: center;
+}
+.status-icon {
+  padding-left: 10px;
+}
+
 .help-icon {
   cursor: default;
   padding-right: 5px;
@@ -68,12 +76,14 @@
 
 .mini-row {
   h5 {
+    font-size: smaller;
     margin-bottom: -7px;
   }
   height: 25px;
 }
 
 .tiny-row {
+  font-size: smaller;
   height: 15px;
 }
 
@@ -84,4 +94,58 @@
 
 .no-padding {
   padding: 0;
+}
+
+
+
+@media screen and (max-width: 420px) {
+
+  h3 {
+    font-size: 1.5rem;
+  }
+  
+  .table-header {
+    padding: 25px;
+    padding-bottom: 5px;
+  }
+
+  .card-header {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em; 
+  }
+
+  .status {
+    padding-left: 30%;
+  }
+
+  .mini-row {
+    h5 {
+      font-size: smaller;
+      margin-bottom: -5px;
+    }
+    height: 20px;
+  }
+  
+  .tiny-row {
+    font-size: smaller;
+    height: 12px;
+  }
+
+  .short {
+    padding-bottom: 2px;
+    font-size: smaller;
+  }
+
+}
+
+@media screen and (max-width: 575px) {
+
+}
+
+@media screen and (max-width: 767px) {
+
+}
+
+@media screen and (max-width: 991px) {
+
 }
