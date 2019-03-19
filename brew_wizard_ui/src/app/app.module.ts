@@ -119,6 +119,7 @@ import { LicenseComponent } from './static-pages/license/license.component';
 import { HopRelationsComponent } from './hop/hop-relations/hop-relations.component';
 import { YeastRelationsComponent } from './yeast/yeast-relations/yeast-relations.component';
 import { StyleYeastRelationsComponent } from './style/style-yeast-relations/style-yeast-relations.component';
+import { ResourcesComponent } from './static-pages/resources/resources.component';
 
 @NgModule({
   declarations: [
@@ -199,6 +200,7 @@ import { StyleYeastRelationsComponent } from './style/style-yeast-relations/styl
     HopRelationsComponent,
     YeastRelationsComponent,
     StyleYeastRelationsComponent,
+    ResourcesComponent,
   ],
   imports: [
     AppRoutingModule,

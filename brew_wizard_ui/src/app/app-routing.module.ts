@@ -42,6 +42,7 @@ import { PrivacyPolicyComponent } from './static-pages/privacy-policy/privacy-po
 
 import { CanDeactivateGuard } from './shared/can-deactivate-guard.service';
 
+import { ResourcesComponent } from './static-pages/resources/resources.component';
 
 const routes: Routes = [
   {
@@ -68,6 +69,10 @@ const routes: Routes = [
   {
     path: 'about_us',
     component: AboutUsComponent
+  },
+  {
+    path: 'resources',
+    component: ResourcesComponent
   },
   {
     path: 'license',

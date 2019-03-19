@@ -2,106 +2,163 @@
   <a class="navbar-brand" [routerLink]="['/']"><img src="../../assets/images/beer.png" class="logo"></a>
 
   <button class="navbar-toggler navbar-toggler-right" type="button" (click)="navbarCollapsed = !navbarCollapsed"
-          [attr.aria-expanded]="!navbarCollapsed" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+    [attr.aria-expanded]="!navbarCollapsed" aria-controls="navbarContent" aria-expanded="false"
+    aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
   <div class="collapse navbar-collapse" [ngbCollapse]="!navbarCollapsed" id="navbarContent">
-    <div class="navbar-nav mr-auto">
+    <a class="nav-link text-light" (click)="navbarCollapsed = !navbarCollapsed" routerLink="recipes" *ngIf="(_authService.userSignedIn$ | async)">Create Recipe</a>
+    <a class="nav-link text-light" (click)="navbarCollapsed = !navbarCollapsed" routerLink="recipes/new">Browse Recipes</a>
+    <a class="nav-link text-light" (click)="navbarCollapsed = !navbarCollapsed" routerLink="resources">Resources</a>
 
-      <li class="nav-item dropdown" ngbDropdown>
-        <a class="nav-link dropdown-toggle text-light" id="ingredientDropdown" ngbDropdownToggle>Ingredients</a>
-        <div class="dropdown-menu" aria-labelledby="ingredientDropdown" ngbDropdownMenu>
-          <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" routerLink="water_profiles">Water Profiles</a>
-          <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" routerLink="water_agents">Water Agents</a>
-          <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" routerLink="acids">Acids</a>
-          <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" routerLink="fermentables">Fermentables</a>
-          <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" routerLink="hops">Hops</a>
-          <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" routerLink="yeasts">Yeast</a>
-          <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" routerLink="miscellaneous">Miscellaneous</a>
-        </div>
-      </li>
+    <div *ngIf="!(_authService.userSignedIn$ | async)">
+      <a class="nav-link text-light" id="loginDropdown" data-toggle="dropdown">Login</a>
+      <ul class="dropdown-menu dropdown-menu-right user-menu">
+        <div class="row">
+          <div class="col-10 offset-1">
+            <form (ngSubmit)="onSignInSubmit()" #f="ngForm">
 
-      <a class="nav-link text-light" (click)="navbarCollapsed = !navbarCollapsed" routerLink="styles">Styles</a>
-      <a class="nav-link text-light" (click)="navbarCollapsed = !navbarCollapsed" routerLink="equipment">Equipment</a>
+              <span class="text-danger">
+                <p *ngFor="let error of signInErrors"> {{ error }}</p>
+              </span>
 
-      <li class="nav-item dropdown" ngbDropdown>
-        <a class="nav-link dropdown-toggle text-light" id="recipeDropdown" ngbDropdownToggle>Recipes</a>
-        <div class="dropdown-menu" aria-labelledby="recipeDropdown" ngbDropdownMenu>
-          <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" routerLink="recipes">Browse Recipes</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" routerLink="recipes/new">Create Recipe</a>
-        </div>
-      </li>
+              <div class="form-group">
+                <label class="sr-only" for="username">Email address</label>
+                <input type="text" name="username" id="username" class="form-control" placeholder="Email address"
+                  [(ngModel)]="headerSignIn.login" required>
 
-      <li class="nav-item dropdown" ngbDropdown>
-        <a class="nav-link dropdown-toggle text-light" id="tablesDropdown" ngbDropdownToggle>Tables</a>
-        <div class="dropdown-menu" aria-labelledby="tablesDropdown" ngbDropdownMenu>
-          <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" routerLink="hop_relations">Hop Substitutes</a>
-          <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" routerLink="yeast_relations">Yeast Substitutes</a>
-          <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" routerLink="style_yeast_relations">Style/Yeast Relationships</a>
-        </div>
-      </li>
-    </div>
-
-    <ul class="navbar-nav">
-      <button class="btn btn-primary text-danger border-danger" title="Report issue or request feature" (click)="_modalService.open(contactPopup, { size: 'sm' });"><i class="fas fa-exclamation-circle"></i><span class="d-sm-none"> Report Issue</span></button>
-
-      <a class="btn btn-complementary text-light" href="https://www.paypal.me/buildabeer" target="_blank">Donate</a>
-
-      <li class="nav-item dropdown" *ngIf="!(_authService.userSignedIn$ | async)">
-        <a class="nav-link dropdown-toggle text-light" id="loginDropdown" data-toggle="dropdown">Login</a>
-        <ul class="dropdown-menu dropdown-menu-right user-menu">
-          <div class="row">
-            <div class="col-md-10 offset-md-1">
-              Welcome Back!
+                <label class="sr-only" for="password">Password</label>
+                <input type="password" name="password" id="password" class="form-control" placeholder="Password"
+                  [(ngModel)]="headerSignIn.password" required>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block" (click)="navbarCollapsed = !navbarCollapsed" [disabled]="!f.valid">Sign in</button>
+              <div>
+                <a routerLink="password_reset" (click)="navbarCollapsed = !navbarCollapsed">Forgot password?</a>
+              </div>
+            </form>
+            <div class="dropdown-divider"></div>
+            <div class="text-center">
+              New here? <a routerLink="register" (click)="navbarCollapsed = !navbarCollapsed">Register</a>
             </div>
           </div>
-          <div class="row">
-            <div class="col-10 offset-1">
-              <form (ngSubmit)="onSignInSubmit()" #f="ngForm">
+        </div>
+      </ul>
+    </div>
 
-                <span class="text-danger">
-                  <p *ngFor="let error of signInErrors"> {{ error }}</p>
-                </span>
+    <span class="nav-link text-light" *ngIf="(_authService.userSignedIn$ | async)">{{ _authTokenService.currentUserData.nickname }}</span>
+    <a class="nav-link text-light" [routerLink]="['/profile']" *ngIf="(_authService.userSignedIn$ | async)">My Profile</a>
+    <a class="nav-link text-light" (click)="logOut()" *ngIf="(_authService.userSignedIn$ | async)">Logout</a>
 
-                <div class="form-group">
-                  <label class="sr-only" for="username">Email address</label>
-                  <input type="text" name="username" id="username" class="form-control" placeholder="Email address" [(ngModel)]="headerSignIn.login" required>
+  </div>
 
-                  <label class="sr-only" for="password">Password</label>
-                  <input type="password" name="password" id="password" class="form-control" placeholder="Password" [(ngModel)]="headerSignIn.password" required>
-                </div>
-                <!-- <div class="checkbox">
-                  <label>
-                    <input type="checkbox" value="remember-me"> Remember me
-                  </label>
-                </div> -->
-                <button type="submit" class="btn btn-primary btn-block" [disabled]="!f.valid">Sign in</button>
-                <div>
-                  <a routerLink="password_reset">Forgot password?</a>
-                </div>
-              </form>
+  <!-- 
+  <div class="navbar-nav mr-auto">
+
+    <li class="nav-item dropdown" ngbDropdown>
+      <a class="nav-link dropdown-toggle text-light" id="ingredientDropdown" ngbDropdownToggle>Ingredients</a>
+      <div class="dropdown-menu" aria-labelledby="ingredientDropdown" ngbDropdownMenu>
+        <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" routerLink="water_profiles">Water
+          Profiles</a>
+        <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" routerLink="water_agents">Water
+          Agents</a>
+        <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" routerLink="acids">Acids</a>
+        <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" routerLink="fermentables">Fermentables</a>
+        <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" routerLink="hops">Hops</a>
+        <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" routerLink="yeasts">Yeast</a>
+        <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed"
+          routerLink="miscellaneous">Miscellaneous</a>
+      </div>
+    </li>
+
+    <a class="nav-link text-light" (click)="navbarCollapsed = !navbarCollapsed" routerLink="styles">Styles</a>
+    <a class="nav-link text-light" (click)="navbarCollapsed = !navbarCollapsed" routerLink="equipment">Equipment</a>
+
+    <li class="nav-item dropdown" ngbDropdown>
+      <a class="nav-link dropdown-toggle text-light" id="recipeDropdown" ngbDropdownToggle>Recipes</a>
+      <div class="dropdown-menu" aria-labelledby="recipeDropdown" ngbDropdownMenu>
+        <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" routerLink="recipes">Browse Recipes</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" routerLink="recipes/new">Create
+          Recipe</a>
+      </div>
+    </li>
+
+    <li class="nav-item dropdown" ngbDropdown>
+      <a class="nav-link dropdown-toggle text-light" id="tablesDropdown" ngbDropdownToggle>Tables</a>
+      <div class="dropdown-menu" aria-labelledby="tablesDropdown" ngbDropdownMenu>
+        <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" routerLink="hop_relations">Hop
+          Substitutes</a>
+        <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" routerLink="yeast_relations">Yeast
+          Substitutes</a>
+        <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed"
+          routerLink="style_yeast_relations">Style/Yeast Relationships</a>
+      </div>
+    </li>
+  </div>
+
+  <ul class="navbar-nav">
+    <button class="btn btn-primary text-danger border-danger" title="Report issue or request feature"
+      (click)="_modalService.open(contactPopup, { size: 'sm' });"><i class="fas fa-exclamation-circle"></i><span
+        class="d-sm-none"> Report Issue</span></button>
+
+    <a class="btn btn-complementary text-light" href="https://www.paypal.me/buildabeer" target="_blank">Donate</a>
+
+    <li class="nav-item dropdown" *ngIf="!(_authService.userSignedIn$ | async)">
+      <a class="nav-link dropdown-toggle text-light" id="loginDropdown" data-toggle="dropdown">Login</a>
+      <ul class="dropdown-menu dropdown-menu-right user-menu">
+        <div class="row">
+          <div class="col-md-10 offset-md-1">
+            Welcome Back!
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-10 offset-1">
+            <form (ngSubmit)="onSignInSubmit()" #f="ngForm">
+
+              <span class="text-danger">
+                <p *ngFor="let error of signInErrors"> {{ error }}</p>
+              </span>
+
+              <div class="form-group">
+                <label class="sr-only" for="username">Email address</label>
+                <input type="text" name="username" id="username" class="form-control" placeholder="Email address"
+                  [(ngModel)]="headerSignIn.login" required>
+
+                <label class="sr-only" for="password">Password</label>
+                <input type="password" name="password" id="password" class="form-control" placeholder="Password"
+                  [(ngModel)]="headerSignIn.password" required>
+              </div>
+              
+              <button type="submit" class="btn btn-primary btn-block" [disabled]="!f.valid">Sign in</button>
+              <div>
+                <a routerLink="password_reset">Forgot password?</a>
+              </div>
+            </form>
             <div class="dropdown-divider"></div>
             <div class="text-center">
               New here? <a routerLink="register">Register</a>
             </div>
-            </div>
           </div>
-        </ul>
-      </li>
-
-      <li class="nav-item dropdown" *ngIf="(_authService.userSignedIn$ | async)">
-        <a class="nav-link dropdown-toggle text-light" id="settingsDropdown" data-toggle="dropdown">{{ _authTokenService.currentUserData.nickname }}</a>
-        <div class="dropdown-menu dropdown-menu-right">
-          <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" [routerLink]="['/profile']">Profile</a>
-          <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" (click)="logOut()">Logout</a>
         </div>
-      </li>
-    </ul>
+      </ul>
+    </li>
+
+    <li class="nav-item dropdown" *ngIf="(_authService.userSignedIn$ | async)">
+      <a class="nav-link dropdown-toggle text-light" id="settingsDropdown"
+        data-toggle="dropdown">{{ _authTokenService.currentUserData.nickname }}</a>
+      <div class="dropdown-menu dropdown-menu-right">
+        <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" [routerLink]="['/profile']">Profile</a>
+        <a class="dropdown-item" (click)="navbarCollapsed = !navbarCollapsed" (click)="logOut()">Logout</a>
+      </div>
+    </li>
+  </ul>
   </div>
+ -->
+
 </nav>
 
+<!-- 
 <ng-template #contactPopup let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">Report Request</h4>
@@ -121,7 +178,8 @@
         </div>
         <div class="col-12 pad-bottom">
           <label for="title">Message</label>
-          <textarea class="form-control" id="message" name="message" maxlength="1000" [(ngModel)]="headerBugReport.message"></textarea>
+          <textarea class="form-control" id="message" name="message" maxlength="1000"
+            [(ngModel)]="headerBugReport.message"></textarea>
         </div>
         <div class="col-12">
           <button (click)="sendContact(headerBugReport);c('Close click')" class="btn btn-primary">Send</button>
@@ -131,3 +189,4 @@
     </div>
   </div>
 </ng-template>
+ -->
