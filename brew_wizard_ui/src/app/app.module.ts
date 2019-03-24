@@ -90,7 +90,6 @@ import { LoadingComponent } from './components/loading/loading.component';
 
 import { CanDeactivateGuard } from './shared/can-deactivate-guard.service';
 import { SaveDialogService } from './recipes/save-dialog.service';
-import { RecipeRunnerComponent } from './recipes/recipe-runner/recipe-runner.component';
 import { CalendarComponent } from './user/calendar/calendar.component';
 
 import { CalendarModule, DateAdapter } from 'angular-calendar';
@@ -119,6 +118,16 @@ import { LicenseComponent } from './static-pages/license/license.component';
 import { HopRelationsComponent } from './hop/hop-relations/hop-relations.component';
 import { YeastRelationsComponent } from './yeast/yeast-relations/yeast-relations.component';
 import { StyleYeastRelationsComponent } from './style/style-yeast-relations/style-yeast-relations.component';
+
+import { RecipeRunnerComponent } from './recipe-runner/recipe-runner/recipe-runner.component';
+import { HltRunnerComponent } from './recipe-runner/hlt-runner/hlt-runner.component';
+import { MashRunnerComponent } from './recipe-runner/mash-runner/mash-runner.component';
+import { SpargeRunnerComponent } from './recipe-runner/sparge-runner/sparge-runner.component';
+import { BoilRunnerComponent } from './recipe-runner/boil-runner/boil-runner.component';
+import { ChillRunnerComponent } from './recipe-runner/chill-runner/chill-runner.component';
+import { FermentationRunnerComponent } from './recipe-runner/fermentation-runner/fermentation-runner.component';
+import { ReminderRunnerComponent } from './recipe-runner/reminder-runner/reminder-runner.component';
+import { TimerComponent } from './recipe-runner/timer/timer.component';
 
 @NgModule({
   declarations: [
@@ -199,6 +208,14 @@ import { StyleYeastRelationsComponent } from './style/style-yeast-relations/styl
     HopRelationsComponent,
     YeastRelationsComponent,
     StyleYeastRelationsComponent,
+    HltRunnerComponent,
+    MashRunnerComponent,
+    SpargeRunnerComponent,
+    BoilRunnerComponent,
+    ChillRunnerComponent,
+    FermentationRunnerComponent,
+    ReminderRunnerComponent,
+    TimerComponent,
   ],
   imports: [
     AppRoutingModule,

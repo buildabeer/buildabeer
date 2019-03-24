@@ -1,0 +1,94 @@
+<div class="container-fluid mt-2">
+  <div class="row pb-2">
+    <div class="col-10">
+      <h2>Recipe Runner - {{ _designer.recipe.name }}</h2>
+    </div>
+    <div class="col-2">
+      <button type="button" class="runner-close float-right btn btn-danger" aria-label="Close" (click)="onFinish.emit({});">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <ul class="nav nav-pills nav-stacked border-left rounded colored" id="pills-tab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link text-center active show" title="Recipe Runner - HLT" id="pills-runner-water-tab" href="#runner-water-tab" data-toggle="pill" role="tab" aria-controls="runner-water-tab" aria-expanded="true" (click)="currentStep = 'water'">
+            <i class="fas fa-tint icon img-responsive solid"></i>
+            <p class="mini"><small>HLT</small></p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-center" title="Recipe Runner - Mash" id="pills-runner-mash-tab" href="#runner-mash-tab" data-toggle="pill" role="tab" aria-controls="runner-mash-tab" aria-expanded="true" (click)="currentStep = 'mash'">
+            <i class="fas fa-star-of-life icon img-responsive solid"></i>
+            <p class="mini"><small>Mash</small></p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-center" title="Recipe Runner - Sparge" id="pills-runner-sparge-tab" href="#runner-sparge-tab" data-toggle="pill" role="tab" aria-controls="runner-sparge-tab" aria-expanded="true" (click)="currentStep = 'sparge'">
+            <i class="fas fa-cloud-rain icon img-responsive solid"></i>
+            <p class="mini"><small>Sparge</small></p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-center" title="Recipe Runner - Boil" id="pills-runner-boil-tab" href="#runner-boil-tab" data-toggle="pill" role="tab" aria-controls="runner-boil-tab" aria-expanded="true" (click)="currentStep = 'boil'">
+            <i class="fas fa-fire icon img-responsive solid"></i>
+            <p class="mini"><small>Boil</small></p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-center" title="Recipe Runner - Chill" id="pills-runner-chill-tab" href="#runner-chill-tab" data-toggle="pill" role="tab" aria-controls="runner-chill-tab" aria-expanded="true" (click)="currentStep = 'chill'">
+            <i class="far fa-snowflake icon img-responsive solid"></i>
+            <p class="mini"><small>Chill</small></p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-center" title="Recipe Runner - Fermentation" id="pills-runner-fermentation-tab" href="#runner-fermentation-tab" data-toggle="pill" role="tab" aria-controls="runner-fermentation-tab" aria-expanded="true" (click)="currentStep = 'fermentation'">
+            <i class="fas fa-vial icon img-responsive solid"></i>
+            <p class="mini"><small>Ferm</small></p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-center" title="Recipe Runner - Reminder" id="pills-runner-reminder-tab" href="#runner-reminder-tab" data-toggle="pill" role="tab" aria-controls="runner-reminder-tab" aria-expanded="true" (click)="currentStep = 'reminder'">
+            <i class="fas fa-bell icon img-responsive solid"></i>
+            <p class="mini"><small>Remind</small></p>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="row pb-3">
+    <div class="col-12 pb-3">
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="runner-water-tab" role="tabpanel" aria-labelledby="pills-runner-water-tab">
+          <app-hlt-runner (hlt_water)="hlt_water=$event"></app-hlt-runner>
+        </div>
+        <div class="tab-pane fade" id="runner-mash-tab" role="tabpanel" aria-labelledby="pills-runner-mash-tab">
+          <app-mash-runner [hlt_water]="hlt_water"></app-mash-runner>
+        </div>
+        <div class="tab-pane fade" id="runner-sparge-tab" role="tabpanel" aria-labelledby="pills-runner-sparge-tab">
+          <app-sparge-runner></app-sparge-runner>
+        </div>
+        <div class="tab-pane fade" id="runner-boil-tab" role="tabpanel" aria-labelledby="pills-runner-boil-tab">
+          <app-boil-runner></app-boil-runner>
+        </div>
+        <div class="tab-pane fade" id="runner-chill-tab" role="tabpanel" aria-labelledby="pills-runner-chill-tab">
+          <app-chill-runner></app-chill-runner>
+        </div>
+        <div class="tab-pane fade" id="runner-fermentation-tab" role="tabpanel" aria-labelledby="pills-runner-fermentation-tab">
+          <app-fermentation-runner></app-fermentation-runner>
+        </div>
+        <div class="tab-pane fade" id="runner-reminder-tab" role="tabpanel" aria-labelledby="pills-runner-reminder-tab">
+          <app-reminder-runner></app-reminder-runner>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <button class="btn btn-primary float-left" (click)="setPreviousStep()" *ngIf="currentStep !== 'water'">Back</button>
+      <button class="btn btn-primary float-right" (click)="setNextStep()" *ngIf="currentStep !== 'reminder'">Next</button>
+    </div>
+  </div>
+</div>
+

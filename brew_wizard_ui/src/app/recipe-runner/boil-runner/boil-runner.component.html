@@ -1,0 +1,93 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <h3>Boil</h3>
+    </div>
+  </div>
+  <div class="row card pt-1">
+    <div class="col-12 center">
+      <h5>
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#gravityCollapse" aria-expanded="true" aria-controls="gravityCollapse" (click)="gravity_collapse=!gravity_collapse">{{ !gravity_collapse ? '+' : '-' }}
+        </button> Gravity matcher
+      </h5>
+    </div>
+    <div class="col-12 collapse" id="gravityCollapse">
+      <div class="container">
+        <div class="row">
+          <div class="col-12 col-md-2 offset-md-1 center">
+            <label for="gravity">Gravity</label>
+            <input type="number" id="gravity" step=".001" class="form-control" [(ngModel)]="recalculator.og">
+          </div>
+          <div class="col-12 col-md-2 center">
+            <label for="gallons">{{ _designer.measurement.liquid === 'us' ? 'Gallons' : 'Liters' }}</label>
+            <input type="number" id="gallons" step=".01" class="form-control" [(ngModel)]="recalculator.gallons">
+          </div>
+          <div class="col-12 col-md-2 center">
+            <label for="addition_type">Addition Type</label>
+            <select id="addition_type" class="form-control" [(ngModel)]="recalculator.addition_type">
+              <option value="dme">Dried Malt Extract</option>
+              <option value="lme">Liquid Malt Extract</option>
+              <option value="sugar">Sugar</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-2 center">
+            <label for="addition_amount">Addition Quantity ({{ _designer.measurement.malts === 'us' ? 'lbs' : 'kg' }})</label>
+            <p id="addition_amount">{{ gravity_adjustment | number:'1.0-2' }}</p>
+          </div>
+          <div class="col-12 col-md-2 center extra-pad-top">
+            <button type="button" class="btn btn-primary pt-2 mb-2" (click)="gravity_adjustment = _designer.checkPoundsToGrams(calculateBoilAddition())">Calculate</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 center">
+      <h5>
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#boilCollapse" aria-expanded="true" aria-controls="boilCollapse" (click)="boil_collapse=!boil_collapse">{{ !boil_collapse ? '+' : '-' }}
+        </button> Boil time matcher
+      </h5>
+    </div>
+    <div class="col-12 collapse" id="boilCollapse">
+      <div class="container">
+        <div class="row">
+          <div class="col-12 col-md-2 offset-md-4 center">
+            <label for="gallons">{{ _designer.measurement.liquid === 'us' ? 'Gallons' : 'Liters' }}</label>
+            <input type="number" id="gallons" step=".01" class="form-control" [(ngModel)]="boil_gallons">
+          </div>
+          <div class="col-12 col-md-2 center extra-pad-top">
+            <button type="button" class="btn btn-primary" (click)="recalculateBoilTime()">Calculate</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <h5>Ingredients</h5>
+    </div>
+    <div class="col-12">
+      <ul class="unstyled">
+        <li *ngFor="let malt of _designer.getMaltDisplay('Boil')"><input type="checkbox">
+          {{ malt.quantity | number:'1.0-1'}} {{ _designer.measurement.malts === 'us' ? 'pounds' : 'kilograms'}} of {{ malt.name }}.
+        </li>
+        <li *ngFor="let misc of _designer.getUsedMiscellaneous('Boil'); let i = index "><input type="checkbox">
+          {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity | number:'1.0-1'}} {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity_label }} of {{ misc.name }} for {{ misc.time }} {{ _designer.recipe.recipe_miscellaneous_attributes[i].time_label }}.
+        </li>
+        <li *ngFor="let hop of _designer.getHopByUsage('boil')"><input type="checkbox">
+          {{hop.quantity | number:'1.0-1'}} {{ _designer.measurement.hops === 'us' ? 'ounces' : 'grams'}} of {{ hop.name }} ({{hop.form}}) at {{ hop.time }} minutes left.
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <app-timer [alarms]="{}" [timer_amount]="timer * 60"></app-timer>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <label for="boilnotes">Notes</label>
+      <input id="boilnotes" type="textbox" class="form-control">
+    </div>
+  </div>
+</div>

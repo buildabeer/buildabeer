@@ -1943,13 +1943,9 @@
               </div>
               <div class="row pad-bottom">
                 <div class="btn-group">
-                  <button type="button" title="Recipe Walk Through" class="btn btn-primary dropdown-toggle dropdown-toggle-split tools-icon save-group" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="options2-dropdown">
+                  <button type="button" title="Recipe Walk Through" class="btn btn-primary tools-icon save-group" (click)="runRecipe(runnerPopup)">
                     <i class="fas fa-play-circle icon img-responsive"></i>
                   </button>
-                  <div class="dropdown-menu" aria-labelledby="options2-dropdown">
-                    <a type="button" class="dropdown-item" (click)="runner_step=1;runRecipe(runnerPopup)">Run Recipe</a>
-                    <a type="button" class="dropdown-item" (click)="runner_step=6;runRecipe(runnerPopup)">Add Reminders</a>
-                  </div>
                   <button type="button" title="Save" class="btn btn-primary save-group" (click)="save(loginPopup)">
                     <i class="fas fa-save icon img-responsive"></i>
                   </button>
@@ -2096,13 +2092,9 @@
           </div>
           <div class="col-4">
             <div class="btn-group">
-              <button type="button" title="Recipe Walk Through" class="btn btn-default dropdown-toggle dropdown-toggle-split light-color tools-icon save-group" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="runner-dropdown">
+              <button type="button" title="Recipe Walk Through" class="btn btn-primary tools-icon save-group" (click)="runRecipe(runnerPopup)">
                 <i class="fas fa-play-circle icon img-responsive"></i>
               </button>
-              <div class="dropdown-menu" aria-labelledby="runner-dropdown">
-                <a type="button" class="dropdown-item" (click)="runner_step=1;runRecipe(runnerPopup)">Run Recipe</a>
-                <a type="button" class="dropdown-item" (click)="runner_step=6;runRecipe(runnerPopup)">Add Reminders</a>
-              </div>
             </div>
             <div class="btn-group">
               <button type="button" title="Save" class="btn btn-default light-color save-group" (click)="save(loginPopup)">
@@ -3414,10 +3406,8 @@
 </ng-template>
 
 <ng-template #runnerPopup let-c="close" let-d="dismiss">
-  <button type="button" class="runner-close float-right" aria-label="Close" (click)="d('Cross click')">
-    <span aria-hidden="true">&times;</span>
-  </button>
-  <app-recipe-runner [startingStep]="runner_step" (onFinish)="d('Cross click')"></app-recipe-runner>
+  <app-recipe-runner (onFinish)="d('Cross click')"></app-recipe-runner>
+  <!-- <app-recipe-runner [startingStep]="runner_step" (onFinish)="d('Cross click')"></app-recipe-runner> -->
 </ng-template>
 
 <ng-template #importXmlPopup let-c="close" let-d="dismiss">

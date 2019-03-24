@@ -1,0 +1,44 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <h3>Chill</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <h5>Ingredients</h5>
+    </div>
+    <div class="col-12">
+      <ul class="unstyled">
+        <li *ngFor="let hop of _designer.getHopByUsage('knockout')"><input type="checkbox">
+          {{hop.quantity | number:'1.0-1'}} {{ _designer.measurement.hops === 'us' ? 'ounces' : 'grams'}} of {{ hop.name }} ({{hop.form}})
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <label for="chilltype">Chilling Method</label>
+      <select id="chilltype" class="form-control" [(ngModel)]="chill_method">
+        <option value="ice">Ice Bath</option>
+        <option value="imm">Immersion Chiller</option>
+        <option value="cflow">Counterflow</option>
+      </select>
+    </div>
+    <div class="col-12">
+      <label for="chilltime">Length (minutes)</label>
+      <input id="chilltime" type="number" min="0" max="120" class="form-control" [(ngModel)]="timer">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <app-timer [alarms]="{}" [timer_amount]="timer * 60"></app-timer>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <label for="chillnotes">Notes</label>
+      <input id="chillnotes" type="textbox" class="form-control">
+    </div>
+  </div>
+</div>

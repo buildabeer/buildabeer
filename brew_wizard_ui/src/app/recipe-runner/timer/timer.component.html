@@ -1,0 +1,29 @@
+<div class="col-12 center">
+  <div id="clockdiv">
+    <div>
+      <span class="hours">{{ getHours() }}</span>
+      <div class="smalltext">Hours</div>
+    </div>
+    <div>
+      <span class="minutes">{{ getMinutes() }}</span>
+      <div class="smalltext">Minutes</div>
+    </div>
+    <div>
+      <span class="seconds">{{ getSeconds() }}</span>
+      <div class="smalltext">Seconds</div>
+    </div>
+  </div>
+</div>
+<div class="col-12 center">
+  <div class="btn-group">
+    <button class="btn btn-primary" (click)="timer = timer + 60; start_timer = start_timer + 60"><i class="fas fa-plus-square"></i></button>
+    <button class="btn btn-primary" (click)="timer = timer - 60; start_timer = start_timer - 60"><i class="fas fa-minus-square"></i></button>
+  </div>
+</div>
+<div class="col-12 center">
+  <div class="btn-group">
+    <button class="btn btn-primary" (click)="startInterval()">Start</button>
+    <button class="btn btn-primary" (click)="stopInterval()">Pause</button>
+    <button class="btn btn-primary" (click)="resetInterval()">Reset</button>
+  </div>
+</div>

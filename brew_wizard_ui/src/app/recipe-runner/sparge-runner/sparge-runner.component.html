@@ -1,0 +1,45 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <h3>Sparge</h3>
+    </div>
+    <div class="col-12">
+      <label for="spargetemp">Temperature (&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C' }})</label>
+      <input id="spargetemp" type="number" min="0" max="212" class="form-control" [(ngModel)]="s_temp">
+    </div>
+    <div class="col-12">
+      <label for="spargequantity">Amount ({{ _designer.measurement.liquid === 'us' ? 'gal' : 'l' }})</label>
+      <input id="spargequantity" type="number" min="0" max="100" step="0.1" class="form-control" [(ngModel)]="s_quant">
+    </div>
+  </div>
+  <div class="row pt-2">
+    <div class="col-12">
+      <h5>Ingredients</h5>
+    </div>
+    <div class="col-12">
+      <ul class="unstyled">
+        <li *ngFor="let malt of _designer.getMaltDisplay('Sparge')"><input type="checkbox">
+          {{ malt.quantity | number:'1.0-1'}} {{ _designer.measurement.malts === 'us' ? 'pounds' : 'kilograms'}} of {{ malt.name }}.
+        </li>
+        <li *ngFor="let hop of _designer.getHopByUsage('fwh')"><input type="checkbox">
+          {{hop.quantity | number:'1.0-1'}} {{ _designer.measurement.hops === 'us' ? 'ounces' : 'grams'}} of {{ hop.name }} ({{hop.form}}) are added during the sparge.
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <app-timer [alarms]="{}" [timer_amount]="s_time * 60"></app-timer>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <label for="mashnotes">Notes</label>
+      <textarea id="spargenotes" type="textbox" class="form-control"></textarea>
+    </div>
+  </div>
+</div>

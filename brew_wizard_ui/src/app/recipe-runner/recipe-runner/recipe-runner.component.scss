@@ -1,0 +1,25 @@
+@import "../../../styles.scss";
+
+.icon {
+  height: 25px;
+  width: 25px;
+}
+
+a.nav-link.active {
+  background-color: $dark;
+  border: 2px solid $primary;
+  margin: -2, 0, -2, 0;
+}
+
+.nav-link {
+  background-color: $light;
+  border: 1px solid $primary;
+  margin: -1, 0, -1, 0;
+  padding: 5px;
+  max-height: 55px;
+  width: 55px;
+}
+
+.solid {
+  color: Black;
+}

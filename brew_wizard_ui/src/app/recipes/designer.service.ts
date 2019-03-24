@@ -2599,6 +2599,18 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
     this.recipe.yeast_starters_attributes.splice(i, 1);
   }
 
+  getMaltDisplay(usage: string): { name: string, quantity: number }[] {
+    const malts: { name: string, quantity: number }[] = [];
+
+    this.recipe.recipe_malts_attributes.forEach((malt, i) => {
+      if (malt.malt_usage === usage) {
+        malts.push({ name: this.used_malts[i].name, quantity: malt.quantity });
+      }
+    });
+
+    return malts;
+  }
+
   calculateStarterDME(i: number): number {
     return this.inputConversion((this.recipe.yeast_starters_attributes[i].gravity - 1) * 1000 *
       this.checkGallonsToLiters(this.recipe.yeast_starters_attributes[i].volume, true) / 4 / 44, 'malts');
