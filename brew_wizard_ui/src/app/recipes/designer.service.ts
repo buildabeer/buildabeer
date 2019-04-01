@@ -2656,7 +2656,8 @@ export class DesignerService {
 
     let new_cells = this.getNewYeastCells(i, old_cells);
 
-    let growth_factor = new_cells / old_cells;
+    //Not used?
+    //let growth_factor = new_cells / old_cells;
     return new_cells + old_cells;
   }
 
