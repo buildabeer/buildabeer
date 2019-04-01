@@ -7,7 +7,7 @@
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <div class="collapse navbar-collapse" [ngbCollapse]="!navbarCollapsed" id="navbarContent">
+  <div class="collapse navbar-collapse float-right" [ngbCollapse]="!navbarCollapsed" id="navbarContent">
     <a class="nav-link text-light" (click)="navbarCollapsed = !navbarCollapsed" routerLink="recipes" *ngIf="(_authService.userSignedIn$ | async)">Create Recipe</a>
     <a class="nav-link text-light" (click)="navbarCollapsed = !navbarCollapsed" routerLink="recipes/new">Browse Recipes</a>
     <a class="nav-link text-light" (click)="navbarCollapsed = !navbarCollapsed" routerLink="resources">Resources</a>

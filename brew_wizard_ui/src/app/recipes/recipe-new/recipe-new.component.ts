@@ -1,15 +1,15 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../user/auth.service';
 
-import { RecipeService } from '../recipe.service';
+//import { RecipeService } from '../recipe.service';
 import { DesignerService } from '../designer.service';
 import { SaveDialogService } from '../save-dialog.service';
 
-import { DecimalPipe } from '@angular/common';
+//import { DecimalPipe } from '@angular/common';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Router, ActivatedRoute } from '@angular/router';
-import * as jsPDF from 'jspdf';
-import * as html2canvas from 'html2canvas';
+import { ActivatedRoute } from '@angular/router';
+//import * as jsPDF from 'jspdf';
+//import * as html2canvas from 'html2canvas';
 import { Observable } from 'rxjs/Rx';
 
 @Component({
@@ -43,10 +43,13 @@ export class RecipeNewComponent implements OnInit {
   // xml
   xml_to_import: File = null;
 
-  constructor(private _recipeService: RecipeService,
-    public _authService: AuthService, private _modalService: NgbModal,
-    public _designer: DesignerService, public _dialogService: SaveDialogService,
-    private router: Router, private _activatedRoute: ActivatedRoute) { }
+  constructor(
+    //private _recipeService: RecipeService,
+    public _authService: AuthService, 
+    private _modalService: NgbModal,
+    public _designer: DesignerService, 
+    public _dialogService: SaveDialogService,
+    private _activatedRoute: ActivatedRoute ) { }
 
   ngOnInit() {
     this.style_collapse = true;
@@ -114,6 +117,7 @@ export class RecipeNewComponent implements OnInit {
   }
 
   savePdf(pdfPopup) {
+  /*
     const pdf = new jsPDF('p', 'pt', 'letter');
     const name = this._designer.recipe.name ? this._designer.recipe.name : 'new_recipe' + '.pdf';
     const pdfModal = this._modalService.open(pdfPopup, { size: 'lg' });
@@ -122,6 +126,7 @@ export class RecipeNewComponent implements OnInit {
       pdf.save(name);
       pdfModal.close();
     });
+    */
   }
 
   copySubmit(form: any): void {
