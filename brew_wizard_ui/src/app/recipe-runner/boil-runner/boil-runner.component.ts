@@ -7,7 +7,6 @@ import { DesignerService } from '../../recipes/designer.service';
   styleUrls: ['./boil-runner.component.scss']
 })
 export class BoilRunnerComponent implements OnInit {
-
   boil_gallons: number = this._designer.roundHundredth(this._designer.checkGallonsToLiters(this._designer.estimatePreGallons()));
   recalculator: { og: number, addition_type: string, gallons: number } = {
     og: this._designer.roundThousandth(this._designer.getEstimatedPreboilPoints() / this._designer.estimatePreGallons() / 1000 + 1),
@@ -15,11 +14,13 @@ export class BoilRunnerComponent implements OnInit {
     gallons: this.boil_gallons };
   timer = this._designer.recipe.boil_time;
   alarms: {};
+  malts = this._designer.getMaltDisplay('Boil');
+  miscs = this._designer.getUsedMiscellaneous('Boil');
+  hops = this._designer.getHopByUsage('boil');
 
   constructor(public _designer: DesignerService) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   calculateBoilAddition(): number {
     const gravities: {} = {

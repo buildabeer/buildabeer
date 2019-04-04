@@ -23,10 +23,18 @@ export class RecipeRunnerComponent implements OnInit {
   setNextStep() {
     switch (this.currentStep) {
       case 'water':
-        this.currentStep = 'mash';
+        if (this._designer.recipe.recipe_type !== 'Extract') {
+          this.currentStep = 'mash';
+        } else {
+          this.currentStep = 'boil'
+        }
         break;
       case 'mash':
-        this.currentStep = 'sparge';
+        if (this._designer.recipe.recipe_type !== 'Extract') {
+          this.currentStep = 'sparge';
+        } else {
+          this.currentStep = 'boil'
+        }
         break;
       case 'sparge':
         this.currentStep = 'boil';
@@ -55,10 +63,18 @@ export class RecipeRunnerComponent implements OnInit {
         this.currentStep = 'water';
         break;
       case 'sparge':
-        this.currentStep = 'mash';
+        if (this._designer.recipe.recipe_type !== 'Extract') {
+          this.currentStep = 'mash';
+        } else {
+          this.currentStep = 'water'
+        }
         break;
       case 'boil':
-        this.currentStep = 'sparge';
+        if (this._designer.recipe.recipe_type !== 'Extract') {
+          this.currentStep = 'sparge';
+        } else {
+          this.currentStep = 'water'
+        }
         break;
       case 'chill':
         this.currentStep = 'boil';
@@ -76,6 +92,9 @@ export class RecipeRunnerComponent implements OnInit {
 
     let element = document.getElementById(`pills-runner-${this.currentStep}-tab`) as HTMLElement;
     element.click();
+  }
 
+  finish() {
+    this.onFinish.emit({});
   }
 }

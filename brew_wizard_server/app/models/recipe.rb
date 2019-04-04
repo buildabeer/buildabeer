@@ -35,8 +35,9 @@ class Recipe < ApplicationRecord
   has_many :recipe_miscellaneous, dependent: :destroy
   has_many :miscellaneous, :through => :recipe_miscellaneous
 
+  has_many :new_histories
+
   has_many :yeast_starters, dependent: :destroy
-  accepts_nested_attributes_for :yeast_starters
 
   belongs_to :style
   belongs_to :equipment
@@ -70,6 +71,7 @@ class Recipe < ApplicationRecord
   accepts_nested_attributes_for :recipe_yeasts
   accepts_nested_attributes_for :recipe_mashes
   accepts_nested_attributes_for :recipe_miscellaneous
+  accepts_nested_attributes_for :yeast_starters
 
   def user_nickname
     return self.user.nickname

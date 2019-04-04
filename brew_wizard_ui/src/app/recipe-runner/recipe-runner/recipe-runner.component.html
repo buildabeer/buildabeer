@@ -4,7 +4,7 @@
       <h2>Recipe Runner - {{ _designer.recipe.name }}</h2>
     </div>
     <div class="col-2">
-      <button type="button" class="runner-close float-right btn btn-danger" aria-label="Close" (click)="onFinish.emit({});">
+      <button type="button" class="runner-close float-right btn btn-danger" aria-label="Close" (click)="finish()">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
@@ -20,13 +20,13 @@
             <p class="mini"><small>HLT</small></p>
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="_designer.recipe.recipe_type !== 'Extract'">
           <a class="nav-link text-center" title="Recipe Runner - Mash" id="pills-runner-mash-tab" href="#runner-mash-tab" data-toggle="pill" role="tab" aria-controls="runner-mash-tab" aria-expanded="true" (click)="currentStep = 'mash'">
             <i class="fas fa-star-of-life icon img-responsive solid"></i>
             <p class="mini"><small>Mash</small></p>
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="_designer.recipe.recipe_type !== 'Extract'">
           <a class="nav-link text-center" title="Recipe Runner - Sparge" id="pills-runner-sparge-tab" href="#runner-sparge-tab" data-toggle="pill" role="tab" aria-controls="runner-sparge-tab" aria-expanded="true" (click)="currentStep = 'sparge'">
             <i class="fas fa-cloud-rain icon img-responsive solid"></i>
             <p class="mini"><small>Sparge</small></p>
@@ -88,6 +88,7 @@
     <div class="col-12">
       <button class="btn btn-primary float-left" (click)="setPreviousStep()" *ngIf="currentStep !== 'water'">Back</button>
       <button class="btn btn-primary float-right" (click)="setNextStep()" *ngIf="currentStep !== 'reminder'">Next</button>
+      <button class="btn btn-primary float-right" (click)="finish()" *ngIf="currentStep === 'reminder'">Finish</button>
     </div>
   </div>
 </div>

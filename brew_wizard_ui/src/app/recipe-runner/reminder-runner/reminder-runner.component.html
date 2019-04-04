@@ -7,35 +7,35 @@
   <div class="row">
     <div class="col-12">
       <table>
-        <tr *ngFor="let misc of primary_miscs; let i = index ">
-          <td><input type="checkbox" [(ngModel)]="emailReminders.primary_misc[i]"></td>
-          <td>Remove {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity | number:'1.0-1'}} {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity_label }} of {{ misc.name }} from primary after {{ misc.time }} {{ _designer.recipe.recipe_miscellaneous_attributes[i].time_label }}.
-          </td>
-        </tr>
-        <tr *ngFor="let misc of secondary_miscs; let i = index ">
-          <td><input type="checkbox" [(ngModel)]="emailReminders.secondary_misc[i]"></td>
-          <td>{{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity | number:'1.0-1'}} {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity_label }} of {{ misc.name }} for {{ misc.time }} {{ _designer.recipe.recipe_miscellaneous_attributes[i].time_label }} during secondary.
-          </td>
-        </tr>
-        <tr *ngFor="let hop of dryhops; let i = index; ">
-          <td><input type="checkbox" [(ngModel)]="emailReminders.hops[i]"></td>
-          <td>{{hop.quantity | number:'1.0-1'}} {{ _designer.measurement.hops === 'us' ? 'ounces' : 'grams'}} of {{ hop.name }} ({{hop.form}}) are added during secondary fermentation for {{ hop.time }} days.</td>
-        </tr>
         <tr *ngIf="!_designer.recipe.secondary_fermentation">
           <td><input type="checkbox" [(ngModel)]="emailReminders.primary_fermentation"></td>
-          <td>Ferment for {{ _designer.recipe.primary_ferm_days }} days at {{ _designer.recipe.primary_ferm_temp }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C'}}.</td>
+          <td>Ferment for {{ _designer.recipe.primary_ferm_days }} days at {{ _designer.recipe.primary_ferm_temp }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C'}}</td>
+        </tr>
+        <tr *ngFor="let misc of primary_miscs; let i = index ">
+          <td><input type="checkbox" [(ngModel)]="emailReminders.primary_misc[i]"></td>
+          <td>Remove {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity | number:'1.0-1'}} {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity_label }} of {{ misc.name }} from primary after {{ misc.time }} {{ _designer.recipe.recipe_miscellaneous_attributes[i].time_label }}
+          </td>
         </tr>
         <tr *ngIf="_designer.recipe.secondary_fermentation">
           <td><input type="checkbox" [(ngModel)]="emailReminders.secondary_fermentation"></td>
-          <td>After primary ({{ _designer.recipe.primary_ferm_days }} days), secondary fermentation for {{ _designer.recipe.secondary_ferm_days }} days at {{ _designer.recipe.secondary_ferm_temp }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C'}}.</td>
+          <td>After primary ({{ _designer.recipe.primary_ferm_days }} days), secondary fermentation for {{ _designer.recipe.secondary_ferm_days }} days at {{ _designer.recipe.secondary_ferm_temp }}&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C'}}</td>
         </tr>
         <tr *ngFor="let yeast of secondary_yeast; let i = index; ">
           <td><input type="checkbox" [(ngModel)]="emailReminders.secondary_yeast[i]"></td>
-          <td>In secondary, use {{ yeast.quantity | number:'1.0-1' }} pkgs of {{ yeast.name }}{{ yeast.lab ? " - " + yeast.lab : "" }}.</td>
+          <td>In secondary, use {{ yeast.quantity | number:'1.0-1' }} pkgs of {{ yeast.name }}{{ yeast.lab ? " - " + yeast.lab : "" }}</td>
+        </tr>
+        <tr *ngFor="let hop of dryhops; let i = index; ">
+          <td><input type="checkbox" [(ngModel)]="emailReminders.hops[i]"></td>
+          <td>{{hop.quantity | number:'1.0-1'}} {{ _designer.measurement.hops === 'us' ? 'ounces' : 'grams'}} of {{ hop.name }} ({{hop.form}}) during secondary for {{ hop.time }} days</td>
+        </tr>
+        <tr *ngFor="let misc of secondary_miscs; let i = index ">
+          <td><input type="checkbox" [(ngModel)]="emailReminders.secondary_misc[i]"></td>
+          <td>{{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity | number:'1.0-1'}} {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity_label }} of {{ misc.name }} for {{ misc.time }} {{ _designer.recipe.recipe_miscellaneous_attributes[i].time_label }} during secondary
+          </td>
         </tr>
         <tr *ngFor="let misc of bottling_miscs; let i = index ">
           <td><input type="checkbox" [(ngModel)]="emailReminders.bottling_misc[i]"></td>
-          <td>{{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity | number:'1.0-1'}} {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity_label }} of {{ misc.name }} for {{ misc.time }} {{ _designer.recipe.recipe_miscellaneous_attributes[i].time_label }} during bottling.
+          <td>{{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity | number:'1.0-1'}} {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity_label }} of {{ misc.name }} for {{ misc.time }} {{ _designer.recipe.recipe_miscellaneous_attributes[i].time_label }} during bottling
           </td>
         </tr>
       </table>

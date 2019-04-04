@@ -1,0 +1,2 @@
+class ReminderHistory < ApplicationRecord
+end

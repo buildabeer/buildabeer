@@ -55,26 +55,26 @@
             <input type="number" id="gallons" step=".01" class="form-control" [(ngModel)]="boil_gallons">
           </div>
           <div class="col-12 col-md-2 center extra-pad-top">
-            <button type="button" class="btn btn-primary" (click)="recalculateBoilTime()">Calculate</button>
+            <button type="button" class="btn btn-primary mt-2 mb-2" (click)="recalculateBoilTime()">Calculate</button>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="malts.length + miscs.length + hops.length > 0">
     <div class="col-12">
       <h5>Ingredients</h5>
     </div>
     <div class="col-12">
       <ul class="unstyled">
-        <li *ngFor="let malt of _designer.getMaltDisplay('Boil')"><input type="checkbox">
-          {{ malt.quantity | number:'1.0-1'}} {{ _designer.measurement.malts === 'us' ? 'pounds' : 'kilograms'}} of {{ malt.name }}.
+        <li *ngFor="let malt of malts"><input type="checkbox">
+          {{ malt.quantity | number:'1.0-1'}} {{ _designer.measurement.malts === 'us' ? 'pounds' : 'kilograms'}} of {{ malt.name }}
         </li>
-        <li *ngFor="let misc of _designer.getUsedMiscellaneous('Boil'); let i = index "><input type="checkbox">
-          {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity | number:'1.0-1'}} {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity_label }} of {{ misc.name }} for {{ misc.time }} {{ _designer.recipe.recipe_miscellaneous_attributes[i].time_label }}.
+        <li *ngFor="let misc of miscs; let i = index "><input type="checkbox">
+          {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity | number:'1.0-1'}} {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity_label }} of {{ misc.name }} for {{ misc.time }} {{ _designer.recipe.recipe_miscellaneous_attributes[i].time_label }}
         </li>
-        <li *ngFor="let hop of _designer.getHopByUsage('boil')"><input type="checkbox">
-          {{hop.quantity | number:'1.0-1'}} {{ _designer.measurement.hops === 'us' ? 'ounces' : 'grams'}} of {{ hop.name }} ({{hop.form}}) at {{ hop.time }} minutes left.
+        <li *ngFor="let hop of hops"><input type="checkbox">
+          {{hop.quantity | number:'1.0-1'}} {{ _designer.measurement.hops === 'us' ? 'ounces' : 'grams'}} of {{ hop.name }} ({{hop.form}}) at {{ hop.time }} minutes
         </li>
       </ul>
     </div>

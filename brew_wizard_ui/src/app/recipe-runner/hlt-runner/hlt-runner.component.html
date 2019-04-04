@@ -3,11 +3,11 @@
     <div class="col-12">
       <h3>Hot Liquor</h3>
     </div>
-    <div class="col-12">
+    <div class="col-12 col-md-6">
       <label for="hltemp">Temperature (&deg;{{ _designer.measurement.temperature === 'us' ? 'F' : 'C'}})</label>
       <input id="hltemp" type="number" min="0" max="212" step=".1" class="form-control" [(ngModel)]="hltTemp">
     </div>
-    <div class="col-12">
+    <div class="col-12 col-md-6">
       <label for="hlquantity">Amount ({{ _designer.measurement.liquid === 'us' ? 'gal' : 'l' }})</label>
       <input id="hlquantity" type="number" min="0" max="212" step=".01" class="form-control" [(ngModel)]="hltQnty" (ngModelChange)="hlt_water.emit(this.hltQnty);">
     </div>
@@ -18,7 +18,7 @@
     </div>
     <div class="col-12">
       <ul class="unstyled">
-        <li *ngFor="let agent of _designer.getActiveAgents()"><input type="checkbox">
+        <li *ngFor="let agent of agents"><input type="checkbox">
           {{ agentAdjust(agent.quantity) | number:'1.0-1' }} {{ _designer.measurement.agents === 'us' ? 'ounces' : 'grams'}} of {{ agent.name }}
         </li>
       </ul>
@@ -26,8 +26,8 @@
   </div>
   <div class="row">
     <div class="col-12">
-      <label for="hlnotes">Notes</label>
-      <textarea id="hlnotes" type="textbox" class="form-control"></textarea>
+      <label for="chillnotes">Notes</label>
+      <input id="chillnotes" type="textbox" class="form-control">
     </div>
   </div>
 </div>

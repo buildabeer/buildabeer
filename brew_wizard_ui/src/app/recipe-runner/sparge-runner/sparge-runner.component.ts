@@ -11,6 +11,8 @@ export class SpargeRunnerComponent implements OnInit {
   s_temp: number;
   s_quant: number;
   s_time: number;
+  malts = this._designer.getMaltDisplay('Sparge');
+  hops = this._designer.getHopByUsage('fwh');
 
   constructor(public _designer: DesignerService) { }
 

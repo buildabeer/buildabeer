@@ -16,7 +16,7 @@
       <label for="hlquantity">Amount ({{ _designer.measurement.liquid === 'us' ? 'gal' : 'l' }})</label>
       <input id="hlquantity" type="number" min="0" max="212" step=".01" class="form-control" [(ngModel)]="hltQnty" (change)="touched=true">
       <ul class="unstyled mt-2">
-        <li *ngFor="let agent of _designer.getActiveAgents()"><input type="checkbox">
+        <li *ngFor="let agent of agents"><input type="checkbox">
           {{ agentAdjust(agent.quantity) | number:'1.0-1' }} {{ _designer.measurement.agents === 'us' ? 'ounces' : 'grams'}} of {{ agent.name }}
         </li>
       </ul>
@@ -35,79 +35,83 @@
     </div>
   </div>
   <div class="row">
+    <div class="col-12">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <h5>Ingredients</h5>
+          </div>
+          <div class="col-12">
+            <ul class="unstyled">
+              <li *ngFor="let malt of malts"><input type="checkbox">
+                {{ malt.quantity | number:'1.0-1'}} {{ _designer.measurement.malts === 'us' ? 'pounds' : 'kilograms'}} of {{ malt.name }}
+              </li>
+              <li *ngFor="let misc of miscs; let i = index "><input type="checkbox">
+                {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity | number:'1.0-1'}} {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity_label }} of {{ misc.name }} for {{ misc.time }} {{ _designer.recipe.recipe_miscellaneous_attributes[i].time_label }}
+              </li>
+              <li *ngFor="let water of _designer.used_waters; let i = index "><input type="checkbox">
+                {{ _designer.recipe.recipe_waters_attributes[i].quantity | number:'1.0-1'}} {{ _designer.measurement.liquid === 'us' ? 'gallons' : 'liters'}} of {{ water.name }}
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="row card pt-2">
+          <div class="col-12 center">
+            <h5>
+              <button class="btn btn-primary" type="button" data-toggle="collapse" attr.data-target="#phCollapse{{i}}" aria-expanded="true" attr.aria-controls="phCollapse{{i}}" (click)="ph_collapse[i]=!ph_collapse[i]">{{ !ph_collapse[i] ? '+' : '-' }}
+              </button> pH matcher
+            </h5>
+          </div>
+          <div class="col-12 collapse" id="phCollapse{{i}}">
+            <div class="container">
+              <div class="row">
+                <div class="col-12 col-md-2 offset-md-1 center">
+                  <label for="ph">pH</label>
+                  <input type="number" id="ph" step=".01" class="form-control" [(ngModel)]="ph_recalculator.ph">
+                </div>
+                <div class="col-12 col-md-2 center">
+                  <label for="ph-gallons">{{ _designer.measurement.liquid === 'us' ? 'Quarts' : 'Liters' }}</label>
+                  <input type="number" id="ph-gallons" step=".01" class="form-control" [(ngModel)]="ph_recalculator.gallons">
+                </div>
+                <div class="col-12 col-md-2 center">
+                  <label for="addition_type">Addition Type</label>
+                  <select id="addition_type" class="form-control" [(ngModel)]="ph_recalculator.addition_type">
+                    <option value="phosphoric">Phosphoric Acid</option>
+                    <option value="lactic">Lactic Acid</option>
+                  </select>
+                </div>
+                <div class="col-12 col-md-2 center">
+                  <label for="addition_amount">Addition ({{ _designer.measurement.agents === 'us' ? 't' : 'ml' }})</label>
+                  <p id="addition_amount">{{ ph_adjustment | number:'1.0-2' }}</p>
+                </div>
+                <div class="col-12 col-md-2 center extra-pad-top pb-2">
+                  <button type="button" class="btn btn-primary" (click)="calculatePhAdjust()">Calculate</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="col-12" *ngFor="let step of steps_used; let i = index">
       <div class="tab-content">
-        <div class="tab-pane fade" [ngClass]="{'show active' : (i === 0)}" id="runner-step{{i}}-tab" role="tabpanel" attr.aria-labelledby="pills-runner-step{{i}}-tab">
+        <div class="tab-pane fade" id="runner-step{{i}}-tab" role="tabpanel" attr.aria-labelledby="pills-runner-step{{i}}-tab">
           <div class="container-fluid">
             <div class="row">
               <div class="col-12">
                 <h6>{{ steps_used[i].step_name }}</h6>
               </div>
-              <div class="col-12">
+              <div class="col-12 col-md-4">
                 <label for="mashtemp">Liquor Temperature</label>
                 <input id="mashliqtemp" type="number" min="0" max="212" step=".1" class="form-control" [(ngModel)]="steps_used[i].water_temp">
               </div>
-              <div class="col-12">
+              <div class="col-12 col-md-4">
                 <label for="mashquantity">Liquor Amount</label>
                 <input id="mashliqquantity" type="number" min="0" max="100" step=".1" class="form-control" [(ngModel)]="steps_used[i].water_amount">
               </div>
-              <div class="col-12">
+              <div class="col-12 col-md-4">
                 <label for="mashtemp">Mash Temperature</label>
                 <input id="mashtemp" type="number" min="0" max="212" step=".1" class="form-control" [(ngModel)]="steps_used[i].step_temp">
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-12">
-                <h5>Ingredient Additions</h5>
-              </div>
-              <div class="col-12">
-                <ul class="unstyled">
-                  <li *ngFor="let malt of _designer.getMaltDisplay('Mash')"><input type="checkbox">
-                    {{ malt.quantity | number:'1.0-1'}} {{ _designer.measurement.malts === 'us' ? 'pounds' : 'kilograms'}} of {{ malt.name }}.
-                  </li>
-                  <li *ngFor="let misc of _designer.getUsedMiscellaneous('Mash'); let i = index "><input type="checkbox">
-                    {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity | number:'1.0-1'}} {{ _designer.recipe.recipe_miscellaneous_attributes[i].quantity_label }} of {{ misc.name }} for {{ misc.time }} {{ _designer.recipe.recipe_miscellaneous_attributes[i].time_label }}.
-                  </li>
-                  <li *ngFor="let water of _designer.used_waters; let i = index "><input type="checkbox">
-                    {{ _designer.recipe.recipe_waters_attributes[i].quantity | number:'1.0-1'}} {{ _designer.measurement.liquid === 'us' ? 'gallons' : 'liters'}} of {{ water.name }} are required for the recipe.
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="row card pt-2">
-              <div class="col-12 center">
-                <h5>
-                  <button class="btn btn-primary" type="button" data-toggle="collapse" attr.data-target="#phCollapse{{i}}" aria-expanded="true" attr.aria-controls="phCollapse{{i}}" (click)="ph_collapse[i]=!ph_collapse[i]">{{ !ph_collapse[i] ? '+' : '-' }}
-                  </button> pH matcher
-                </h5>
-              </div>
-              <div class="col-12 collapse" id="phCollapse{{i}}">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-12 col-md-2 offset-md-1 center">
-                      <label for="ph">pH</label>
-                      <input type="number" id="ph" step=".01" class="form-control" [(ngModel)]="ph_recalculator.ph">
-                    </div>
-                    <div class="col-12 col-md-2 center">
-                      <label for="ph-gallons">{{ _designer.measurement.liquid === 'us' ? 'Quarts' : 'Liters' }}</label>
-                      <input type="number" id="ph-gallons" step=".01" class="form-control" [(ngModel)]="ph_recalculator.gallons">
-                    </div>
-                    <div class="col-12 col-md-2 center">
-                      <label for="addition_type">Addition Type</label>
-                      <select id="addition_type" class="form-control" [(ngModel)]="ph_recalculator.addition_type">
-                        <option value="phosphoric">Phosphoric Acid</option>
-                        <option value="lactic">Lactic Acid</option>
-                      </select>
-                    </div>
-                    <div class="col-12 col-md-2 center">
-                      <label for="addition_amount">Addition ({{ _designer.measurement.agents === 'us' ? 't' : 'ml' }})</label>
-                      <p id="addition_amount">{{ ph_adjustment | number:'1.0-2' }}</p>
-                    </div>
-                    <div class="col-12 col-md-2 center extra-pad-top pb-2">
-                      <button type="button" class="btn btn-primary" (click)="calculatePhAdjust()">Calculate</button>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
             <div class="row">

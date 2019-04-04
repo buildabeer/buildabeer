@@ -29,6 +29,9 @@ export class MashRunnerComponent implements OnInit {
   ph_collapse: boolean[];
   ph_adjustment = 0;
   steps_used: { step_name: string, step_temp: number, step_time: number, water_amount: number, water_temp: number }[] = [];
+  agents = this._designer.getActiveAgents();
+  malts = this._designer.getMaltDisplay('Mash');
+  miscs = this._designer.getUsedMiscellaneous('Mash');
 
   constructor(public _designer: DesignerService) { }
 
@@ -36,6 +39,7 @@ export class MashRunnerComponent implements OnInit {
     this.ph_collapse = new Array(this._designer.getMashWaterInfo().step_info.length).fill(false);
     this.steps_used = JSON.parse(JSON.stringify(this._designer.getMashWaterInfo().step_info));
     this.hltQnty = this.hlt_water;
+    console.log(this.steps_used);
   }
 
   calculatePhAdjust() {

@@ -10,14 +10,14 @@
     </div>
     <div class="col-12">
       <ul class="unstyled">
-        <li *ngFor="let hop of _designer.getHopByUsage('knockout')"><input type="checkbox">
+        <li *ngFor="let hop of hops"><input type="checkbox">
           {{hop.quantity | number:'1.0-1'}} {{ _designer.measurement.hops === 'us' ? 'ounces' : 'grams'}} of {{ hop.name }} ({{hop.form}})
         </li>
       </ul>
     </div>
   </div>
   <div class="row">
-    <div class="col-12">
+    <div class="col-12 col-md-6">
       <label for="chilltype">Chilling Method</label>
       <select id="chilltype" class="form-control" [(ngModel)]="chill_method">
         <option value="ice">Ice Bath</option>
@@ -25,9 +25,27 @@
         <option value="cflow">Counterflow</option>
       </select>
     </div>
-    <div class="col-12">
+    <div class="col-12 col-md-6">
       <label for="chilltime">Length (minutes)</label>
       <input id="chilltime" type="number" min="0" max="120" class="form-control" [(ngModel)]="timer">
+    </div>
+  </div>
+  <div class="row" *ngIf="khops.length + hhops.length + whops.length > 0">
+    <div class="col-12">
+      <h5>Ingredients</h5>
+    </div>
+    <div class="col-12">
+      <ul class="unstyled">
+        <li *ngFor="let hop of khops"><input type="checkbox">
+          {{hop.quantity | number:'1.0-1'}} {{ _designer.measurement.hops === 'us' ? 'ounces' : 'grams'}} of {{ hop.name }} ({{hop.form}}) at knockout
+        </li>
+        <li *ngFor="let hop of hhops"><input type="checkbox">
+          {{hop.quantity | number:'1.0-1'}} {{ _designer.measurement.hops === 'us' ? 'ounces' : 'grams'}} of {{ hop.name }} ({{hop.form}}) to the hopback
+        </li>
+        <li *ngFor="let hop of whops"><input type="checkbox">
+          {{hop.quantity | number:'1.0-1'}} {{ _designer.measurement.hops === 'us' ? 'ounces' : 'grams'}} of {{ hop.name }} ({{hop.form}}) to whirlpool
+        </li>
+      </ul>
     </div>
   </div>
   <div class="row">

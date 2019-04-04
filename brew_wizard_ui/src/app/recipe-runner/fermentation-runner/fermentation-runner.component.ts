@@ -14,6 +14,8 @@ export class FermentationRunnerComponent implements OnInit {
   f_days = this._designer.recipe.primary_ferm_days;
   f_second_days = this._designer.recipe.secondary_ferm_days;
   f_temp = this._designer.recipe.primary_ferm_temp;
+  yeasts = this._designer.getUsedYeast(1);
+  primary_miscs = this._designer.getUsedMiscellaneous('Primary');
 
   constructor(public _designer: DesignerService) { }
 

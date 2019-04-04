@@ -10,6 +10,7 @@ export class HltRunnerComponent implements OnInit {
 
   hltTemp = this.getInitialTemperature();
   hltQnty = this._designer.getMashWaterInfo().step_info[0].water_amount;
+  agents = this._designer.getActiveAgents()
 
   @Output()
   hlt_water = new EventEmitter();

@@ -4,7 +4,7 @@ class RecipesController < ApplicationController
 
   # GET /recipes
   def index
-    skip = 1
+    skip = 0
     if (params["public"] && params["public"] == "true")
       @recipes = Recipe.where(global: true)
     else
