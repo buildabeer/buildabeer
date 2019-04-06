@@ -9,8 +9,8 @@
 
   <div class="collapse navbar-collapse" [ngbCollapse]="!navbarCollapsed" id="navbarContent">
     <div class="navbar-nav mr-auto">
-      <a class="nav-link text-light" (click)="navbarCollapsed = !navbarCollapsed" routerLink="recipes" *ngIf="(_authService.userSignedIn$ | async)">Create Recipe</a>
-      <a class="nav-link text-light" (click)="navbarCollapsed = !navbarCollapsed" routerLink="recipes/new">Create Recipe</a>
+      <a class="nav-link text-light" (click)="navbarCollapsed = !navbarCollapsed" routerLink="recipes/new" *ngIf="(_authService.userSignedIn$ | async)">Create Recipe</a>
+      <a class="nav-link text-light" (click)="navbarCollapsed = !navbarCollapsed" routerLink="recipes">Browse Recipes</a>
       <a class="nav-link text-light" (click)="navbarCollapsed = !navbarCollapsed" routerLink="resources">Resources</a>
     </div>
 
