@@ -45,13 +45,15 @@ export class DesignerService {
   water_profile_select = true;
   water_profile: {
     style: string,
- color: string,
- hoppiness: string,
- strength: string } = { style: 'ale',
- color: 'pale',
- hoppiness: 'soft',
- strength: 'light'
-};
+    color: string,
+    hoppiness: string,
+    strength: string
+  } = {
+    style: 'ale',
+    color: 'pale',
+    hoppiness: 'soft',
+    strength: 'light'
+  };
   recipe: IRecipe;
 
   // used stuff
@@ -65,11 +67,11 @@ export class DesignerService {
   used_acids: IAcid[] = [];
   used_sparge_acids: IAcid[] = [];
   used_water_profile: {
-                    id: number, profile_type: string, strength: string, bitterness: string, bitterness_2: string,
-                    color: string, calcium_min: number, calcium_max: number, alkalinity_min: number, alkalinity_max: number,
-                    sulfate_min: number, sulfate_max: number, chloride_min: number, chloride_max: number,
-                    magnesium_min: number, magnesium_max: number, ra_min: number, ra_max: number, acidify: string
-                  } = null;
+    id: number, profile_type: string, strength: string, bitterness: string, bitterness_2: string,
+    color: string, calcium_min: number, calcium_max: number, alkalinity_min: number, alkalinity_max: number,
+    sulfate_min: number, sulfate_max: number, chloride_min: number, chloride_max: number,
+    magnesium_min: number, magnesium_max: number, ra_min: number, ra_max: number, acidify: string
+  } = null;
   used_water_ratio = 1;
 
   strike_amount = 0;
@@ -90,11 +92,11 @@ export class DesignerService {
   miscellaneous: IMiscellaneous[] = [];
   mash_steps: any[] = [];
   water_profiles: {
-                    id: number, profile_type: string, strength: string, bitterness: string, bitterness_2: string,
-                    color: string, calcium_min: number, calcium_max: number, alkalinity_min: number, alkalinity_max: number,
-                    sulfate_min: number, sulfate_max: number, chloride_min: number, chloride_max: number,
-                    magnesium_min: number, magnesium_max: number, ra_min: number, ra_max: number, acidify: string
-                  }[] = [];
+    id: number, profile_type: string, strength: string, bitterness: string, bitterness_2: string,
+    color: string, calcium_min: number, calcium_max: number, alkalinity_min: number, alkalinity_max: number,
+    sulfate_min: number, sulfate_max: number, chloride_min: number, chloride_max: number,
+    magnesium_min: number, magnesium_max: number, ra_min: number, ra_max: number, acidify: string
+  }[] = [];
 
 
 
@@ -185,9 +187,9 @@ export class DesignerService {
           window.alert('Message sent.');
         }
       },
-      err => {
-        window.alert('Ironically, there was an error sending your message. Please feel free to yell at us on github.com/buildabeer/buildabeer');
-      });
+        err => {
+          window.alert('Ironically, there was an error sending your message. Please feel free to yell at us on github.com/buildabeer/buildabeer');
+        });
   }
 
   reset_recipe() {
@@ -305,43 +307,43 @@ export class DesignerService {
           if (retryCount < 3) {
             return retryCount;
           } else {
-            throw(err);
+            throw (err);
           }
         }, 0).delay(1000);
       })
       .subscribe(profileData => {
-          this.waters = profileData;
+        this.waters = profileData;
 
-          if (!this.target_water) {
-            if (this.recipe.target_water_id) {
-              this.waters.some((water) => {
-                if (water.id === this.recipe.target_water_id) {
-                  this.target_water = water;
-                  return true;
-                }
-              });
-            } else {
-              this.target_water = this.waters[0];
-            }
-          }
-
-          if (!this.used_waters[0]) {
-            this.waters.some((wp) => {
-              if (wp.name === 'Distilled Water') {
-                this.used_waters.push(wp);
-                this.recipe.recipe_waters_attributes
-                .push({'water_id': wp.id, 'quantity': this.checkGallonsToLiters(this.estimateGallonsNeeded()), 'id': null, 'boil': false});
+        if (!this.target_water) {
+          if (this.recipe.target_water_id) {
+            this.waters.some((water) => {
+              if (water.id === this.recipe.target_water_id) {
+                this.target_water = water;
                 return true;
               }
             });
+          } else {
+            this.target_water = this.waters[0];
           }
+        }
 
-          this.loading_waters = false;
-        },
+        if (!this.used_waters[0]) {
+          this.waters.some((wp) => {
+            if (wp.name === 'Distilled Water') {
+              this.used_waters.push(wp);
+              this.recipe.recipe_waters_attributes
+                .push({ 'water_id': wp.id, 'quantity': this.checkGallonsToLiters(this.estimateGallonsNeeded()), 'id': null, 'boil': false });
+              return true;
+            }
+          });
+        }
+
+        this.loading_waters = false;
+      },
         error => {
           this.error = true;
           console.error(error);
-      });
+        });
 
     if (new_recipe) {
       this.loading_recipe = false;
@@ -353,43 +355,44 @@ export class DesignerService {
             if (retryCount < 3) {
               return retryCount;
             } else {
-              throw(err);
+              throw (err);
             }
           }, 0).delay(1000);
         })
         .subscribe(agentData => {
-            this.agents = agentData;
+          this.agents = agentData;
 
-            agentData.forEach((agent) => {
-              this.recipe.recipe_water_agents_attributes.push({'id': null, 'water_agent_id': agent.id, 'quantity': 0});
-            });
-            this.loading_agents = false;
-          },
+          agentData.forEach((agent) => {
+            this.recipe.recipe_water_agents_attributes.push({ 'id': null, 'water_agent_id': agent.id, 'quantity': 0 });
+          });
+          this.loading_agents = false;
+        },
           error => {
             this.error = true;
             console.error(error);
-        });
+          });
 
       this._maltService.getMashSteps()
-      .retryWhen((err) => {
-        return err.scan((retryCount) => {
-          retryCount++;
-          if (retryCount < 3) {
-            return retryCount;
-          } else {
-            throw(err);
-          }
-        }, 0).delay(1000);
-      })
-      .subscribe(mashStepData => {
+        .retryWhen((err) => {
+          return err.scan((retryCount) => {
+            retryCount++;
+            if (retryCount < 3) {
+              return retryCount;
+            } else {
+              throw (err);
+            }
+          }, 0).delay(1000);
+        })
+        .subscribe(mashStepData => {
           this.mash_steps = mashStepData;
           mashStepData.forEach((step, i) => {
-            this.recipe.recipe_mashes_attributes.push({name: step.name,
-                mash_step_id: step.id,
-                id: null,
-                used: false,
-                temperature: this.checkFahrenheitToCelsius(Math.round((step.max_temp - step.min_temp) / 2 + step.min_temp)),
-                time: Math.round((step.max_time - step.min_time) / 2 + step.min_time)
+            this.recipe.recipe_mashes_attributes.push({
+              name: step.name,
+              mash_step_id: step.id,
+              id: null,
+              used: false,
+              temperature: this.checkFahrenheitToCelsius(Math.round((step.max_temp - step.min_temp) / 2 + step.min_temp)),
+              time: Math.round((step.max_time - step.min_time) / 2 + step.min_time)
             });
             if (step.name === 'Alpha- and Beta-Amylase') {
               this.infusion_step = i;
@@ -397,10 +400,10 @@ export class DesignerService {
           });
           this.loading_mashsteps = false;
         },
-        error => {
-          this.error = true;
-          console.error(error);
-      });
+          error => {
+            this.error = true;
+            console.error(error);
+          });
     }
 
     this._acidService.getAcids()
@@ -410,18 +413,18 @@ export class DesignerService {
           if (retryCount < 3) {
             return retryCount;
           } else {
-            throw(err);
+            throw (err);
           }
         }, 0).delay(1000);
       })
       .subscribe(acidData => {
-          this.acids = acidData;
-          this.loading_acids = false;
-        },
+        this.acids = acidData;
+        this.loading_acids = false;
+      },
         error => {
           this.error = true;
           console.error(error);
-      });
+        });
 
     this._maltService.getTypes()
       .retryWhen((err) => {
@@ -430,18 +433,18 @@ export class DesignerService {
           if (retryCount < 3) {
             return retryCount;
           } else {
-            throw(err);
+            throw (err);
           }
         }, 0).delay(1000);
       })
       .subscribe(maltTypeData => {
-          this.maltTypes = maltTypeData;
-          this.loading_malttypes = false;
-        },
+        this.maltTypes = maltTypeData;
+        this.loading_malttypes = false;
+      },
         error => {
           this.error = true;
           console.error(error);
-      });
+        });
 
     this._maltService.getMalts()
       .retryWhen((err) => {
@@ -450,18 +453,18 @@ export class DesignerService {
           if (retryCount < 3) {
             return retryCount;
           } else {
-            throw(err);
+            throw (err);
           }
         }, 0).delay(1000);
       })
       .subscribe(maltData => {
-          this.malts = maltData;
-          this.loading_malts = false;
-        },
+        this.malts = maltData;
+        this.loading_malts = false;
+      },
         error => {
           this.error = true;
           console.error(error);
-      });
+        });
 
     this._hopService.getHops()
       .retryWhen((err) => {
@@ -470,18 +473,18 @@ export class DesignerService {
           if (retryCount < 3) {
             return retryCount;
           } else {
-            throw(err);
+            throw (err);
           }
         }, 0).delay(1000);
       })
       .subscribe(hopData => {
-          this.hops = hopData;
-          this.loading_hops = false;
-        },
+        this.hops = hopData;
+        this.loading_hops = false;
+      },
         error => {
           this.error = true;
           console.error(error);
-      });
+        });
 
     this._miscService.getMiscellanies()
       .retryWhen((err) => {
@@ -490,18 +493,18 @@ export class DesignerService {
           if (retryCount < 3) {
             return retryCount;
           } else {
-            throw(err);
+            throw (err);
           }
         }, 0).delay(1000);
       })
       .subscribe(miscData => {
-          this.miscellaneous = miscData;
-          this.loading_miscs = false;
-        },
+        this.miscellaneous = miscData;
+        this.loading_miscs = false;
+      },
         error => {
           this.error = true;
           console.error(error);
-      });
+        });
 
     this._yeastService.getYeasts()
       .retryWhen((err) => {
@@ -510,18 +513,18 @@ export class DesignerService {
           if (retryCount < 3) {
             return retryCount;
           } else {
-            throw(err);
+            throw (err);
           }
         }, 0).delay(1000);
       })
       .subscribe(yeastData => {
-          this.yeast = yeastData;
-          this.loading_yeast = false;
-        },
+        this.yeast = yeastData;
+        this.loading_yeast = false;
+      },
         error => {
           this.error = true;
           console.error(error);
-      });
+        });
 
     this._styleService.getStyles()
       .retryWhen((err) => {
@@ -530,45 +533,45 @@ export class DesignerService {
           if (retryCount < 3) {
             return retryCount;
           } else {
-            throw(err);
+            throw (err);
           }
         }, 0).delay(1000);
       })
       .subscribe(styleData => {
-          this.styles = styleData;
-          if (!this.used_style) {
-            if (this.recipe.style_id) {
-              this.styles.some((style) => {
-                if (style.id === this.recipe.style_id) {
-                  this.used_style = style;
-                  return true;
-                }
-              });
-            } else {
-              this.used_style = this.styles[0];
-            }
-            this.recipe.carbonation_volumes = Math.round(
-              ((this.used_style.max_carb - this.used_style.min_carb) / 2 + this.used_style.min_carb) * 10) / 10;
-          }
-
-          if (this.water_profiles) {
-            this.water_profiles.some((wp) => {
-              if (wp.id === this.used_style.water_profile_id) {
-                this.used_water_profile = wp;
-
-                this.water_profile.style = wp.profile_type;
-                this.setSliders(wp);
+        this.styles = styleData;
+        if (!this.used_style) {
+          if (this.recipe.style_id) {
+            this.styles.some((style) => {
+              if (style.id === this.recipe.style_id) {
+                this.used_style = style;
                 return true;
               }
             });
+          } else {
+            this.used_style = this.styles[0];
           }
+          this.recipe.carbonation_volumes = Math.round(
+            ((this.used_style.max_carb - this.used_style.min_carb) / 2 + this.used_style.min_carb) * 10) / 10;
+        }
 
-          this.loading_styles = false;
-        },
+        if (this.water_profiles) {
+          this.water_profiles.some((wp) => {
+            if (wp.id === this.used_style.water_profile_id) {
+              this.used_water_profile = wp;
+
+              this.water_profile.style = wp.profile_type;
+              this.setSliders(wp);
+              return true;
+            }
+          });
+        }
+
+        this.loading_styles = false;
+      },
         error => {
           this.error = true;
           console.error(error);
-      });
+        });
 
     this._equipmentService.getEquipments()
       .retryWhen((err) => {
@@ -577,20 +580,20 @@ export class DesignerService {
           if (retryCount < 3) {
             return retryCount;
           } else {
-            throw(err);
+            throw (err);
           }
         }, 0).delay(1000);
       })
       .subscribe(equipmentData => {
-          this.equipment = equipmentData;
-          this.used_equipment = this.equipment[0];
-          this.recipe.efficiency = this.used_equipment.efficiency;
-          this.loading_equipment = false;
-        },
+        this.equipment = equipmentData;
+        this.used_equipment = this.equipment[0];
+        this.recipe.efficiency = this.used_equipment.efficiency;
+        this.loading_equipment = false;
+      },
         error => {
           this.error = true;
           console.error(error);
-      });
+        });
 
     this._waterProfileService.getStyleWaterProfiles()
       .retryWhen((err) => {
@@ -599,29 +602,29 @@ export class DesignerService {
           if (retryCount < 3) {
             return retryCount;
           } else {
-            throw(err);
+            throw (err);
           }
         }, 0).delay(1000);
       })
       .subscribe(profileData => {
-          this.water_profiles = profileData;
-          if (this.used_style) {
-            profileData.some((wp) => {
-              if (wp.id === this.used_style.water_profile_id) {
-                this.used_water_profile = wp;
+        this.water_profiles = profileData;
+        if (this.used_style) {
+          profileData.some((wp) => {
+            if (wp.id === this.used_style.water_profile_id) {
+              this.used_water_profile = wp;
 
-                this.water_profile.style = wp.profile_type;
-                this.setSliders(wp);
-                return true;
-              }
-            });
-          }
-          this.loading_water_profiles = false;
-        },
+              this.water_profile.style = wp.profile_type;
+              this.setSliders(wp);
+              return true;
+            }
+          });
+        }
+        this.loading_water_profiles = false;
+      },
         error => {
           this.error = true;
           console.error(error);
-      });
+        });
 
     this._userService.getSettings()
       .retryWhen((err) => {
@@ -630,20 +633,20 @@ export class DesignerService {
           if (retryCount < 3) {
             return retryCount;
           } else {
-            throw(err);
+            throw (err);
           }
         }, 0).delay(1000);
       })
       .subscribe(settingData => {
-          if (settingData !== null) {
-            this.measurement = settingData;
-          }
-          this.loading_measurements = false;
-        },
+        if (settingData !== null) {
+          this.measurement = settingData;
+        }
+        this.loading_measurements = false;
+      },
         error => {
           this.error = true;
           console.error(error);
-      });
+        });
   }
 
   loadRecipe(recipeId): void {
@@ -699,234 +702,235 @@ export class DesignerService {
             return retryCount;
           } else {
             this.error = true;
-            throw(err);
+            throw (err);
           }
         }, 0).delay(1000);
       })
       .subscribe(recipeData => {
-          this.recipe.name = recipeData.name;
-          this.recipe_user_id = recipeData.user_id;
-          this.recipe.id = recipeData.id;
-          this.recipe.brewer = recipeData.brewer;
-          this.recipe.recipe_date = recipeData.recipe_date;
-          this.recipe.version = recipeData.version;
-          this.recipe.batch_size = this.checkGallonsToLiters(recipeData.batch_size);
-          this.recipe.boil_time = recipeData.boil_time;
-          this.recipe.equipment_id = recipeData.equipment_id;
-          this.recipe.water_profile_id = recipeData.water_profile_id;
-          this.recipe.target_water_id = recipeData.target_water_id;
-          this.recipe.style_id = recipeData.style_id;
-          this.recipe.notes = recipeData.notes;
-          this.recipe.description = recipeData.description;
-          this.recipe.taste_notes = recipeData.taste_notes;
-          this.recipe.sparge_type = recipeData.sparge_type;
-          this.recipe.global = recipeData.global;
-          this.recipe.storage_type = recipeData.storage_type;
-          this.recipe.storage_temperature = this.checkFahrenheitToCelsius(recipeData.storage_temperature);
-          this.recipe.carbonation_volumes = recipeData.carbonation_volumes;
-          this.recipe.carbonation_with = recipeData.carbonation_with;
-          this.recipe.primary_ferm_temp = this.checkFahrenheitToCelsius(recipeData.primary_ferm_temp);
-          this.recipe.secondary_ferm_temp = this.checkFahrenheitToCelsius(recipeData.secondary_ferm_temp);
-          this.recipe.mash_ratio = this.checkMashRatioUnits(recipeData.mash_ratio);
-          this.recipe.secondary_fermentation = recipeData.secondary_fermentation;
-          this.recipe.primary_ferm_days = recipeData.primary_ferm_days;
-          this.recipe.secondary_ferm_days = recipeData.secondary_ferm_days;
-          this.recipe.efficiency = recipeData.efficiency;
-          this.recipe.recipe_type = recipeData.recipe_type;
-          this.recipe.mash_type = recipeData.mash_type;
-          this.recipe.yeast_starters_attributes = recipeData.yeast_starters;
+        this.recipe.name = recipeData.name;
+        this.recipe_user_id = recipeData.user_id;
+        this.recipe.id = recipeData.id;
+        this.recipe.brewer = recipeData.brewer;
+        this.recipe.recipe_date = recipeData.recipe_date;
+        this.recipe.version = recipeData.version;
+        this.recipe.batch_size = this.checkGallonsToLiters(recipeData.batch_size);
+        this.recipe.boil_time = recipeData.boil_time;
+        this.recipe.equipment_id = recipeData.equipment_id;
+        this.recipe.water_profile_id = recipeData.water_profile_id;
+        this.recipe.target_water_id = recipeData.target_water_id;
+        this.recipe.style_id = recipeData.style_id;
+        this.recipe.notes = recipeData.notes;
+        this.recipe.description = recipeData.description;
+        this.recipe.taste_notes = recipeData.taste_notes;
+        this.recipe.sparge_type = recipeData.sparge_type;
+        this.recipe.global = recipeData.global;
+        this.recipe.storage_type = recipeData.storage_type;
+        this.recipe.storage_temperature = this.checkFahrenheitToCelsius(recipeData.storage_temperature);
+        this.recipe.carbonation_volumes = recipeData.carbonation_volumes;
+        this.recipe.carbonation_with = recipeData.carbonation_with;
+        this.recipe.primary_ferm_temp = this.checkFahrenheitToCelsius(recipeData.primary_ferm_temp);
+        this.recipe.secondary_ferm_temp = this.checkFahrenheitToCelsius(recipeData.secondary_ferm_temp);
+        this.recipe.mash_ratio = this.checkMashRatioUnits(recipeData.mash_ratio);
+        this.recipe.secondary_fermentation = recipeData.secondary_fermentation;
+        this.recipe.primary_ferm_days = recipeData.primary_ferm_days;
+        this.recipe.secondary_ferm_days = recipeData.secondary_ferm_days;
+        this.recipe.efficiency = recipeData.efficiency;
+        this.recipe.recipe_type = recipeData.recipe_type;
+        this.recipe.mash_type = recipeData.mash_type;
+        this.recipe.yeast_starters_attributes = recipeData.yeast_starters;
 
-          this.used_waters = recipeData.waters;
-          this.used_hops = recipeData.hops;
-          this.used_miscellaneous = recipeData.miscellaneous;
-          this.used_yeast = recipeData.yeasts;
-          this.used_acids = recipeData.acids;
-          this.used_sparge_acids = recipeData.sparge_acids;
+        this.used_waters = recipeData.waters;
+        this.used_hops = recipeData.hops;
+        this.used_miscellaneous = recipeData.miscellaneous;
+        this.used_yeast = recipeData.yeasts;
+        this.used_acids = recipeData.acids;
+        this.used_sparge_acids = recipeData.sparge_acids;
 
-          this.used_acids.forEach((used_acid, i) => {
-            this.acids.some((acid) => {
-              if (acid.name === used_acid.name) {
-                this.used_acids[i] = acid;
-                return true;
-              }
-            });
-          });
-
-          this.used_sparge_acids.forEach((used_acid, i) => {
-            this.acids.some((acid) => {
-              if (acid.name === used_acid.name) {
-                this.used_sparge_acids[i] = acid;
-                return true;
-              }
-            });
-          });
-
-          this.used_waters.forEach((used_water, i) => {
-            this.waters.some((water) => {
-              if (water.name === used_water.name) {
-                this.used_waters[i] = water;
-                return true;
-              }
-            });
-          });
-
-          this.equipment.some((equip) => {
-            if (equip.id === this.recipe.equipment_id) {
-              this.used_equipment = equip;
+        this.used_acids.forEach((used_acid, i) => {
+          this.acids.some((acid) => {
+            if (acid.name === used_acid.name) {
+              this.used_acids[i] = acid;
               return true;
             }
           });
+        });
 
-          this.water_profiles.some((wp) => {
-            if (wp.id === this.recipe.water_profile_id) {
-              this.used_water_profile = wp;
-
-              this.water_profile.style = wp.profile_type;
-              this.setSliders(wp);
+        this.used_sparge_acids.forEach((used_acid, i) => {
+          this.acids.some((acid) => {
+            if (acid.name === used_acid.name) {
+              this.used_sparge_acids[i] = acid;
               return true;
             }
           });
+        });
 
-          this.styles.some((style) => {
-            if (style.id === this.recipe.style_id) {
-              this.used_style = style;
-              this.recipe.carbonation_volumes = (style.max_carb - style.min_carb) / 2 + style.min_carb;
-              return true;
-            }
-          });
-
+        this.used_waters.forEach((used_water, i) => {
           this.waters.some((water) => {
-            if (water.id === this.recipe.target_water_id) {
-              this.target_water = water;
+            if (water.name === used_water.name) {
+              this.used_waters[i] = water;
               return true;
             }
           });
+        });
 
-          if (this.target_water === null) {
-            this.target_water = undefined;
+        this.equipment.some((equip) => {
+          if (equip.id === this.recipe.equipment_id) {
+            this.used_equipment = equip;
+            return true;
           }
+        });
 
-          this.recipe.recipe_waters_attributes = recipeData.recipe_waters;
+        this.water_profiles.some((wp) => {
+          if (wp.id === this.recipe.water_profile_id) {
+            this.used_water_profile = wp;
 
-          this.recipe.recipe_malts_attributes = recipeData.recipe_malts;
-          this.recipe.recipe_malts_attributes.forEach((recipe_malt) => {
-            recipeData.malts.some((used_malt) => {
-              if (recipe_malt.malt_id === used_malt.id) {
-                this.used_malts.push(used_malt);
-                return true;
-              }
-            });
-          });
-
-          this.recipe.recipe_hops_attributes = recipeData.recipe_hops;
-
-          if (this.measurement.liquid !== 'us') {
-            this.recipe.recipe_waters_attributes.forEach((recipe_water) => {
-              recipe_water.quantity = this.checkGallonsToLiters(recipe_water.quantity);
-            });
-            this.recipe.recipe_malts_attributes.forEach((recipe_malt) => {
-              recipe_malt.quantity = this.checkPoundsToGrams(recipe_malt.quantity, 'malts');
-              recipe_malt.color = this.checkColor(recipe_malt.color);
-            });
-            this.recipe.recipe_hops_attributes.forEach((recipe_hop) => {
-              recipe_hop.quantity = this.checkPoundsToGrams(recipe_hop.quantity, 'hops');
-            });
+            this.water_profile.style = wp.profile_type;
+            this.setSliders(wp);
+            return true;
           }
-          this.setStrikeAmount();
+        });
 
-          this.recipe.recipe_miscellaneous_attributes = recipeData.recipe_miscellaneous;
-          this.recipe.recipe_miscellaneous_attributes.forEach((recipe_misc) => {
-            if (recipe_misc.time >= 24 * 60) {
-              recipe_misc.time_label = 'Days';
-              recipe_misc.time = recipe_misc.time / 24 / 60;
-            } else if (recipe_misc.time >= 60) {
-              recipe_misc.time_label = 'Hours';
-              recipe_misc.time = recipe_misc.time / 60;
-            } else {
-              recipe_misc.time_label = 'Minutes';
+        this.styles.some((style) => {
+          if (style.id === this.recipe.style_id) {
+            this.used_style = style;
+            this.recipe.carbonation_volumes = (style.max_carb - style.min_carb) / 2 + style.min_carb;
+            return true;
+          }
+        });
+
+        this.waters.some((water) => {
+          if (water.id === this.recipe.target_water_id) {
+            this.target_water = water;
+            return true;
+          }
+        });
+
+        if (this.target_water === null) {
+          this.target_water = undefined;
+        }
+
+        this.recipe.recipe_waters_attributes = recipeData.recipe_waters;
+
+        this.recipe.recipe_malts_attributes = recipeData.recipe_malts;
+        this.recipe.recipe_malts_attributes.forEach((recipe_malt) => {
+          recipeData.malts.some((used_malt) => {
+            if (recipe_malt.malt_id === used_malt.id) {
+              this.used_malts.push(used_malt);
+              return true;
             }
           });
+        });
 
-          this.recipe.recipe_yeasts_attributes = recipeData.recipe_yeasts;
-          this.recipe.recipe_acids_attributes = recipeData.recipe_acids;
-          this.recipe.recipe_sparge_acids_attributes = recipeData.recipe_sparge_acids;
+        this.recipe.recipe_hops_attributes = recipeData.recipe_hops;
 
-          this._agentService.getAgents()
-            .retryWhen((err) => {
-              return err.scan((retryCount) => {
-                retryCount++;
-                if (retryCount < 3) {
-                  return retryCount;
-                } else {
-                  throw(err);
+        if (this.measurement.liquid !== 'us') {
+          this.recipe.recipe_waters_attributes.forEach((recipe_water) => {
+            recipe_water.quantity = this.checkGallonsToLiters(recipe_water.quantity);
+          });
+          this.recipe.recipe_malts_attributes.forEach((recipe_malt) => {
+            recipe_malt.quantity = this.checkPoundsToGrams(recipe_malt.quantity, 'malts');
+            recipe_malt.color = this.checkColor(recipe_malt.color);
+          });
+          this.recipe.recipe_hops_attributes.forEach((recipe_hop) => {
+            recipe_hop.quantity = this.checkPoundsToGrams(recipe_hop.quantity, 'hops');
+          });
+        }
+        this.setStrikeAmount();
+
+        this.recipe.recipe_miscellaneous_attributes = recipeData.recipe_miscellaneous;
+        this.recipe.recipe_miscellaneous_attributes.forEach((recipe_misc) => {
+          if (recipe_misc.time >= 24 * 60) {
+            recipe_misc.time_label = 'Days';
+            recipe_misc.time = recipe_misc.time / 24 / 60;
+          } else if (recipe_misc.time >= 60) {
+            recipe_misc.time_label = 'Hours';
+            recipe_misc.time = recipe_misc.time / 60;
+          } else {
+            recipe_misc.time_label = 'Minutes';
+          }
+        });
+
+        this.recipe.recipe_yeasts_attributes = recipeData.recipe_yeasts;
+        this.recipe.recipe_acids_attributes = recipeData.recipe_acids;
+        this.recipe.recipe_sparge_acids_attributes = recipeData.recipe_acids;
+
+        this._agentService.getAgents()
+          .retryWhen((err) => {
+            return err.scan((retryCount) => {
+              retryCount++;
+              if (retryCount < 3) {
+                return retryCount;
+              } else {
+                throw (err);
+              }
+            }, 0).delay(1000);
+          })
+          .subscribe(agentData => {
+            this.agents = agentData;
+            agentData.forEach((agent, i) => {
+              const new_agent = { 'id': null, 'water_agent_id': agent.id, 'quantity': 0 };
+              recipeData.recipe_water_agents.some((used_agent) => {
+                if (used_agent.water_agent_id === new_agent.water_agent_id) {
+                  new_agent.id = used_agent.id;
+                  new_agent.quantity = this.checkPoundsToGrams(used_agent.quantity, 'agents');
+                  return true;
                 }
-              }, 0).delay(1000);
-            })
-            .subscribe(agentData => {
-                this.agents = agentData;
-                agentData.forEach((agent, i) => {
-                  const new_agent = {'id': null, 'water_agent_id': agent.id, 'quantity': 0};
-                  recipeData.recipe_water_agents.some((used_agent) => {
-                    if (used_agent.water_agent_id === new_agent.water_agent_id) {
-                      new_agent.id = used_agent.id;
-                      new_agent.quantity = this.checkPoundsToGrams(used_agent.quantity, 'agents');
-                      return true;
-                    }
-                  });
-                  this.recipe.recipe_water_agents_attributes.push(new_agent);
-                });
-                this.loading_agents = false;
-              },
-              error => {
-                this.error = true;
-                console.error(error);
+              });
+              this.recipe.recipe_water_agents_attributes.push(new_agent);
+            });
+            this.loading_agents = false;
+          },
+            error => {
+              this.error = true;
+              console.error(error);
             });
 
-          this._maltService.getMashSteps()
-            .retryWhen((err) => {
-              return err.scan((retryCount) => {
-                retryCount++;
-                if (retryCount < 3) {
-                  return retryCount;
-                } else {
-                  throw(err);
-                }
-              }, 0).delay(1000);
-            })
-            .subscribe(mashStepData => {
-                this.mash_steps = mashStepData;
-                mashStepData.forEach((step, i) => {
-                  this.recipe.recipe_mashes_attributes.push({name: step.name,
-                      mash_step_id: step.id,
-                      id: null,
-                      used: false,
-                      temperature: this.checkFahrenheitToCelsius(Math.round((step.max_temp - step.min_temp) / 2 + step.min_temp)),
-                      time: Math.round((step.max_time - step.min_time) / 2 + step.min_time)
-                  });
-                  if (step.name === 'Alpha- and Beta-Amylase') {
-                    this.infusion_step = i;
-                  }
-                });
-
-                recipeData.recipe_mashes.forEach((used_step) => {
-                  this.recipe.recipe_mashes_attributes.forEach((step) => {
-                    if (used_step.mash_step_id === step.mash_step_id) {
-                      step.id = used_step.id;
-                      step.used = true;
-                      step.temperature = this.checkFahrenheitToCelsius(used_step.temperature);
-                      step.time = used_step.time;
-                    }
-                  });
-                });
-                this.loading_mashsteps = false;
-              },
-              error => {
-                this.error = true;
-                console.error(error);
+        this._maltService.getMashSteps()
+          .retryWhen((err) => {
+            return err.scan((retryCount) => {
+              retryCount++;
+              if (retryCount < 3) {
+                return retryCount;
+              } else {
+                throw (err);
+              }
+            }, 0).delay(1000);
+          })
+          .subscribe(mashStepData => {
+            this.mash_steps = mashStepData;
+            mashStepData.forEach((step, i) => {
+              this.recipe.recipe_mashes_attributes.push({
+                name: step.name,
+                mash_step_id: step.id,
+                id: null,
+                used: false,
+                temperature: this.checkFahrenheitToCelsius(Math.round((step.max_temp - step.min_temp) / 2 + step.min_temp)),
+                time: Math.round((step.max_time - step.min_time) / 2 + step.min_time)
+              });
+              if (step.name === 'Alpha- and Beta-Amylase') {
+                this.infusion_step = i;
+              }
             });
 
-          this.loading_recipe = false;
-        },
+            recipeData.recipe_mashes.forEach((used_step) => {
+              this.recipe.recipe_mashes_attributes.forEach((step) => {
+                if (used_step.mash_step_id === step.mash_step_id) {
+                  step.id = used_step.id;
+                  step.used = true;
+                  step.temperature = this.checkFahrenheitToCelsius(used_step.temperature);
+                  step.time = used_step.time;
+                }
+              });
+            });
+            this.loading_mashsteps = false;
+          },
+            error => {
+              this.error = true;
+              console.error(error);
+            });
+
+        this.loading_recipe = false;
+      },
         error => {
           if (error.status === 401) {
             console.error('You must log in first.');
@@ -935,7 +939,7 @@ export class DesignerService {
           }
           this.error = true;
           console.error(error);
-      });
+        });
   }
 
   loadRecipeCopy(recipeId): void {
@@ -991,234 +995,235 @@ export class DesignerService {
             return retryCount;
           } else {
             this.error = true;
-            throw(err);
+            throw (err);
           }
         }, 0).delay(1000);
       })
       .subscribe(recipeData => {
-          this.recipe.name = recipeData.name + ' - Copy';
-          this.recipe_user_id = recipeData.user_id;
-          this.recipe.id = recipeData.id;
-          this.recipe.brewer = recipeData.brewer;
-          this.recipe.recipe_date = recipeData.recipe_date;
-          this.recipe.version = recipeData.version;
-          this.recipe.batch_size = this.checkGallonsToLiters(recipeData.batch_size);
-          this.recipe.boil_time = recipeData.boil_time;
-          this.recipe.equipment_id = recipeData.equipment_id;
-          this.recipe.water_profile_id = recipeData.water_profile_id;
-          this.recipe.target_water_id = recipeData.target_water_id;
-          this.recipe.style_id = recipeData.style_id;
-          this.recipe.notes = recipeData.notes;
-          this.recipe.description = recipeData.description;
-          this.recipe.taste_notes = recipeData.taste_notes;
-          this.recipe.sparge_type = recipeData.sparge_type;
-          this.recipe.global = recipeData.global;
-          this.recipe.storage_type = recipeData.storage_type;
-          this.recipe.storage_temperature = this.checkFahrenheitToCelsius(recipeData.storage_temperature);
-          this.recipe.carbonation_volumes = recipeData.carbonation_volumes;
-          this.recipe.carbonation_with = recipeData.carbonation_with;
-          this.recipe.primary_ferm_temp = this.checkFahrenheitToCelsius(recipeData.primary_ferm_temp);
-          this.recipe.secondary_ferm_temp = this.checkFahrenheitToCelsius(recipeData.secondary_ferm_temp);
-          this.recipe.mash_ratio = this.checkMashRatioUnits(recipeData.mash_ratio);
-          this.recipe.secondary_fermentation = recipeData.secondary_fermentation;
-          this.recipe.primary_ferm_days = recipeData.primary_ferm_days;
-          this.recipe.secondary_ferm_days = recipeData.secondary_ferm_days;
-          this.recipe.efficiency = recipeData.efficiency;
-          this.recipe.recipe_type = recipeData.recipe_type;
-          this.recipe.mash_type = recipeData.mash_type;
-          this.recipe.yeast_starters_attributes = recipeData.yeast_starters;
+        this.recipe.name = recipeData.name + ' - Copy';
+        this.recipe_user_id = recipeData.user_id;
+        this.recipe.id = recipeData.id;
+        this.recipe.brewer = recipeData.brewer;
+        this.recipe.recipe_date = recipeData.recipe_date;
+        this.recipe.version = recipeData.version;
+        this.recipe.batch_size = this.checkGallonsToLiters(recipeData.batch_size);
+        this.recipe.boil_time = recipeData.boil_time;
+        this.recipe.equipment_id = recipeData.equipment_id;
+        this.recipe.water_profile_id = recipeData.water_profile_id;
+        this.recipe.target_water_id = recipeData.target_water_id;
+        this.recipe.style_id = recipeData.style_id;
+        this.recipe.notes = recipeData.notes;
+        this.recipe.description = recipeData.description;
+        this.recipe.taste_notes = recipeData.taste_notes;
+        this.recipe.sparge_type = recipeData.sparge_type;
+        this.recipe.global = recipeData.global;
+        this.recipe.storage_type = recipeData.storage_type;
+        this.recipe.storage_temperature = this.checkFahrenheitToCelsius(recipeData.storage_temperature);
+        this.recipe.carbonation_volumes = recipeData.carbonation_volumes;
+        this.recipe.carbonation_with = recipeData.carbonation_with;
+        this.recipe.primary_ferm_temp = this.checkFahrenheitToCelsius(recipeData.primary_ferm_temp);
+        this.recipe.secondary_ferm_temp = this.checkFahrenheitToCelsius(recipeData.secondary_ferm_temp);
+        this.recipe.mash_ratio = this.checkMashRatioUnits(recipeData.mash_ratio);
+        this.recipe.secondary_fermentation = recipeData.secondary_fermentation;
+        this.recipe.primary_ferm_days = recipeData.primary_ferm_days;
+        this.recipe.secondary_ferm_days = recipeData.secondary_ferm_days;
+        this.recipe.efficiency = recipeData.efficiency;
+        this.recipe.recipe_type = recipeData.recipe_type;
+        this.recipe.mash_type = recipeData.mash_type;
+        this.recipe.yeast_starters_attributes = recipeData.yeast_starters;
 
-          this.used_waters = recipeData.waters;
-          this.used_acids = recipeData.acids;
-          this.used_sparge_acids = recipeData.sparge_acids;
-          this.used_hops = recipeData.hops;
-          this.used_miscellaneous = recipeData.miscellaneous;
-          this.used_yeast = recipeData.yeasts;
+        this.used_waters = recipeData.waters;
+        this.used_acids = recipeData.acids;
+        this.used_sparge_acids = recipeData.sparge_acids;
+        this.used_hops = recipeData.hops;
+        this.used_miscellaneous = recipeData.miscellaneous;
+        this.used_yeast = recipeData.yeasts;
 
-          this.used_acids.forEach((used_acid, i) => {
-            this.acids.some((acid) => {
-              if (acid.name === used_acid.name) {
-                this.used_acids[i] = acid;
-                return true;
-              }
-            });
-          });
-
-          this.used_sparge_acids.forEach((used_acid, i) => {
-            this.acids.some((acid) => {
-              if (acid.name === used_acid.name) {
-                this.used_sparge_acids[i] = acid;
-                return true;
-              }
-            });
-          });
-
-          this.used_waters.forEach((used_water, i) => {
-            this.waters.some((water) => {
-              if (water.name === used_water.name) {
-                this.used_waters[i] = water;
-                return true;
-              }
-            });
-          });
-
-          this.equipment.some((equip) => {
-            if (equip.id === this.recipe.equipment_id) {
-              this.used_equipment = equip;
+        this.used_acids.forEach((used_acid, i) => {
+          this.acids.some((acid) => {
+            if (acid.name === used_acid.name) {
+              this.used_acids[i] = acid;
               return true;
             }
           });
-          this.water_profiles.some((wp) => {
-            if (wp.id === this.recipe.water_profile_id) {
-              this.used_water_profile = wp;
+        });
 
-              this.water_profile.style = wp.profile_type;
-              this.setSliders(wp);
+        this.used_sparge_acids.forEach((used_acid, i) => {
+          this.acids.some((acid) => {
+            if (acid.name === used_acid.name) {
+              this.used_sparge_acids[i] = acid;
               return true;
             }
           });
-          this.styles.some((style) => {
-            if (style.id === this.recipe.style_id) {
-              this.used_style = style;
-              this.recipe.carbonation_volumes = (style.max_carb - style.min_carb) / 2 + style.min_carb;
-              return true;
-            }
-          });
+        });
 
+        this.used_waters.forEach((used_water, i) => {
           this.waters.some((water) => {
-            if (water.id === this.recipe.target_water_id) {
-              this.target_water = water;
+            if (water.name === used_water.name) {
+              this.used_waters[i] = water;
               return true;
             }
           });
+        });
 
-          if (this.target_water === null) {
-            this.target_water = undefined;
+        this.equipment.some((equip) => {
+          if (equip.id === this.recipe.equipment_id) {
+            this.used_equipment = equip;
+            return true;
           }
+        });
+        this.water_profiles.some((wp) => {
+          if (wp.id === this.recipe.water_profile_id) {
+            this.used_water_profile = wp;
 
-          this.recipe.recipe_waters_attributes = recipeData.recipe_waters;
-
-          this.recipe.recipe_malts_attributes = recipeData.recipe_malts;
-          this.recipe.recipe_malts_attributes.forEach((recipe_malt) => {
-            recipeData.malts.some((used_malt) => {
-              if (recipe_malt.malt_id === used_malt.id) {
-                this.used_malts.push(used_malt);
-                return true;
-              }
-            });
-          });
-
-          this.recipe.recipe_hops_attributes = recipeData.recipe_hops;
-
-          if (this.measurement.liquid !== 'us') {
-            this.recipe.recipe_waters_attributes.forEach((recipe_water) => {
-              recipe_water.quantity = this.checkGallonsToLiters(recipe_water.quantity);
-            });
-            this.recipe.recipe_malts_attributes.forEach((recipe_malt) => {
-              recipe_malt.quantity = this.checkPoundsToGrams(recipe_malt.quantity, 'malts');
-              recipe_malt.color = this.checkColor(recipe_malt.color);
-            });
-            this.recipe.recipe_hops_attributes.forEach((recipe_hop) => {
-              recipe_hop.quantity = this.checkPoundsToGrams(recipe_hop.quantity, 'hops');
-            });
+            this.water_profile.style = wp.profile_type;
+            this.setSliders(wp);
+            return true;
           }
-          this.setStrikeAmount();
+        });
+        this.styles.some((style) => {
+          if (style.id === this.recipe.style_id) {
+            this.used_style = style;
+            this.recipe.carbonation_volumes = (style.max_carb - style.min_carb) / 2 + style.min_carb;
+            return true;
+          }
+        });
 
-          this.recipe.recipe_miscellaneous_attributes = recipeData.recipe_miscellaneous;
-          this.recipe.recipe_miscellaneous_attributes.forEach((recipe_misc) => {
-            if (recipe_misc.time >= 24 * 60) {
-              recipe_misc.time_label = 'Days';
-              recipe_misc.time = recipe_misc.time / 24 / 60;
-            } else if (recipe_misc.time >= 60) {
-              recipe_misc.time_label = 'Hours';
-              recipe_misc.time = recipe_misc.time / 60;
-            } else {
-              recipe_misc.time_label = 'Minutes';
+        this.waters.some((water) => {
+          if (water.id === this.recipe.target_water_id) {
+            this.target_water = water;
+            return true;
+          }
+        });
+
+        if (this.target_water === null) {
+          this.target_water = undefined;
+        }
+
+        this.recipe.recipe_waters_attributes = recipeData.recipe_waters;
+
+        this.recipe.recipe_malts_attributes = recipeData.recipe_malts;
+        this.recipe.recipe_malts_attributes.forEach((recipe_malt) => {
+          recipeData.malts.some((used_malt) => {
+            if (recipe_malt.malt_id === used_malt.id) {
+              this.used_malts.push(used_malt);
+              return true;
             }
           });
+        });
 
-          this.recipe.recipe_yeasts_attributes = recipeData.recipe_yeasts;
-          this.recipe.recipe_acids_attributes = recipeData.recipe_acids;
-          this.recipe.recipe_sparge_acids_attributes = recipeData.recipe_sparge_acids;
+        this.recipe.recipe_hops_attributes = recipeData.recipe_hops;
 
-          this._agentService.getAgents()
-            .retryWhen((err) => {
-              return err.scan((retryCount) => {
-                retryCount++;
-                if (retryCount < 3) {
-                  return retryCount;
-                } else {
-                  throw(err);
+        if (this.measurement.liquid !== 'us') {
+          this.recipe.recipe_waters_attributes.forEach((recipe_water) => {
+            recipe_water.quantity = this.checkGallonsToLiters(recipe_water.quantity);
+          });
+          this.recipe.recipe_malts_attributes.forEach((recipe_malt) => {
+            recipe_malt.quantity = this.checkPoundsToGrams(recipe_malt.quantity, 'malts');
+            recipe_malt.color = this.checkColor(recipe_malt.color);
+          });
+          this.recipe.recipe_hops_attributes.forEach((recipe_hop) => {
+            recipe_hop.quantity = this.checkPoundsToGrams(recipe_hop.quantity, 'hops');
+          });
+        }
+        this.setStrikeAmount();
+
+        this.recipe.recipe_miscellaneous_attributes = recipeData.recipe_miscellaneous;
+        this.recipe.recipe_miscellaneous_attributes.forEach((recipe_misc) => {
+          if (recipe_misc.time >= 24 * 60) {
+            recipe_misc.time_label = 'Days';
+            recipe_misc.time = recipe_misc.time / 24 / 60;
+          } else if (recipe_misc.time >= 60) {
+            recipe_misc.time_label = 'Hours';
+            recipe_misc.time = recipe_misc.time / 60;
+          } else {
+            recipe_misc.time_label = 'Minutes';
+          }
+        });
+
+        this.recipe.recipe_yeasts_attributes = recipeData.recipe_yeasts;
+        this.recipe.recipe_acids_attributes = recipeData.recipe_acids;
+        this.recipe.recipe_sparge_acids_attributes = recipeData.recipe_sparge_acids;
+
+        this._agentService.getAgents()
+          .retryWhen((err) => {
+            return err.scan((retryCount) => {
+              retryCount++;
+              if (retryCount < 3) {
+                return retryCount;
+              } else {
+                throw (err);
+              }
+            }, 0).delay(1000);
+          })
+          .subscribe(agentData => {
+            this.agents = agentData;
+            agentData.forEach((agent, i) => {
+              const new_agent = { 'id': null, 'water_agent_id': agent.id, 'quantity': 0 };
+              recipeData.recipe_water_agents.some((used_agent) => {
+                if (used_agent.water_agent_id === new_agent.water_agent_id) {
+                  new_agent.id = used_agent.id;
+                  new_agent.quantity = this.checkPoundsToGrams(used_agent.quantity, 'agents');
+                  return true;
                 }
-              }, 0).delay(1000);
-            })
-            .subscribe(agentData => {
-                this.agents = agentData;
-                agentData.forEach((agent, i) => {
-                  const new_agent = {'id': null, 'water_agent_id': agent.id, 'quantity': 0};
-                  recipeData.recipe_water_agents.some((used_agent) => {
-                    if (used_agent.water_agent_id === new_agent.water_agent_id) {
-                      new_agent.id = used_agent.id;
-                      new_agent.quantity = this.checkPoundsToGrams(used_agent.quantity, 'agents');
-                      return true;
-                    }
-                  });
-                  this.recipe.recipe_water_agents_attributes.push(new_agent);
-                });
-                this.loading_agents = false;
-                this.clearIds();
-              },
-              error => {
-                this.error = true;
-                console.error(error);
+              });
+              this.recipe.recipe_water_agents_attributes.push(new_agent);
+            });
+            this.loading_agents = false;
+            this.clearIds();
+          },
+            error => {
+              this.error = true;
+              console.error(error);
             });
 
-          this._maltService.getMashSteps()
-            .retryWhen((err) => {
-              return err.scan((retryCount) => {
-                retryCount++;
-                if (retryCount < 3) {
-                  return retryCount;
-                } else {
-                  throw(err);
-                }
-              }, 0).delay(1000);
-            })
-            .subscribe(mashStepData => {
-                this.mash_steps = mashStepData;
-                mashStepData.forEach((step, i) => {
-                  this.recipe.recipe_mashes_attributes.push({name: step.name,
-                      mash_step_id: step.id,
-                      id: null,
-                      used: false,
-                      temperature: this.checkFahrenheitToCelsius(Math.round((step.max_temp - step.min_temp) / 2 + step.min_temp)),
-                      time: Math.round((step.max_time - step.min_time) / 2 + step.min_time)
-                  });
-                  if (step.name === 'Alpha- and Beta-Amylase') {
-                    this.infusion_step = i;
-                  }
-                });
-
-                recipeData.recipe_mashes.forEach((used_step) => {
-                  this.recipe.recipe_mashes_attributes.forEach((step) => {
-                    if (used_step.mash_step_id === step.mash_step_id) {
-                      step.id = used_step.id;
-                      step.used = true;
-                      step.temperature = this.checkFahrenheitToCelsius(used_step.temperature);
-                      step.time = used_step.time;
-                    }
-                  });
-                });
-                this.loading_mashsteps = false;
-                this.clearIds();
-              },
-              error => {
-                this.error = true;
-                console.error(error);
+        this._maltService.getMashSteps()
+          .retryWhen((err) => {
+            return err.scan((retryCount) => {
+              retryCount++;
+              if (retryCount < 3) {
+                return retryCount;
+              } else {
+                throw (err);
+              }
+            }, 0).delay(1000);
+          })
+          .subscribe(mashStepData => {
+            this.mash_steps = mashStepData;
+            mashStepData.forEach((step, i) => {
+              this.recipe.recipe_mashes_attributes.push({
+                name: step.name,
+                mash_step_id: step.id,
+                id: null,
+                used: false,
+                temperature: this.checkFahrenheitToCelsius(Math.round((step.max_temp - step.min_temp) / 2 + step.min_temp)),
+                time: Math.round((step.max_time - step.min_time) / 2 + step.min_time)
+              });
+              if (step.name === 'Alpha- and Beta-Amylase') {
+                this.infusion_step = i;
+              }
             });
 
-          this.loading_recipe = false;
-        },
+            recipeData.recipe_mashes.forEach((used_step) => {
+              this.recipe.recipe_mashes_attributes.forEach((step) => {
+                if (used_step.mash_step_id === step.mash_step_id) {
+                  step.id = used_step.id;
+                  step.used = true;
+                  step.temperature = this.checkFahrenheitToCelsius(used_step.temperature);
+                  step.time = used_step.time;
+                }
+              });
+            });
+            this.loading_mashsteps = false;
+            this.clearIds();
+          },
+            error => {
+              this.error = true;
+              console.error(error);
+            });
+
+        this.loading_recipe = false;
+      },
         error => {
           if (error.status === 401) {
             console.error('You must log in first.');
@@ -1227,7 +1232,7 @@ export class DesignerService {
           }
           this.error = true;
           console.error(error);
-      });
+        });
   }
 
   setLoadingMessage() {
@@ -1389,9 +1394,9 @@ export class DesignerService {
       this.add_water = null;
     });
 
-    if (!this.used_waters.includes(add_water) ) {
+    if (!this.used_waters.includes(add_water)) {
       this.used_waters.push(add_water);
-      this.recipe.recipe_waters_attributes.push({'water_id': add_water.id, 'quantity': 0, 'id': null, 'boil': false});
+      this.recipe.recipe_waters_attributes.push({ 'water_id': add_water.id, 'quantity': 0, 'id': null, 'boil': false });
       if (this.addWaterGallons() < this.estimateGallonsNeeded()) {
         this.recipe.recipe_waters_attributes[this.recipe.recipe_waters_attributes.length - 1].quantity = this.checkGallonsToLiters(
           Math.round(10 * (this.estimateGallonsNeeded() - this.addWaterGallons())) / 10);
@@ -1404,9 +1409,9 @@ export class DesignerService {
       this.add_acid = null;
     });
 
-    if (!this.used_acids.includes(add_acid) ) {
+    if (!this.used_acids.includes(add_acid)) {
       this.used_acids.push(add_acid);
-      this.recipe.recipe_acids_attributes.push({'acid_id': add_acid.id, 'quantity': 0, 'id': null});
+      this.recipe.recipe_acids_attributes.push({ 'acid_id': add_acid.id, 'quantity': 0, 'id': null });
     }
   }
 
@@ -1415,9 +1420,9 @@ export class DesignerService {
       this.add_sparge_acid = null;
     });
 
-    if (!this.used_sparge_acids.includes(add_sparge_acid) ) {
+    if (!this.used_sparge_acids.includes(add_sparge_acid)) {
       this.used_sparge_acids.push(add_sparge_acid);
-      this.recipe.recipe_sparge_acids_attributes.push({'acid_id': add_sparge_acid.id, 'quantity': 0, 'id': null});
+      this.recipe.recipe_sparge_acids_attributes.push({ 'acid_id': add_sparge_acid.id, 'quantity': 0, 'id': null });
     }
   }
 
@@ -1435,16 +1440,16 @@ export class DesignerService {
       return '';
     }
     const message: string[] = [w.name + '\n', 'pH: ' + w.ph, 'Calcium: ' + w.calcium, 'Magnesium: ' +
-    w.magnesium, 'Sodium: ' + w.sodium, 'Sulfate: ' + w.sulfate, 'Chloride: ' +
+      w.magnesium, 'Sodium: ' + w.sodium, 'Sulfate: ' + w.sulfate, 'Chloride: ' +
     w.chloride, 'Bicarbonate: ' + w.bicarbonate, '\n' + (w.description ? w.description : 'No description')];
     return message.join(' ');
   }
 
   waterAgentTitle(w): string {
     const message: string = w.name + '\n' + (w.description ? (w.description + '\n') : '') +
-    'pH: ' + w.ph.toString() + ' Calcium: ' + w.calcium.toString() + ' Magnesium: ' +
-    w.magnesium.toString() + ' Sodium: ' + w.sodium.toString() + ' Sulfate: ' + w.sulfate.toString() + ' Chloride: ' +
-    w.chloride.toString() + ' Bicarbonate: ' + w.bicarbonate.toString();
+      'pH: ' + w.ph.toString() + ' Calcium: ' + w.calcium.toString() + ' Magnesium: ' +
+      w.magnesium.toString() + ' Sodium: ' + w.sodium.toString() + ' Sulfate: ' + w.sulfate.toString() + ' Chloride: ' +
+      w.chloride.toString() + ' Bicarbonate: ' + w.bicarbonate.toString();
     return message;
   }
 
@@ -1528,14 +1533,16 @@ export class DesignerService {
   }
 
   getActiveAgents(): any {
-    const activeAgents: { water_agent_id: number, id: number, name: string, quantity: number}[] = [];
+    const activeAgents: { water_agent_id: number, id: number, name: string, quantity: number }[] = [];
 
     for (let i = 0; i < this.agents.length; i++) {
       if (this.recipe.recipe_water_agents_attributes[i].quantity > 0) {
-        activeAgents.push({ 'water_agent_id': this.recipe.recipe_water_agents_attributes[i].water_agent_id,
+        activeAgents.push({
+          'water_agent_id': this.recipe.recipe_water_agents_attributes[i].water_agent_id,
           'name': this.agents[i].name,
           'quantity': this.recipe.recipe_water_agents_attributes[i].quantity,
-           'id': this.recipe.recipe_water_agents_attributes[i].id });
+          'id': this.recipe.recipe_water_agents_attributes[i].id
+        });
       }
     }
 
@@ -1557,7 +1564,7 @@ export class DesignerService {
 
     if (this.used_equipment) {
       return this.inputConversion(this.recipe.batch_size, 'liquid')
-      + this.used_equipment.wl_boil + (this.recipe.secondary_fermentation ? .1 : 0);
+        + this.used_equipment.wl_boil + (this.recipe.secondary_fermentation ? .1 : 0);
     }
     return this.inputConversion(this.recipe.batch_size, 'liquid') + (this.recipe.secondary_fermentation ? .1 : 0);
   }
@@ -1582,20 +1589,20 @@ export class DesignerService {
   currentWater(): IWaterProfile {
     const total_gallons: number = this.addWaterGallons();
     const current_water: IWaterProfile = {
-        id: 0,
-        user_id: 0,
-        name: 'Current Water Mix',
-        ph: 0,
-        calcium: 0,
-        magnesium: 0,
-        sodium: 0,
-        sulfate: 0,
-        chloride: 0,
-        bicarbonate: 0,
-        description: 'The current mix of the water profiles you have selected.',
-        global: false,
-        recipe_count: 0
-      };
+      id: 0,
+      user_id: 0,
+      name: 'Current Water Mix',
+      ph: 0,
+      calcium: 0,
+      magnesium: 0,
+      sodium: 0,
+      sulfate: 0,
+      chloride: 0,
+      bicarbonate: 0,
+      description: 'The current mix of the water profiles you have selected.',
+      global: false,
+      recipe_count: 0
+    };
 
     if (this.used_waters.length === 0 || this.recipe.recipe_waters_attributes.length === 0) {
       return undefined;
@@ -1610,7 +1617,7 @@ export class DesignerService {
         calcium_to_add = profile.calcium - (profile.bicarbonate - hco3final) / 3.05;
       }
       current_water.ph += (Math.pow(10, profile.ph) * this.inputConversion(
-this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
+        this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
       current_water.calcium += (calcium_to_add * this.inputConversion(this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
       current_water.magnesium += (profile.magnesium * this.inputConversion(this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
       current_water.sodium += (profile.sodium * this.inputConversion(this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
@@ -1642,20 +1649,20 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
 
   waterDifference(): IWaterProfile {
     const water_diff: IWaterProfile = {
-        id: 0,
-        user_id: 0,
-        name: 'Water Difference',
-        ph: 0,
-        calcium: 0,
-        magnesium: 0,
-        sodium: 0,
-        sulfate: 0,
-        chloride: 0,
-        bicarbonate: 0,
-        description: 'The difference between the current water profile and the target water profile..',
-        global: false,
-        recipe_count: 0
-      };
+      id: 0,
+      user_id: 0,
+      name: 'Water Difference',
+      ph: 0,
+      calcium: 0,
+      magnesium: 0,
+      sodium: 0,
+      sulfate: 0,
+      chloride: 0,
+      bicarbonate: 0,
+      description: 'The difference between the current water profile and the target water profile..',
+      global: false,
+      recipe_count: 0
+    };
     const current_water = this.currentWater();
 
     if (!this.currentWater() || !this.target_water) {
@@ -1676,7 +1683,7 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
   waterSumOfSquares(): number {
     const diff: IWaterProfile = this.waterDifference();
     return (Math.pow(diff.ph * 10, 2) + Math.pow(diff.calcium, 2) + Math.pow(diff.magnesium, 2) + Math.pow(diff.sodium, 2) +
-              Math.pow(diff.sulfate, 2) + Math.pow(diff.chloride, 2) + Math.pow(diff.bicarbonate, 2));
+      Math.pow(diff.sulfate, 2) + Math.pow(diff.chloride, 2) + Math.pow(diff.bicarbonate, 2));
   }
 
   matchWater(): void {
@@ -1786,7 +1793,7 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
     }
     if (this.used_waters[1]) {
       this.used_water_ratio = 100 * this.recipe.recipe_waters_attributes[1].quantity
-      / (this.recipe.recipe_waters_attributes[0].quantity + this.recipe.recipe_waters_attributes[1].quantity);
+        / (this.recipe.recipe_waters_attributes[0].quantity + this.recipe.recipe_waters_attributes[1].quantity);
     }
     this.setStrikeAmount();
     if (!this.water_profile_select) {
@@ -1831,10 +1838,11 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
     });
 
     this.used_malts.push(Object.assign({}, add_malt));
-    this.recipe.recipe_malts_attributes.push({'id': null, 'malt_id': add_malt.id,
+    this.recipe.recipe_malts_attributes.push({
+      'id': null, 'malt_id': add_malt.id,
       'color': add_malt.color, 'quantity': 0, 'malt_usage':
-      ((this.maltTypes[add_malt.malt_type_id - 1].name === 'Grain' || this.maltTypes[add_malt.malt_type_id - 1].name === 'Adjunct') ?
-            'Mash' : 'Boil')
+        ((this.maltTypes[add_malt.malt_type_id - 1].name === 'Grain' || this.maltTypes[add_malt.malt_type_id - 1].name === 'Adjunct') ?
+          'Mash' : 'Boil')
     });
   }
 
@@ -1882,11 +1890,12 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
   selectedMaltEvent(event): void {
     for (let i = 0; i < event.malts.length; i++) {
       this.used_malts.push(Object.assign({}, event.malts[i]));
-      this.recipe.recipe_malts_attributes.push({id: null, malt_id: event.malts[i].id,
+      this.recipe.recipe_malts_attributes.push({
+        id: null, malt_id: event.malts[i].id,
         color: event.malts[i].color, quantity: 0, malt_usage:
-        ((this.maltTypes[event.malts[i].malt_type_id - 1].name === 'Grain'
-        || this.maltTypes[event.malts[i].malt_type_id - 1].name === 'Adjunct')
-        ? 'Mash' : 'Boil')
+          ((this.maltTypes[event.malts[i].malt_type_id - 1].name === 'Grain'
+            || this.maltTypes[event.malts[i].malt_type_id - 1].name === 'Adjunct')
+            ? 'Mash' : 'Boil')
       });
     }
   }
@@ -1900,8 +1909,10 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
     return weight;
   }
 
-  getMashWaterInfo(): { sparge_amount: number, step_info:
-    { step_name: string, step_temp: number, step_time: number, water_amount: number, water_temp: number }[] } {
+  getMashWaterInfo(): {
+    sparge_amount: number, step_info:
+      { step_name: string, step_temp: number, step_time: number, water_amount: number, water_temp: number }[]
+  } {
     const activate_steps: { step_name: string, step_temp: number, step_time: number, water_amount: number, water_temp: number }[] = [];
     let strike_temp: number;
     let previous_temp: number;
@@ -1923,7 +1934,7 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
       activate_steps.push({
         water_amount: this.checkPoundsToGrams(this.getTotalGrainWeight(), 'malts') * this.recipe.mash_ratio,
         water_temp: Math.max(
-          (.2 / this.recipe.mash_ratio) * (this.inputConversion(            mash_step_temp, 'temperature') - 72) + this.inputConversion(              mash_step_temp, 'temperature'), this.inputConversion(                mash_step_temp, 'temperature')),
+          (.2 / this.recipe.mash_ratio) * (this.inputConversion(mash_step_temp, 'temperature') - 72) + this.inputConversion(mash_step_temp, 'temperature'), this.inputConversion(mash_step_temp, 'temperature')),
         step_name: 'Infusion',
         step_time: 20,
         step_temp: this.inputConversion(mash_step_temp, 'temperature'),
@@ -1934,18 +1945,19 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
       this.recipe.recipe_mashes_attributes.forEach((mash_step, i) => {
         if (mash_step.used) {
           const new_step: { step_name: string, step_temp: number, step_time: number, water_amount: number, water_temp: number } = {
-            step_name: '', step_temp: 0, step_time: 0, water_amount: 0, water_temp: 0 };
+            step_name: '', step_temp: 0, step_time: 0, water_amount: 0, water_temp: 0
+          };
           new_step.step_name = mash_step.name;
           new_step.step_temp = this.inputConversion(mash_step.temperature, 'temperature');
           new_step.step_time = mash_step.time;
 
           if (!strike_temp) {
             new_step.water_amount = this.checkPoundsToGrams(this.getTotalGrainWeight(), 'malts') * this.recipe.mash_ratio;
-            strike_temp = Math.max((.2 / this.recipe.mash_ratio) * (this.inputConversion(              mash_step.temperature, 'temperature') - 72) + this.inputConversion(                mash_step.temperature, 'temperature'), this.inputConversion(mash_step.temperature, 'temperature'));
+            strike_temp = Math.max((.2 / this.recipe.mash_ratio) * (this.inputConversion(mash_step.temperature, 'temperature') - 72) + this.inputConversion(mash_step.temperature, 'temperature'), this.inputConversion(mash_step.temperature, 'temperature'));
             new_step.water_temp = strike_temp;
           } else {
-            new_step.water_amount = (this.inputConversion(              mash_step.temperature, 'temperature') - previous_temp) * (.2
-                * this.getTotalGrainWeight() + total_water) / (212 - this.inputConversion(                mash_step.temperature, 'temperature'));
+            new_step.water_amount = (this.inputConversion(mash_step.temperature, 'temperature') - previous_temp) * (.2
+              * this.getTotalGrainWeight() + total_water) / (212 - this.inputConversion(mash_step.temperature, 'temperature'));
             new_step.water_temp = 212;
           }
           total_water += new_step.water_amount;
@@ -1958,7 +1970,8 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
         if (mash_step.used) {
 
           const new_step: { step_name: string, step_temp: number, step_time: number, water_amount: number, water_temp: number } = {
-            step_name: '', step_temp: 0, step_time: 0, water_amount: 0, water_temp: 0 };
+            step_name: '', step_temp: 0, step_time: 0, water_amount: 0, water_temp: 0
+          };
           new_step.step_name = mash_step.name;
           new_step.step_temp = this.inputConversion(mash_step.temperature, 'temperature');
           new_step.step_time = mash_step.time;
@@ -1978,7 +1991,7 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
       });
     }
 
-    return { 'sparge_amount': this.estimateGallonsNeeded() - this.inputConversion(      total_water, 'liquid') / (this.measurement.liquid === 'us' ? 4 : 1), 'step_info': activate_steps };
+    return { 'sparge_amount': this.estimateGallonsNeeded() - this.inputConversion(total_water, 'liquid') / (this.measurement.liquid === 'us' ? 4 : 1), 'step_info': activate_steps };
   }
 
   getUsedMashSteps(): any[] {
@@ -2110,7 +2123,7 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
     let weight = 0;
     this.used_malts.forEach((m, i) => {
       if (this.recipe.recipe_malts_attributes[i].malt_usage === 'Mash'
-      && (this.maltTypes[m.malt_type_id - 1].name === 'Grain' || this.maltTypes[m.malt_type_id - 1].name === 'Adjunct')) {
+        && (this.maltTypes[m.malt_type_id - 1].name === 'Grain' || this.maltTypes[m.malt_type_id - 1].name === 'Adjunct')) {
         weight += this.inputConversion(this.recipe.recipe_malts_attributes[i].quantity, 'malts');
       }
     });
@@ -2356,7 +2369,8 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
 
     this.used_hops.push(Object.assign({}, add_hop));
 
-    const newAddition = {hop_id: add_hop.id, id: null,
+    const newAddition = {
+      hop_id: add_hop.id, id: null,
       quantity: 0, alpha: add_hop.alpha, time: 0, form: 'Pellet',
       usage: 'boil'
     };
@@ -2441,7 +2455,7 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
 
     if (method === 'average') {
       return (this.calculateIBU('tinseth') + this.calculateIBU('rager') +
-              this.calculateIBU('garetz') + this.calculateIBU('daniels')) / 4;
+        this.calculateIBU('garetz') + this.calculateIBU('daniels')) / 4;
     }
 
     this.recipe.recipe_hops_attributes.forEach((hop, i) => {
@@ -2472,11 +2486,11 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
       bigness = 1.65 * Math.pow(0.000125, this.getEstimatedOG() - 1);
       boil_factor = (1 - Math.exp(-.04 * hop.time)) / 4.15;
       utilization = bigness * boil_factor;
-      add_ibu = hop.alpha * this.inputConversion(        hop.quantity, 'hops') * 74.89 / this.estimatedPostBoilGallons();
+      add_ibu = hop.alpha * this.inputConversion(hop.quantity, 'hops') * 74.89 / this.estimatedPostBoilGallons();
       add_ibu = add_ibu * utilization;
     } else if (method === 'rager') {
       utilization = (18.11 + (13.65 * Math.tanh((hop.time - 31.32) / 18.37))) / 100;
-      add_ibu = (this.inputConversion(        hop.quantity, 'hops') * utilization * (hop.alpha / 100) * 7489) /
+      add_ibu = (this.inputConversion(hop.quantity, 'hops') * utilization * (hop.alpha / 100) * 7489) /
         (this.estimatedPostBoilGallons() * (1 + Math.max(0, (this.getEstimatedOG() - 1.050) / .2)));
     } else if (method === 'garetz') {
       const desired_ibus = (this.calculateIBU('tinseth') + this.calculateIBU('rager')) / 2;
@@ -2492,13 +2506,13 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
       const ca: number = gf * hf * tf;
 
       utilization = 7.2994 + (15.0746 * Math.tanh((hop.time - 21.86) / 24.71));
-      add_ibu = (utilization * this.inputConversion(        hop.quantity, 'hops') * hop.alpha * .749) / (this.estimatedPostBoilGallons() * ca);
+      add_ibu = (utilization * this.inputConversion(hop.quantity, 'hops') * hop.alpha * .749) / (this.estimatedPostBoilGallons() * ca);
     } else if (method === 'daniels') {
       bigness = 1.65 * Math.pow(0.000125, this.getEstimatedOG() - 1);
       boil_factor = (1 - Math.exp(-.04 * hop.time)) / 4.15;
       utilization = bigness * boil_factor;
 
-      add_ibu = utilization / 100 * this.inputConversion(        hop.quantity, 'hops') * hop.alpha * 7489 / this.estimatedPostBoilGallons();
+      add_ibu = utilization / 100 * this.inputConversion(hop.quantity, 'hops') * hop.alpha * 7489 / this.estimatedPostBoilGallons();
     }
 
     if (hop.form === 'Pellet') {
@@ -2514,7 +2528,7 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
   getTotalHopWeight(): number {
     let weight = 0;
     this.recipe.recipe_hops_attributes.forEach((w) => {
-      weight += this.inputConversion(        w.quantity, 'hops');
+      weight += this.inputConversion(w.quantity, 'hops');
     });
 
     return weight;
@@ -2525,7 +2539,7 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
 
     this.recipe.recipe_hops_attributes.forEach((hop, i) => {
       if (hop.usage === usage && hop.quantity > 0) {
-        hops.push({'name': this.used_hops[i].name, 'quantity': hop.quantity, 'time': hop.time, 'form': hop.form});
+        hops.push({ 'name': this.used_hops[i].name, 'quantity': hop.quantity, 'time': hop.time, 'form': hop.form });
       }
     });
 
@@ -2545,7 +2559,8 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
 
     this.used_miscellaneous.push(Object.assign({}, add_misc));
 
-    const newAddition = {miscellaneou_id: add_misc.id, id: null,
+    const newAddition = {
+      miscellaneou_id: add_misc.id, id: null,
       quantity: (add_misc.amount / add_misc.batch_size) * this.recipe.batch_size,
       quantity_label: add_misc.amount_label, time: this._miscService.calculateTime(add_misc.time).time,
       time_label: this.capitalizeFirstLetter(this._miscService.calculateTime(add_misc.time).label),
@@ -2566,14 +2581,20 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
     }
   }
 
-  getUsedMiscellaneous(stage_used): { quantity: number, quantity_label: string, name: string,
-                                      time: number, time_label: string }[] {
-    const used_miscellaneous: { quantity: number, quantity_label: string, name: string,
-                                time: number, time_label: string }[] = [];
+  getUsedMiscellaneous(stage_used): {
+    quantity: number, quantity_label: string, name: string,
+    time: number, time_label: string
+  }[] {
+    const used_miscellaneous: {
+      quantity: number, quantity_label: string, name: string,
+      time: number, time_label: string
+    }[] = [];
     this.recipe.recipe_miscellaneous_attributes.forEach((misc, i) => {
       if (misc.usage === stage_used) {
-        used_miscellaneous.push({ quantity: misc.quantity, quantity_label: misc.quantity_label,
-        name: this.used_miscellaneous[i].name, time: misc.time, time_label: misc.time_label });
+        used_miscellaneous.push({
+          quantity: misc.quantity, quantity_label: misc.quantity_label,
+          name: this.used_miscellaneous[i].name, time: misc.time, time_label: misc.time_label
+        });
       }
     });
 
@@ -2591,8 +2612,10 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
   }
 
   addYeastStarterStep() {
-    this.recipe.yeast_starters_attributes.push({ id: null, aeration_method: 'none', gravity: 1.036,
-                                          volume: this.inputConversion(2 / 3.78541 * 4, 'liquidquart')});
+    this.recipe.yeast_starters_attributes.push({
+      id: null, aeration_method: 'none', gravity: 1.036,
+      volume: this.inputConversion(2 / 3.78541 * 4, 'liquidquart')
+    });
   }
 
   removeYeastStarter(i: number) {
@@ -2633,7 +2656,8 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
 
     let new_cells = this.getNewYeastCells(i, old_cells);
 
-    let growth_factor = new_cells / old_cells;
+    //Not used?
+    //let growth_factor = new_cells / old_cells;
     return new_cells + old_cells;
   }
 
@@ -2671,9 +2695,9 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
 
   getEGrams(i: number): number {
     return (this.recipe.yeast_starters_attributes[i].gravity - 1) *
-            this.checkGallonsToLiters(this.recipe.yeast_starters_attributes[i].volume, true) *
-            1000 * 2.72715;
-            // 2.72715 is #grams of extract / point of starter gravity / liter
+      this.checkGallonsToLiters(this.recipe.yeast_starters_attributes[i].volume, true) *
+      1000 * 2.72715;
+    // 2.72715 is #grams of extract / point of starter gravity / liter
   }
 
   yeastNeeded(): number {
@@ -2711,7 +2735,8 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
     });
 
     this.used_yeast.push(Object.assign({}, add_yeast));
-    this.recipe.recipe_yeasts_attributes.push({id: null, yeast_id: add_yeast.id,
+    this.recipe.recipe_yeasts_attributes.push({
+      id: null, yeast_id: add_yeast.id,
       quantity: 1, fermentation_stage: stage
     });
   }
@@ -2746,7 +2771,8 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
     for (let i = 0; i < event.yeast.length; i++) {
       const add_yeast = Object.assign({}, event.yeast[i]);
       this.used_yeast.push(add_yeast);
-      this.recipe.recipe_yeasts_attributes.push({id: null, yeast_id: add_yeast.id,
+      this.recipe.recipe_yeasts_attributes.push({
+        id: null, yeast_id: add_yeast.id,
         quantity: 1, fermentation_stage: stage
       });
     }
@@ -2774,7 +2800,7 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
   }
 
   optimalYeastTemperature(stage): { min: number, max: number } {
-    const range = { min: 0, max: 125};
+    const range = { min: 0, max: 125 };
     this.used_yeast.forEach((yeast, i) => {
       if (this.recipe.recipe_yeasts_attributes[i].fermentation_stage === stage) {
         if (yeast.min_temperature > range.min) {
@@ -2789,9 +2815,9 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
   }
 
   optimalYeastTemperatureCheck(stage): boolean {
-    const temperature = this.inputConversion((stage === 1) ? 
-                        this.inputConversion(this.recipe.primary_ferm_temp, 'temperature') : 
-                        this.inputConversion(this.recipe.secondary_ferm_temp, 'temperature'), 'temperature');
+    const temperature = this.inputConversion((stage === 1) ?
+      this.inputConversion(this.recipe.primary_ferm_temp, 'temperature') :
+      this.inputConversion(this.recipe.secondary_ferm_temp, 'temperature'), 'temperature');
     const range = this.optimalYeastTemperature(stage);
     if (range.min > temperature || range.max < temperature) {
       return false;
@@ -2805,7 +2831,7 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
       return 'The yeasts you have selected do not have an optimal temperature range that match eachother.';
     } else {
       return 'It is suggested to ferment at a temperature within the yeasts optimal temperature range of '
-      + range.min + ' - ' + range.max + ' degrees F.\
+        + range.min + ' - ' + range.max + ' degrees F.\
        Temperatures outside of the optimal range can lead to failed fermentation and off flavors.';
     }
   }
@@ -2814,8 +2840,10 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
     const used_yeast: { quantity: number, name: string, lab: string }[] = [];
     this.used_yeast.forEach((yeast, i) => {
       if (this.recipe.recipe_yeasts_attributes[i].fermentation_stage === stage_used) {
-        used_yeast.push({ 'quantity': this.recipe.recipe_yeasts_attributes[i].quantity,
-        'name': yeast.name, 'lab': yeast.lab });
+        used_yeast.push({
+          'quantity': this.recipe.recipe_yeasts_attributes[i].quantity,
+          'name': yeast.name, 'lab': yeast.lab
+        });
       }
     });
 
@@ -2834,9 +2862,9 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
     switch (this.recipe.carbonation_with) {
       case 'pressure':
         quantity = -16.6999 - 0.0101059 * this.inputConversion(this.recipe.storage_temperature, 'temperature') +
-            0.00116512 * Math.pow(this.inputConversion(this.recipe.storage_temperature, 'temperature'), 2) + 0.173354 *
-            this.inputConversion(this.recipe.storage_temperature, 'temperature') * this.recipe.carbonation_volumes + 4.24267 *
-            this.recipe.carbonation_volumes - 0.0684226 * Math.pow(this.recipe.carbonation_volumes, 2);
+          0.00116512 * Math.pow(this.inputConversion(this.recipe.storage_temperature, 'temperature'), 2) + 0.173354 *
+          this.inputConversion(this.recipe.storage_temperature, 'temperature') * this.recipe.carbonation_volumes + 4.24267 *
+          this.recipe.carbonation_volumes - 0.0684226 * Math.pow(this.recipe.carbonation_volumes, 2);
         return this.checkPsiToKpa(quantity);
       case 'cornsugar':
         sugar_factor = 4;
@@ -2858,7 +2886,7 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
         const carbonation_beer = (1.013) * Math.pow(2.71828182845904,
           (-10.73797 + (2617.25 / (this.fahrToCels(this.inputConversion(this.recipe.storage_temperature, 'temperature')) + 273.15)))) * 10;
         quantity = 1.95 * 4 * this.inputConversion(this.recipe.batch_size, 'liquid') * (this.recipe.carbonation_volumes - carbonation_beer / 2) /
-(this.getEstimatedOG() - this.getEstimatedFG()) / 1000;
+          (this.getEstimatedOG() - this.getEstimatedFG()) / 1000;
         return this.checkGallonsToLiters(quantity, true);
     }
 
@@ -2866,7 +2894,7 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
     const co2_factor = this.recipe.carbonation_volumes - dissolved_co2;
     const vol_factor = this.inputConversion(this.recipe.batch_size, 'liquid') * 3.78541;
     quantity = co2_factor * sugar_factor * vol_factor * sugar_volume_factor /
-    (this.measurement.malts === 'us' ? 28.34952 : 1); // 28.34952 is gram to oz
+      (this.measurement.malts === 'us' ? 28.34952 : 1); // 28.34952 is gram to oz
     return this.recipe.storage_type === 'keg' ? (quantity / 2) : quantity;
   }
 
@@ -3174,7 +3202,7 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
     if (this.match_malt) {
       this.recipe.recipe_malts_attributes.forEach((malt, i) => {
         if (malt.malt_usage === 'Mash' && (this.maltTypes[this.used_malts[i].malt_type_id - 1].name === 'Grain' ||
-                  this.maltTypes[this.used_malts[i].malt_type_id - 1].name === 'Adjunct')) {
+          this.maltTypes[this.used_malts[i].malt_type_id - 1].name === 'Adjunct')) {
           malt.quantity = this.roundHundredth(malt.quantity / new_efficiency * this.recipe.efficiency);
         }
       });
@@ -3359,7 +3387,7 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
   }
 
   checkMashRatioUnits(ratio): number {
-      return ratio * (this.measurement.liquid === 'us' ? 1 : 1 * 3.78541 / 4) / (this.measurement.malts === 'us' ? 1 : 1 * .453592);
+    return ratio * (this.measurement.liquid === 'us' ? 1 : 1 * 3.78541 / 4) / (this.measurement.malts === 'us' ? 1 : 1 * .453592);
   }
 
   checkPoundsToGrams(pound, type): number {
@@ -3543,49 +3571,49 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
     const ingredients: string[] = [];
     this.used_malts.forEach((malt, i) => {
       ingredients.push(
-        ( this.maltTypes ? this.maltTypes[malt.malt_type_id - 1].name : '' ) + '\t' +
+        (this.maltTypes ? this.maltTypes[malt.malt_type_id - 1].name : '') + '\t' +
         this.roundPointOne(
-          this.recipe.recipe_malts_attributes[i].quantity) + ' ' + ( this.measurement.malts === 'us' ? 'lbs' : 'kg' ) + '\t' +
+          this.recipe.recipe_malts_attributes[i].quantity) + ' ' + (this.measurement.malts === 'us' ? 'lbs' : 'kg') + '\t' +
         malt.name + ' (' + (this.recipe.recipe_malts_attributes[i].malt_usage) + ')'
       );
     });
     this.used_miscellaneous.forEach((misc, i) => {
       ingredients.push(
-        ( misc.miscellaneous_type ) + '\t' +
+        (misc.miscellaneous_type) + '\t' +
         this.roundHundredth(
           this.recipe.recipe_miscellaneous_attributes[i].quantity) + ' ' +
-          ( this.recipe.recipe_miscellaneous_attributes[i].quantity_label ) + '\t' +
-        ( misc.name ) + ' ' + ( misc.usage  )
+        (this.recipe.recipe_miscellaneous_attributes[i].quantity_label) + '\t' +
+        (misc.name) + ' ' + (misc.usage)
       );
     });
     this.used_hops.forEach((hop, i) => {
       ingredients.push(
         'Hop\t' +
-        this.roundPointOne(this.recipe.recipe_hops_attributes[i].quantity) + ' ' + ( this.measurement.hops === 'us' ? 'oz' : 'g' ) + '\t' +
-        ( hop.name ) + ' ' + (( this.displayHopInfo(
-          this.recipe.recipe_hops_attributes[i].usage, this.recipe.recipe_hops_attributes[i].time) ))
+        this.roundPointOne(this.recipe.recipe_hops_attributes[i].quantity) + ' ' + (this.measurement.hops === 'us' ? 'oz' : 'g') + '\t' +
+        (hop.name) + ' ' + ((this.displayHopInfo(
+          this.recipe.recipe_hops_attributes[i].usage, this.recipe.recipe_hops_attributes[i].time)))
       );
     });
     this.used_yeast.forEach((yeast, i) => {
       ingredients.push(
         'Yeast\t' +
         this.roundPointOne(this.recipe.recipe_yeasts_attributes[i].quantity) + ' pkgs' + '\t' +
-        ( yeast.name ) + ( yeast.lab ? ' - ' + yeast.lab : '' )
+        (yeast.name) + (yeast.lab ? ' - ' + yeast.lab : '')
       );
     });
     this.used_waters.forEach((water, i) => {
       ingredients.push(
         'Water\t' +
         this.roundPointOne(
-          this.recipe.recipe_waters_attributes[i].quantity) + ' ' + ( (this.measurement.liquid === 'us' ? 'gallons' : 'liters') ) + '\t' +
-        ( water.name )
+          this.recipe.recipe_waters_attributes[i].quantity) + ' ' + ((this.measurement.liquid === 'us' ? 'gallons' : 'liters')) + '\t' +
+        (water.name)
       );
     });
     this.getActiveAgents().forEach((agent, i) => {
       ingredients.push(
         'Water Agent\t' +
-        this.roundPointOne(agent.quantity) + ' ' + ( this.measurement.agents === 'us' ? 'ounces' : 'grams' ) + '\t' +
-        ( agent.name )
+        this.roundPointOne(agent.quantity) + ' ' + (this.measurement.agents === 'us' ? 'ounces' : 'grams') + '\t' +
+        (agent.name)
       );
     });
 
@@ -3688,9 +3716,11 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
       } else {
         usage = 'Aroma';
       }
-      recipe_json.recipe['hops'].push({ name: this.used_hops[i].name, version: 1,
+      recipe_json.recipe['hops'].push({
+        name: this.used_hops[i].name, version: 1,
         alpha: hop.alpha, amount: this.convertToXml(hop.quantity, 'hops'),
-        use: usage, time: hop.time, form: hop.form === 'Pellet' ? 'Pellet' : 'Plug' });
+        use: usage, time: hop.time, form: hop.form === 'Pellet' ? 'Pellet' : 'Plug'
+      });
     });
 
     recipe_json.recipe['fermentables'] = [];
@@ -3832,13 +3862,13 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
         parsed_xml.push('<' + (key_name === null ? key : key_name).toUpperCase() + '>');
         parsed_xml = [...parsed_xml, ...this.parseXml(my_json[key], key.substring(0, key.length - 1))];
         parsed_xml.push('</' + (key_name === null ? key : key_name).toUpperCase() + '>');
-      } else if (typeof(my_json[key]) === 'object') {
+      } else if (typeof (my_json[key]) === 'object') {
         parsed_xml.push('<' + (key_name === null ? key : key_name).toUpperCase() + '>');
         parsed_xml = [...parsed_xml, ...this.parseXml(my_json[key])];
         parsed_xml.push('</' + (key_name === null ? key : key_name).toUpperCase() + '>');
       } else {
         parsed_xml.push('<' + (key_name === null ? key : key_name)
-        .toUpperCase() + '>' + my_json[key] + '</' + (key_name === null ? key : key_name).toUpperCase() + '>');
+          .toUpperCase() + '>' + my_json[key] + '</' + (key_name === null ? key : key_name).toUpperCase() + '>');
       }
     }
     return parsed_xml;
@@ -3923,7 +3953,7 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
         this.styles.some((style) => {
           if (style.category_number === parseInt(node.getElementsByTagName(
             'CATEGORY_NUMBER')[0].innerHTML, 10) &&
-                      style.subcategory === node.getElementsByTagName('STYLE_LETTER')[0].innerHTML) {
+            style.subcategory === node.getElementsByTagName('STYLE_LETTER')[0].innerHTML) {
             this.used_style = style;
             found = true;
             return true;
@@ -3942,12 +3972,14 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
           this.hops.some((hop) => {
             if (hop.name === hop_node.getElementsByTagName('NAME')[0].innerHTML) {
               this.used_hops.push(hop);
-              const new_hop = { hop_id: hop.id, id: null,
-                  quantity: this.convertFromXml(parseFloat(hop_node.getElementsByTagName('AMOUNT')[0].innerHTML), 'hops'),
-                  alpha: parseFloat(hop_node.getElementsByTagName('ALPHA')[0].innerHTML),
-                  time: parseInt(hop_node.getElementsByTagName('TIME')[0].innerHTML, 10),
-                  form: hop_node.getElementsByTagName('FORM')[0] ? hop_node.getElementsByTagName('FORM')[0].innerHTML : 'Pellet',
-                  usage: hop_node.getElementsByTagName('USE')[0].innerHTML };
+              const new_hop = {
+                hop_id: hop.id, id: null,
+                quantity: this.convertFromXml(parseFloat(hop_node.getElementsByTagName('AMOUNT')[0].innerHTML), 'hops'),
+                alpha: parseFloat(hop_node.getElementsByTagName('ALPHA')[0].innerHTML),
+                time: parseInt(hop_node.getElementsByTagName('TIME')[0].innerHTML, 10),
+                form: hop_node.getElementsByTagName('FORM')[0] ? hop_node.getElementsByTagName('FORM')[0].innerHTML : 'Pellet',
+                usage: hop_node.getElementsByTagName('USE')[0].innerHTML
+              };
 
               if (new_hop.usage === 'Boil') {
                 new_hop.usage = 'boil';
@@ -3982,11 +4014,13 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
           this.malts.some((malt) => {
             if (malt.name === malt_node.getElementsByTagName('NAME')[0].innerHTML) {
               this.used_malts.push(malt);
-              const new_malt = { malt_id: malt.id, id: null,
-                  quantity: this.convertFromXml(parseFloat(malt_node.getElementsByTagName('AMOUNT')[0].innerHTML), 'malts'),
-                  color: this.convertFromXml(parseFloat(malt_node.getElementsByTagName('COLOR')[0].innerHTML), 'color'), malt_usage:
+              const new_malt = {
+                malt_id: malt.id, id: null,
+                quantity: this.convertFromXml(parseFloat(malt_node.getElementsByTagName('AMOUNT')[0].innerHTML), 'malts'),
+                color: this.convertFromXml(parseFloat(malt_node.getElementsByTagName('COLOR')[0].innerHTML), 'color'), malt_usage:
                   ((this.maltTypes[malt.malt_type_id - 1].name === 'Grain' || this.maltTypes[malt.malt_type_id - 1].name === 'Adjunct') ?
-                        'Mash' : 'Boil') };
+                    'Mash' : 'Boil')
+              };
 
               this.recipe.recipe_malts_attributes.push(new_malt);
               found = true;
@@ -4006,13 +4040,15 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
           this.yeast.some((yeast) => {
             if ((yeast_node.getElementsByTagName(
               'PRODUCT_ID')[0] && yeast.product_id === yeast_node.getElementsByTagName('PRODUCT_ID')[0].innerHTML) ||
-                    (!yeast_node.getElementsByTagName('PRODUCT_ID')[0] && yeast.name === yeast_node.getElementsByTagName(
-                      'NAME')[0].innerHTML)) {
+              (!yeast_node.getElementsByTagName('PRODUCT_ID')[0] && yeast.name === yeast_node.getElementsByTagName(
+                'NAME')[0].innerHTML)) {
               this.used_yeast.push(yeast);
-              const new_yeast = { yeast_id: yeast.id, id: null,
-                  quantity: this.convertFromXml(parseFloat(yeast_node.getElementsByTagName('AMOUNT')[0].innerHTML), 'yeasts'),
-                  fermentation_stage: yeast_node.getElementsByTagName(
-                    'ADD_TO_SECONDARY')[0] ? (yeast_node.getElementsByTagName('ADD_TO_SECONDARY')[0].innerHTML === 'TRUE' ? 2 : 1) : 1 };
+              const new_yeast = {
+                yeast_id: yeast.id, id: null,
+                quantity: this.convertFromXml(parseFloat(yeast_node.getElementsByTagName('AMOUNT')[0].innerHTML), 'yeasts'),
+                fermentation_stage: yeast_node.getElementsByTagName(
+                  'ADD_TO_SECONDARY')[0] ? (yeast_node.getElementsByTagName('ADD_TO_SECONDARY')[0].innerHTML === 'TRUE' ? 2 : 1) : 1
+              };
 
               this.recipe.recipe_yeasts_attributes.push(new_yeast);
               found = true;
@@ -4032,9 +4068,11 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
           this.waters.some((water) => {
             if (water.name === water_node.getElementsByTagName('NAME')[0].innerHTML) {
               this.used_waters.push(water);
-              const new_water = { water_id: water.id, id: null,
-                  quantity: this.convertFromXml(parseFloat(
-                    water_node.getElementsByTagName('AMOUNT')[0].innerHTML), 'liquid'), boil: false };
+              const new_water = {
+                water_id: water.id, id: null,
+                quantity: this.convertFromXml(parseFloat(
+                  water_node.getElementsByTagName('AMOUNT')[0].innerHTML), 'liquid'), boil: false
+              };
 
               this.recipe.recipe_waters_attributes.push(new_water);
               found = true;
@@ -4135,20 +4173,20 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
 
     return error_list;
 
-  /*
-    // recipe_json.recipe.asst_brewer
-
-    // recipe_json.recipe.taste_rating
-    // recipe_json.recipe.fermentation_stages
-    // recipe_json.recipe.tertiary_age
-    // recipe_json.recipe.tertiary_temp
-    // recipe_json.recipe.age
-    // recipe_json.recipe.age_temp
-    // recipe_json.recipe.forced_carbonation
-    // recipe_json.recipe.priming_sugar_name
-    // recipe_json.recipe.priming_sugar_equiv
-    // recipe_json.recipe.keg_priming_factor
-    */
+    /*
+      // recipe_json.recipe.asst_brewer
+  
+      // recipe_json.recipe.taste_rating
+      // recipe_json.recipe.fermentation_stages
+      // recipe_json.recipe.tertiary_age
+      // recipe_json.recipe.tertiary_temp
+      // recipe_json.recipe.age
+      // recipe_json.recipe.age_temp
+      // recipe_json.recipe.forced_carbonation
+      // recipe_json.recipe.priming_sugar_name
+      // recipe_json.recipe.priming_sugar_equiv
+      // recipe_json.recipe.keg_priming_factor
+      */
   }
 
   parseXmlImport(recipe) {
@@ -4214,7 +4252,7 @@ this.recipe.recipe_waters_attributes[i].quantity, 'liquid') / total_gallons);
     fileReader.readAsText(xml_file);
   }
 
-  openDetail(detailPopup, index= 0) {
+  openDetail(detailPopup, index = 0) {
     this.detailIndex = index;
     this.detailModal = this._modalService.open(detailPopup, { size: 'lg' });
   }

@@ -1,15 +1,15 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../user/auth.service';
 
-import { RecipeService } from '../recipe.service';
+//import { RecipeService } from '../recipe.service';
 import { DesignerService } from '../designer.service';
 import { SaveDialogService } from '../save-dialog.service';
 
-import { DecimalPipe } from '@angular/common';
+//import { DecimalPipe } from '@angular/common';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import * as jsPDF from 'jspdf';
-import * as html2canvas from 'html2canvas';
+//import * as html2canvas from 'html2canvas';
 import { Observable } from 'rxjs/Rx';
 
 @Component({
@@ -37,10 +37,13 @@ export class RecipeEditComponent implements OnInit {
   // xml
   xml_to_import: File = null;
 
-  constructor(private _recipeService: RecipeService,
-    public _authService: AuthService, private _modalService: NgbModal,
-    public _designer: DesignerService, private _activatedRoute: ActivatedRoute,
-    public _dialogService: SaveDialogService, private router: Router, ) { }
+  constructor(
+    //private _recipeService: RecipeService,
+    public _authService: AuthService,
+    private _modalService: NgbModal,
+    public _designer: DesignerService,
+    private _activatedRoute: ActivatedRoute,
+    public _dialogService: SaveDialogService ) { }
 
   ngOnInit() {
     this.style_collapse = true;

@@ -9,7 +9,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "ng build --prod"
+    "postinstall": "ng build --prod",
+    "bundle-report": "webpack-bundle-analyzer dist/stats.json"
   },
   "private": true,
   "dependencies": {
@@ -66,7 +67,8 @@
     "karma-jasmine-html-reporter": "^1.4.0",
     "protractor": "^5.4.2",
     "ts-node": "~7.0.1",
-    "tslint": "~5.11.0"
+    "tslint": "~5.11.0",
+    "webpack-bundle-analyzer": "^3.1.0"
   },
   "engines": {
     "node": "9.4.0",
