@@ -1,4 +1,7 @@
 @import "../../../styles.scss";
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
 
 .paginate-text {
   max-width: 50px;
@@ -96,10 +99,7 @@
   padding: 0;
 }
 
-
-
-@media screen and (max-width: 420px) {
-
+@include media-breakpoint-down(xs) {
   h3 {
     font-size: 1.5rem;
   }
@@ -135,17 +135,5 @@
     padding-bottom: 2px;
     font-size: smaller;
   }
-
-}
-
-@media screen and (max-width: 575px) {
-
-}
-
-@media screen and (max-width: 767px) {
-
-}
-
-@media screen and (max-width: 991px) {
 
 }
