@@ -47,7 +47,8 @@ export class AppHeaderComponent implements OnInit {
         }
       },
       err => {
-        window.alert('Ironically, there was an error sending your message. Please feel free to yell at us on github.com/buildabeer/buildabeer');
+        window.alert('Ironically, there was an error sending your message.' +
+          ' Please feel free to yell at us on github.com/buildabeer/buildabeer');
       });
   }
 

@@ -7,8 +7,10 @@ $theme-colors: (
   "primary": #ff9901
   );
 
-// @import "~bootstrap/dist/css/bootstrap.min.css";
 @import "~bootstrap/scss/bootstrap";
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
 
 .switch {
   display: inline-block;
@@ -84,27 +86,10 @@ input:checked + .slider:before {
 
 }
 
-// XSmall devices
-@media (min-width: 420px) { 
-  
+@include media-breakpoint-down(xs) {
+
 }
 
-// Small devices (landscape phones, 576px and up)
-@media (min-width: 576px) { 
-  
-}
+@include media-breakpoint-up(xs) {
 
-// Medium devices (tablets, 768px and up)
-@media (min-width: 768px) { 
-  
-}
-
-// Large devices (desktops, 992px and up)
-@media (min-width: 992px) { 
-  
-}
-
-// Extra large devices (large desktops, 1200px and up)
-@media (min-width: 1200px) { 
-  
 }
