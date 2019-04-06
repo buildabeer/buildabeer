@@ -3,3 +3,9 @@
   margin-bottom: 60px;
   min-height: calc(100vh - 120px);
 }
+
+@media screen and (max-width: 420px) {
+  .body {
+    padding-top: 80px;
+  }
+}
