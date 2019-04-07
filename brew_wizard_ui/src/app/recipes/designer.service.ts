@@ -2643,18 +2643,14 @@ export class DesignerService {
   getTotalNewYeastCells(i: number): number {
     let old_cells;
     if (i < 0) {
-      return 0;
+      return this.getTotalYeastCells();
     } else if (i === 0) {
       old_cells = this.getTotalYeastCells();
     } else {
       old_cells = this.getTotalNewYeastCells(i - 1);
     }
 
-    if (old_cells === 0) {
-      return 0;
-    }
-
-    let new_cells = this.getNewYeastCells(i, old_cells);
+    let new_cells: number = this.getNewYeastCells(i, old_cells);
 
     //Not used?
     //let growth_factor = new_cells / old_cells;
@@ -2666,7 +2662,7 @@ export class DesignerService {
   }
 
   getYeastGrowthRate(i: number, old_cells: number): number {
-    let cells_over_egrams = old_cells / this.getEGrams(i);
+    let cells_over_egrams: number = old_cells / this.getEGrams(i);
     switch (this.recipe.yeast_starters_attributes[i].aeration_method) {
       case 'stir':
         if (cells_over_egrams > 3.5) {

@@ -1232,7 +1232,7 @@
                 </div>
               </div>
 
-              <h3 class="underline"><span ngbTooltip="There is currently not enough yeast, consider using a starter to increase your yeast count from {{ _designer.getTotalYeastCells() }} billion to {{ _designer.yeastNeeded() | number:'1.1-2' }} billion." *ngIf="_designer.getTotalYeastCells() < _designer.yeastNeeded();"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span> Yeast Starter</h3>
+              <h3 class="underline"><span ngbTooltip="There is currently not enough yeast, consider using a starter to increase your yeast count from {{ _designer.getTotalStarterYeast() }} billion to {{ _designer.yeastNeeded() | number:'1.1-2' }} billion." *ngIf="_designer.getTotalStarterYeast() < _designer.yeastNeeded()"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span> Yeast Starter</h3>
               <div class="container-fluid pad-bottom">
                 <div class="row pad-bottom border-bottom" *ngFor="let starter of _designer.recipe.yeast_starters_attributes; let i = index">
                   <div class="col-8">
@@ -2583,7 +2583,7 @@
                     <i class="fas fa-exclamation-triangle img-responsive warning"></i>
                   </span>{{ _designer.checkPoundsToGrams(_designer.getTotalHopWeight(), 'hops') | number:'1.1-2' }} {{ _designer.measurement.hops === 'us' ? 'oz' : 'g' }}
                 </div>
-                <div>Total yeast: {{ _designer.getTotalYeast() | number:'1.1-2' }} pkgs - {{ _designer.getTotalYeastCells() | number:'1.1-1' }} billion cells <span ngbTooltip="There is currently not enough yeast, consider using a starter to increase your yeast count from {{ _designer.getTotalYeastCells() | number:'1.1-2' }} billion to {{ _designer.yeastNeeded() | number:'1.1-2' }} billion." *ngIf="_designer.getTotalYeastCells() < _designer.yeastNeeded();"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span></div>
+                <div>Total yeast: {{ _designer.getTotalYeast() | number:'1.1-2' }} pkgs - {{ _designer.getTotalYeastCells() | number:'1.1-1' }} billion cells <span ngbTooltip="There is currently not enough yeast, consider using a starter to increase your yeast count from {{ _designer.getTotalStarterYeast() | number:'1.1-2' }} billion to {{ _designer.yeastNeeded() | number:'1.1-2' }} billion." *ngIf="_designer.getTotalStarterYeast() < _designer.yeastNeeded();"><i class="fas fa-exclamation-triangle img-responsive warning"></i></span></div>
                 <div *ngIf="_designer.getTotalStarterYeast() > _designer.getTotalYeastCells()">Yeast after starter: {{ _designer.getTotalStarterYeast() | number:'1.1-2' }} billion cells</div>
               </div>
             </div>
