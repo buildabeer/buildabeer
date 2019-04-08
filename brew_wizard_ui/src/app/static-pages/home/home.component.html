@@ -1,33 +1,41 @@
 <div class="row welcome">
   <div class="center">
-    <h1> Welcome!</h1>
+    <h1>Build-A-Beer</h1>
     <p>
-      Recipe design made easy.
+      Recipe design made easy!
     </p>
   </div>
 </div>
-<div class="row welcome">
+<div class="row welcome" *ngIf="!(_authService.userSignedIn$ | async)">
   <div class="center">
-    <a routerLink="register" *ngIf="!(_authService.userSignedIn$ | async)" class="reg-link btn btn-primary">
-      <i class="fas fa-users large-icon"></i>
-      <p>Register Here<br />Save recipes, equipment profiles,<br />calendar reminders</p>
+    <a routerLink="register" class="main-link btn btn-primary mr-1 mb-1">
+      <i class="fas fa-users medium-icon"></i>
+      <p>Register</p>
+    </a>
+    <a routerLink="recipes/new" class="main-link btn btn-primary ml-1 mb-1">
+      <i class="fas fa-id-card medium-icon"></i>
+      <p>Login</p>
     </a>
   </div>
 </div>
 <div class="row welcome">
   <div class="center">
-    <a routerLink="recipes/new" class="main-link btn btn-primary">
-      <i class="fas fa-plus-square icon"></i>
-      <p>New Recipe</p>
-    </a>
-    <a routerLink="recipes" class="main-link btn btn-primary ml-1">
-      <i class="fas fa-clipboard-list icon"></i>
+    <a routerLink="recipes" class="reg-link btn btn-primary mr-1 mt-1">
+      <i class="fas fa-clipboard-list medium-icon"></i>
       <p>Browse Recipes</p>
     </a>
+    <a routerLink="login" class="reg-link btn btn-primary ml-1 mt-1" *ngIf="!(_authService.userSignedIn$ | async)">
+      <i class="fas fa-plus-square medium-icon"></i>
+      <p>New Recipe</p>
+    </a>
+    <a routerLink="recipes/new" class="reg-link btn btn-primary ml-1 mt-1" *ngIf="(_authService.userSignedIn$ | async)">
+      <i class="fas fa-plus-square medium-icon"></i>
+      <p>New Recipe</p>
+    </a>
   </div>
 </div>
 <div class="row welcome">
   <div class="center">
-    <p><br/>Where we aim to bring centuries of trial, experience, and research to your aid.</p>
+    <p class="tagline">We bring centuries of experience and research to your aid.</p>
   </div>
 </div>

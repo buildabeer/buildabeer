@@ -1,5 +1,15 @@
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+
 .body {
   padding-top: 100px;
   margin-bottom: 60px;
   min-height: calc(100vh - 120px);
+}
+
+@include media-breakpoint-down(xs) {
+  .body {
+    padding-top: 80px;
+  }
 }

@@ -1,15 +1,18 @@
 .main-link {
-  height: 150px;
   width: 150px;
 }
 
 .reg-link {
-  height: 182px;
-  width: 304px;
+  width: 150px;
 }
 
 .welcome {
   text-align: center;
+}
+
+.tagline {
+  margin-left: 10%;
+  margin-right: 10%;
 }
 
 .center {
@@ -18,11 +21,16 @@
 }
 
 .icon {
-  height: 100px;
-  width: 100px;
+  height: 1rem;
+  width: 1rem;
+}
+
+.medium-icon {
+  height: 4rem;
+  width: 4rem;
 }
 
 .large-icon {
-  height: 100px;
-  width: 200px;
+  height: 6rem;
+  width: 6rem;
 }

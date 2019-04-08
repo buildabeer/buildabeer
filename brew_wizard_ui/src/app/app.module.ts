@@ -118,6 +118,7 @@ import { LicenseComponent } from './static-pages/license/license.component';
 import { HopRelationsComponent } from './hop/hop-relations/hop-relations.component';
 import { YeastRelationsComponent } from './yeast/yeast-relations/yeast-relations.component';
 import { StyleYeastRelationsComponent } from './style/style-yeast-relations/style-yeast-relations.component';
+import { ResourcesComponent } from './static-pages/resources/resources.component';
 
 import { RecipeRunnerComponent } from './recipe-runner/recipe-runner/recipe-runner.component';
 import { HltRunnerComponent } from './recipe-runner/hlt-runner/hlt-runner.component';
@@ -216,6 +217,7 @@ import { TimerComponent } from './recipe-runner/timer/timer.component';
     FermentationRunnerComponent,
     ReminderRunnerComponent,
     TimerComponent,
+    ResourcesComponent,
   ],
   imports: [
     AppRoutingModule,

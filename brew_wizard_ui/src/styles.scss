@@ -7,8 +7,10 @@ $theme-colors: (
   "primary": #ff9901
   );
 
-// @import "~bootstrap/dist/css/bootstrap.min.css";
 @import "~bootstrap/scss/bootstrap";
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
 
 .switch {
   display: inline-block;
@@ -84,3 +86,10 @@ input:checked + .slider:before {
 
 }
 
+@include media-breakpoint-down(xs) {
+
+}
+
+@include media-breakpoint-up(xs) {
+
+}
