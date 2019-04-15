@@ -1,7 +1,12 @@
 <div class="container-fluid mt-2">
   <div class="row pb-2">
-    <div class="col-10">
+    <div class="col-8">
       <h2>Recipe Runner - {{ _designer.recipe.name }}</h2>
+    </div>
+    <div class="col-2">
+      <button type="button" title="Save History" class="btn btn-primary save-group" (click)="_newHistoryService.editHistory()">
+        <i class="fas fa-save icon img-responsive"></i>
+      </button>
     </div>
     <div class="col-2">
       <button type="button" class="runner-close float-right btn btn-danger" aria-label="Close" (click)="finish()">

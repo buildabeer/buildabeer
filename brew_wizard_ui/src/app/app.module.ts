@@ -130,6 +130,8 @@ import { FermentationRunnerComponent } from './recipe-runner/fermentation-runner
 import { ReminderRunnerComponent } from './recipe-runner/reminder-runner/reminder-runner.component';
 import { TimerComponent } from './recipe-runner/timer/timer.component';
 
+import { NewHistoryService } from './recipe-runner/new_history.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -237,7 +239,7 @@ import { TimerComponent } from './recipe-runner/timer/timer.component';
                 AgentService, MaltService, StyleService, HopService,
                 YeastService, EquipmentService, RecipeService, DesignerService,
                 CanDeactivateGuard, SaveDialogService, UserService, MiscellaneousService,
-                AcidService, GoogleAnalyticsService],
+                AcidService, GoogleAnalyticsService, NewHistoryService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -132,7 +132,7 @@ class RecipesController < ApplicationController
       render json: @recipe.errors, status: :unprocessable_entity
     end
 
-    if(current_user.id === @recipe.user_id || (current_user.admin? && @recipe["global"]))
+    if current_user.id == @recipe.user_id || (current_user.admin? && @recipe["global"]))
       @recipe.destroy
     else
       render json: @recipe.errors, status: :unprocessable_entity

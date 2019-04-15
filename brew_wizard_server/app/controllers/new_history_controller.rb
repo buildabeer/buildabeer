@@ -25,13 +25,16 @@ class NewHistoriesController < ApplicationController
 
   # GET /new_histories/1
   def show
-    render json: @new_history, include: { style: {}, equipment: {}, water_profile: {}, new_history_malts: {},
-    malts: {}, new_history_waters: {}, waters: {}, new_history_water_agents: {},
-    water_agents: {}, new_history_hops: {}, hops: { include: { hop_relations: {} } }, new_history_yeasts: {},
-    new_history_mashes: {}, mash_steps: {}, target_water: {}, new_history_acids: {}, acids: {},
-    new_history_sparge_acids: {}, sparge_acids: {},
-    new_history_miscellaneous: {}, miscellaneous: {}, yeasts: { include: { yeast_relations: {} } },
-    yeast_starters: {} }
+    render json: @new_history, include: { 
+      boil_history: {},
+      chill_history: {},
+      fermentation_history: {},
+      mash_history: {},
+      mash_step_history: {},
+      reminder_history: {},
+      sparge_history: {},
+      hlt_history: {}
+    }
   end
 
   def count
@@ -47,18 +50,6 @@ class NewHistoriesController < ApplicationController
     @new_history = NewHistory.create(new_history_params)
     @new_history.user_id = current_user.id
 
-    if(@new_history["global"] && !current_user.admin?)
-      @new_history["global"] = false
-    end
-
-    if(@new_history["global"] && !current_user.admin?)
-      @new_history["global"] = false
-    end
-
-    if @new_history["new_history_date"]
-      @new_history["new_history_date"] = @new_history["new_history_date"].to_date
-    end
-
     if @new_history.save
       render json: @new_history, status: :created
     else
@@ -72,24 +63,10 @@ class NewHistoriesController < ApplicationController
       render json: @new_history.errors, status: :unprocessable_entity
     end
 
-    if(@new_history["global"] && !current_user.admin?)
-      @new_history["global"] = false
-    end
-
-    if(@new_history["global"] && !current_user.admin?)
-      @new_history["global"] = false
-    end
-
-    if @new_history["new_history_date"]
-      @new_history["new_history_date"] = @new_history["new_history_date"].to_date
-    end
-
-    mark_list = %w(yeast_starters new_history_acids new_history_yeasts 
-                   new_history_mashes new_history_malts new_history_hops new_history_water_agents
-                   new_history_waters)
+    mark_list = %w(mash_step_histories)
     mark_list.each { |m_list| black_mark(m_list, new_history_params) }
 
-    if((@new_history.user_id == current_user.id) || (@new_history["global"] && current_user.admin?)) && @new_history.update(new_history_params)
+    if @new_history.user_id == current_user.id && @new_history.update(new_history_params)
       render json: @new_history
     else
       render json: @new_history.errors, status: :unprocessable_entity
@@ -109,10 +86,10 @@ class NewHistoriesController < ApplicationController
   # DELETE /new_histories/1
   def destroy
     if !current_user
-      render json: @new_history.errors, status: :unprocessable_entity
+      render json: ["Must be logged in."], status: :unprocessable_entity
     end
 
-    if(current_user.id === @new_history.user_id || (current_user.admin? && @new_history["global"]))
+    if current_user.id == @new_history.user_id
       @new_history.destroy
     else
       render json: @new_history.errors, status: :unprocessable_entity
@@ -122,10 +99,8 @@ class NewHistoriesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_new_history
-      if !user_signed_in?
-        @new_history = NewHistory.where("id = ? AND global = ?", params[:id], true).first
-      else
-        @new_history = NewHistory.where("(user_id = ? OR global = ?) AND id = ?", current_user.id, true, params[:id]).first
+      if user_signed_in?
+        @new_history = NewHistory.where("user_id = ? AND id = ?", current_user.id, params[:id]).first
       end
     end
 
@@ -135,21 +110,20 @@ class NewHistoriesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def new_history_params
-      params.require(:new_history).permit(:name, :id, :brewer, :new_history_date, :version,
-        :new_history_id, :batch_size, :boil_time, :equipment_id, :notes, :description,
-        :taste_notes, :style_id, :global, :target_water_id, :sparge_type, :mash_type,
-        :storage_type, :storage_temperature, :carbonation_volumes, :carbonation_with,
-        :primary_ferm_temp, :secondary_ferm_temp, :mash_ratio, :secondary_fermentation,
-        :primary_ferm_days, :secondary_ferm_days, :efficiency, :new_history_type, :water_profile_id,
-        new_history_waters_attributes: [:id, :water_id, :quantity, :boil],
-        new_history_water_agents_attributes: [:id, :water_agent_id, :quantity],
-        new_history_malts_attributes: [:id, :malt_id, :quantity, :color, :malt_usage],
-        new_history_hops_attributes: [:id, :hop_id, :quantity, :alpha, :time, :form, :usage],
-        new_history_yeasts_attributes: [:id, :yeast_id, :quantity, :fermentation_stage],
-        new_history_acids_attributes: [:id, :acid_id, :quantity],
-        new_history_sparge_acids_attributes: [:id, :acid_id, :quantity],
-        new_history_mashes_attributes: [:id, :mash_step_id, :temperature, :time],
-        new_history_miscellaneous_attributes: [:id, :miscellaneou_id, :quantity, :quantity_label, :time, :usage],
-        yeast_starters_attributes: [:id, :aeration_method, :gravity, :volume])
+      params.require(:new_history).permit(:user_id, :recipe_id, :recipe_name, :brew_date, :ingredient_list,
+        hlt_histories_attributes: [:id, :hlt_temp, :hlt_quantity, :agent_list, :hlt_notes],
+        mash_histories_attributes: [:id, :hlt_addition, :hlt_addition_temp, :ingredient_list, 
+                                    :ph_addition, :mash_notes],
+        mash_step_histories_attributes: [:id, :mash_history_id, :step_counter, :step_temperature,
+                                         :step_minutes, :step_water_temperature, :step_water_quantity],
+        sparge_histories_attributes: [:id, :sparge_temperature, :sparge_quantity, :ingredient_list,
+                                      :sparge_notes],
+        boil_histories_attributes: [:id, :pre_boil_gravity, :pre_boil_quantity, :boil_minutes, 
+                                    :ingredient_list, :gravity_additions, :boil_notes],
+        chill_histories_attributes: [:id, :chill_method, :chill_minutes, :ingredient_list, :chill_notes],
+        fermentation_histories_attributes: [:id, :wort_quantity, :fermentation_days, :original_gravity,
+                                            :fermentation_temperature, :aeration_method, :aeration_minutes,
+                                            :secondary_ferm_days, :ingredient_list, :fermentation_notes],
+        reminder_histories_attributes: [:id, :possible_reminders, :added_reminders, :reminder_notes])
     end
 end

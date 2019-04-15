@@ -16,6 +16,7 @@ class NewHistory < ApplicationRecord
 
   has_one :mash_history, dependent: :destroy
   accepts_nested_attributes_for :mash_histories
+  
   has_many :mash_step_histories, :through => :recipe_waters
   accepts_nested_attributes_for :mash_step_histories
 

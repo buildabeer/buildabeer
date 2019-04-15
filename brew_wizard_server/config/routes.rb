@@ -64,6 +64,8 @@ Rails.application.routes.draw do
   put '/recipes/:id', to: 'recipes#update'
   resources :recipes
 
+  resources :new_histories
+
   post '/contact_us', to: 'contacts#create'
 
   get '/measurement_settings', to: 'measurement_settings#show'
