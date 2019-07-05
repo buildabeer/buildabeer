@@ -16,6 +16,17 @@ class MiscellaneousController < ApplicationController
     render json: @miscellaneous.sort_by { |miscellaneous| miscellaneous.name.downcase }, methods: :recipe_count
   end
 
+  # GET /miscellaneous
+  def name_index
+    if !user_signed_in?
+      @miscellaneous = Miscellaneou.select("id, name").where(global: true)
+    else
+      @miscellaneous = Miscellaneou.select("id, name").where("global = ? OR user_id = ?", true, current_user.id)
+    end
+
+    render json: @miscellaneous.sort_by { |miscellaneous| miscellaneous.name.downcase }
+  end
+
   # GET /miscellaneous/1
   def show
     render json: @miscellaneous, methods: :recipe_count

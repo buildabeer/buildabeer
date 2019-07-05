@@ -16,7 +16,7 @@ class StylesController < ApplicationController
     render json: @styles.sort_by { |style| style.name.downcase }, methods: :recipe_count#, include: [:yeasts]
   end
 
-  def index_names
+  def name_index
     if !user_signed_in?
       @styles = Style.where(global: true)
     else

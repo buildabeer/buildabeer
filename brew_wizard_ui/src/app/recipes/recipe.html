@@ -818,13 +818,13 @@
                   </div>
                   <div class="col-7 no-pad">
                     <select id="addGrainDropdown" class="item-selector form-control" [(ngModel)]="_designer.add_malt" (ngModelChange)="_designer.onAddMalt($event)">
-                      <option *ngFor="let m of _designer.malts" [ngValue]="m">{{ m.name }}</option>
+                      <option *ngFor="let m of _designer.malt_name_list" [ngValue]="m">{{ m.name }}</option>
                     </select>
                   </div>
                 </div>
 
                 <div class="row">
-                  <app-malt-select [maltOptions]="_designer.malts" [maltTypes]="_designer.maltTypes" (selectedMalt)="_designer.selectedMaltEvent($event)"></app-malt-select>
+                  <app-malt-select [maltTypes]="_designer.maltTypes" (selectedMalt)="_designer.selectedMaltEvent($event)"></app-malt-select>
                 </div>
               </div>
 
@@ -983,13 +983,13 @@
                   </div>
                   <div class="col-7 no-right-pad">
                     <select id="addMiscDropdown" class="item-selector form-control" [(ngModel)]="_designer.add_misc" (ngModelChange)="_designer.onAddMiscellaneous($event)">
-                      <option *ngFor="let misc of _designer.miscellaneous" [ngValue]="misc">{{ misc.name }}</option>
+                      <option *ngFor="let misc of _designer.misc_name_list" [ngValue]="misc">{{ misc.name }}</option>
                     </select>
                   </div>
                 </div>
 
                 <div class="row">
-                  <app-miscellaneous-select [miscellaneousOptions]="_designer.miscellaneous" (selectedMiscellaneous)="_designer.selectedMiscellaneousEvent($event)"></app-miscellaneous-select>
+                  <app-miscellaneous-select (selectedMiscellaneous)="_designer.selectedMiscellaneousEvent($event)"></app-miscellaneous-select>
                 </div>
               </div>
             </div>
@@ -1073,13 +1073,13 @@
                   </div>
                   <div class="col-7 no-right-pad">
                     <select id="addHopDropdown" class="item-selector form-control" [(ngModel)]="_designer.add_hop" (ngModelChange)="_designer.onAddHop($event)">
-                      <option *ngFor="let h of _designer.hops" [ngValue]="h">{{ h.name }}</option>
+                      <option *ngFor="let h of _designer.hop_name_list" [ngValue]="h">{{ h.name }} ({{ h.origin }})</option>
                     </select>
                   </div>
                 </div>
 
                 <div class="row">
-                  <app-hop-select [hopOptions]="_designer.hops" (selectedHop)="_designer.selectedHopEvent($event)"></app-hop-select>
+                  <app-hop-select (selectedHop)="_designer.selectedHopEvent($event)"></app-hop-select>
                 </div>
               </div>
             </div>
@@ -1152,13 +1152,13 @@
                   </div>
                   <div class="col-7 no-right-pad">
                     <select id="addGrainDropdown" class="item-selector form-control" [(ngModel)]="_designer.add_yeast" (ngModelChange)="_designer.onAddYeast($event, 1)">
-                      <option *ngFor="let y of _designer.yeast" [ngValue]="y">{{ y.name }}</option>
+                      <option *ngFor="let y of _designer.yeast_name_list" [ngValue]="y">{{ y.name }}</option>
                     </select>
                   </div>
                 </div>
 
                 <div class="row">
-                  <app-yeast-select [yeastOptions]="_designer.yeast" [styleId]="_designer.used_style ? _designer.used_style.id : _designer.styles[0]" (selectedYeast)="_designer.selectedYeastEvent($event, 1)"></app-yeast-select>
+                  <app-yeast-select [styleId]="_designer.used_style ? _designer.used_style.id : _designer.styles[0]" (selectedYeast)="_designer.selectedYeastEvent($event, 1)"></app-yeast-select>
                 </div>
               </div>
               <div class="container">
@@ -1222,13 +1222,13 @@
                   </div>
                   <div class="col-7 no-right-pad">
                     <select id="addGrainDropdown" class="item-selector form-control" [(ngModel)]="_designer.add_yeast" (ngModelChange)="_designer.onAddYeast($event, 2)">
-                      <option *ngFor="let y of _designer.yeast" [ngValue]="y">{{ y.name }}</option>
+                      <option *ngFor="let y of _designer.yeast_name_list" [ngValue]="y">{{ y.name }}</option>
                     </select>
                   </div>
                 </div>
 
                 <div class="row">
-                  <app-yeast-select [yeastOptions]="_designer.yeast" [styleId]="_designer.used_style ? _designer.used_style.id : _designer.styles[0]" (selectedYeast)="_designer.selectedYeastEvent($event, 2)"></app-yeast-select>
+                  <app-yeast-select [styleId]="_designer.used_style ? _designer.used_style.id : _designer.styles[0]" (selectedYeast)="_designer.selectedYeastEvent($event, 2)"></app-yeast-select>
                 </div>
               </div>
 

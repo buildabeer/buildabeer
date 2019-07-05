@@ -9,7 +9,17 @@
     </button>
   </div>
   <div class="modal-body">
-    <div class="row">
+    <div *ngIf="is_loading" class="row">
+      <div class="col-md-12">
+        <app-loading *ngIf="is_loading" [message]="loading_message" ></app-loading>
+      </div>
+    </div>
+    <div *ngIf="!is_loading && error" class="row">
+      <div class="col-md-12">
+        <h2>Failed to retrieve fermentable data.</h2>
+      </div>
+    </div>
+    <div *ngIf="!is_loading && !error" class="row">
       <div class="col-md-12">
         <div class="row">
           <div class="col-md-10 offset-md-1">

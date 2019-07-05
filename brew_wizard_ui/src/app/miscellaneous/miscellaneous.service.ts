@@ -25,6 +25,12 @@ export class MiscellaneousService {
       .catch(this.handleError);
   }
 
+  getMiscellaneousNames(): any {
+    return this.http.get(`${environment.token_auth_config.apiBase}/miscellaneous/names`)
+      .map((response: any) => response)
+      .catch(this.handleError);
+  }
+
   createMiscellaneous(miscellaneou: IMiscellaneous): any {
     return this.http.post(`${environment.token_auth_config.apiBase}/miscellaneous/`, {miscellaneou});
   }

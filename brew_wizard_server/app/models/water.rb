@@ -14,6 +14,6 @@ class Water < ApplicationRecord
   validates :description, length: { maximum: 500 }
 
   def recipe_count
-    return self.recipes.count + Recipe.where(target_water_id: self.id).count
+    return self.recipes.count
   end
 end

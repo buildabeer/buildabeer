@@ -26,7 +26,7 @@ export class HopService {
   }
 
   getHopNames(): any {
-    return this.http.get(`${environment.token_auth_config.apiBase}/hop_names`)
+    return this.http.get(`${environment.token_auth_config.apiBase}/hops/names`)
       .map((response: any) => response)
       .catch(this.handleError);
   }

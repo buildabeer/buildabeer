@@ -83,13 +83,8 @@ export class DesignerService {
   waters: IWaterProfile[] = [];
   agents: IWaterAgent[] = [];
   acids: IAcid[] = [];
-  malts: IMalt[] = [];
   maltTypes: any[] = [];
-  hops: IHop[] = [];
-  yeast: IYeast[] = [];
-  styles: IStyle[] = [];
   equipment: IEquipment[] = [];
-  miscellaneous: IMiscellaneous[] = [];
   mash_steps: any[] = [];
   water_profiles: {
     id: number, profile_type: string, strength: string, bitterness: string, bitterness_2: string,
@@ -98,8 +93,14 @@ export class DesignerService {
     magnesium_min: number, magnesium_max: number, ra_min: number, ra_max: number, acidify: string
   }[] = [];
 
+  styles: IStyle[] = [];
 
 
+  malt_name_list: {id: number, name: string}[] = []
+  yeast_name_list: {id: number, name: string, product_id: string}[] = []
+  style_name_list: {id: number, name: string}[] = []
+  hop_name_list: {id: number, name: string, origin: string}[] = []
+  misc_name_list: {id: number, name: string}[] = []
 
   // water vars
   target_water: IWaterProfile = null;
@@ -236,19 +237,6 @@ export class DesignerService {
       ibu: 'tinseth',
       color: 'srm'
     };
-
-    // lists
-    this.waters = [];
-    this.agents = [];
-    this.malts = [];
-    this.maltTypes = [];
-    this.hops = [];
-    this.miscellaneous = [];
-    this.yeast = [];
-    this.styles = [];
-    this.equipment = [];
-    this.mash_steps = [];
-    this.acids = [];
 
     this.recipe = {
       name: '',
@@ -446,7 +434,7 @@ export class DesignerService {
           console.error(error);
         });
 
-    this._maltService.getMalts()
+    this._maltService.getMaltNames()
       .retryWhen((err) => {
         return err.scan((retryCount) => {
           retryCount++;
@@ -458,7 +446,7 @@ export class DesignerService {
         }, 0).delay(1000);
       })
       .subscribe(maltData => {
-        this.malts = maltData;
+        this.malt_name_list = maltData;
         this.loading_malts = false;
       },
         error => {
@@ -466,7 +454,7 @@ export class DesignerService {
           console.error(error);
         });
 
-    this._hopService.getHops()
+    this._hopService.getHopNames()
       .retryWhen((err) => {
         return err.scan((retryCount) => {
           retryCount++;
@@ -478,7 +466,7 @@ export class DesignerService {
         }, 0).delay(1000);
       })
       .subscribe(hopData => {
-        this.hops = hopData;
+        this.hop_name_list = hopData;
         this.loading_hops = false;
       },
         error => {
@@ -486,7 +474,7 @@ export class DesignerService {
           console.error(error);
         });
 
-    this._miscService.getMiscellanies()
+    this._miscService.getMiscellaneousNames()
       .retryWhen((err) => {
         return err.scan((retryCount) => {
           retryCount++;
@@ -498,7 +486,7 @@ export class DesignerService {
         }, 0).delay(1000);
       })
       .subscribe(miscData => {
-        this.miscellaneous = miscData;
+        this.misc_name_list = miscData;
         this.loading_miscs = false;
       },
         error => {
@@ -506,7 +494,7 @@ export class DesignerService {
           console.error(error);
         });
 
-    this._yeastService.getYeasts()
+    this._yeastService.getYeastNames()
       .retryWhen((err) => {
         return err.scan((retryCount) => {
           retryCount++;
@@ -518,7 +506,7 @@ export class DesignerService {
         }, 0).delay(1000);
       })
       .subscribe(yeastData => {
-        this.yeast = yeastData;
+        this.yeast_name_list = yeastData;
         this.loading_yeast = false;
       },
         error => {
@@ -1236,58 +1224,58 @@ export class DesignerService {
   }
 
   setLoadingMessage() {
-    if (this.loading_waters) {
-      this.loading_message = 'Loading water...';
-      return;
-    }
-    if (this.loading_agents) {
-      this.loading_message = 'Loading water agents...';
-      return;
-    }
-    if (this.loading_acids) {
-      this.loading_message = 'Loading acids...';
-      return;
-    }
-    if (this.loading_mashsteps) {
-      this.loading_message = 'Loading mash steps...';
-      return;
-    }
-    if (this.loading_malttypes) {
-      this.loading_message = 'Loading fermentable types...';
-      return;
-    }
-    if (this.loading_malts) {
-      this.loading_message = 'Loading fermentables...';
-      return;
-    }
-    if (this.loading_styles) {
-      this.loading_message = 'Loading styles...';
-      return;
-    }
-    if (this.loading_equipment) {
-      this.loading_message = 'Loading equipment...';
-      return;
-    }
-    if (this.loading_water_profiles) {
-      this.loading_message = 'Loading water profiles...';
-      return;
-    }
-    if (this.loading_recipe) {
-      this.loading_message = 'Loading recipe...';
-      return;
-    }
-    if (this.loading_measurements) {
-      this.loading_message = 'Loading measurements...';
-      return;
-    }
-    if (this.loading_hops) {
-      this.loading_message = 'Loading hops...';
-      return;
-    }
-    if (this.loading_yeast) {
-      this.loading_message = 'Loading yeast...';
-      return;
-    }
+    // if (this.loading_waters) {
+    //   this.loading_message = 'Loading water...';
+    //   return;
+    // }
+    // if (this.loading_agents) {
+    //   this.loading_message = 'Loading water agents...';
+    //   return;
+    // }
+    // if (this.loading_acids) {
+    //   this.loading_message = 'Loading acids...';
+    //   return;
+    // }
+    // if (this.loading_mashsteps) {
+    //   this.loading_message = 'Loading mash steps...';
+    //   return;
+    // }
+    // if (this.loading_malttypes) {
+    //   this.loading_message = 'Loading fermentable types...';
+    //   return;
+    // }
+    // if (this.loading_malts) {
+    //   this.loading_message = 'Loading fermentables...';
+    //   return;
+    // }
+    // if (this.loading_styles) {
+    //   this.loading_message = 'Loading styles...';
+    //   return;
+    // }
+    // if (this.loading_equipment) {
+    //   this.loading_message = 'Loading equipment...';
+    //   return;
+    // }
+    // if (this.loading_water_profiles) {
+    //   this.loading_message = 'Loading water profiles...';
+    //   return;
+    // }
+    // if (this.loading_recipe) {
+    //   this.loading_message = 'Loading recipe...';
+    //   return;
+    // }
+    // if (this.loading_measurements) {
+    //   this.loading_message = 'Loading measurements...';
+    //   return;
+    // }
+    // if (this.loading_hops) {
+    //   this.loading_message = 'Loading hops...';
+    //   return;
+    // }
+    // if (this.loading_yeast) {
+    //   this.loading_message = 'Loading yeast...';
+    //   return;
+    // }
   }
 
   isLoading(): boolean {
@@ -1832,18 +1820,12 @@ export class DesignerService {
 
   // malt
 
-  onAddMalt(add_malt): void {
+  onAddMalt(malt): void {
     setTimeout(() => {
       this.add_malt = null;
     });
 
-    this.used_malts.push(Object.assign({}, add_malt));
-    this.recipe.recipe_malts_attributes.push({
-      'id': null, 'malt_id': add_malt.id,
-      'color': add_malt.color, 'quantity': 0, 'malt_usage':
-        ((this.maltTypes[add_malt.malt_type_id - 1].name === 'Grain' || this.maltTypes[add_malt.malt_type_id - 1].name === 'Adjunct') ?
-          'Mash' : 'Boil')
-    });
+    this.addUsedMalt(malt);
   }
 
   removeMalt(malt_index): void {
@@ -2362,28 +2344,12 @@ export class DesignerService {
 
   // hop
 
-  onAddHop(add_hop): void {
+  onAddHop(hop): void {
     setTimeout(() => {
       this.add_hop = null;
     });
 
-    this.used_hops.push(Object.assign({}, add_hop));
-
-    const newAddition = {
-      hop_id: add_hop.id, id: null,
-      quantity: 0, alpha: add_hop.alpha, time: 0, form: 'Pellet',
-      usage: 'boil'
-    };
-
-    if (add_hop.hop_type === 'Bittering') {
-      newAddition.time = 60;
-    } else if (add_hop.hop_type === 'Aroma') {
-      newAddition.time = 5;
-    } else {
-      newAddition.time = 15;
-    }
-
-    this.recipe.recipe_hops_attributes.push(newAddition);
+    this.addUsedHop(hop)
   }
 
   removeHop(hop_index): void {
@@ -2391,11 +2357,11 @@ export class DesignerService {
     this.recipe.recipe_hops_attributes.splice(hop_index, 1);
   }
 
-  getHopSubstitutes(relation_list): IHop[] {
-    const hop_list: IHop[] = [];
+  getHopSubstitutes(relation_list): {name: string, id: number, origin: string}[] {
+    const hop_list: {id: number, name: string, origin: string}[] = [];
 
     relation_list.forEach((relation) => {
-      this.hops.some((hop) => {
+      this.hop_name_list.some((hop) => {
         if (hop.id === relation.hop_relation_id) {
           hop_list.push(hop);
           return true;
@@ -2407,9 +2373,26 @@ export class DesignerService {
   }
 
   substituteHop(index, sub) {
-    this.used_hops[index] = sub;
-    this.recipe.recipe_hops_attributes[index].hop_id = sub.id;
-    this.recipe.recipe_hops_attributes[index].alpha = sub.alpha;
+    this._hopService.getHop(sub.id)
+      .retryWhen((err) => {
+        return err.scan((retryCount) => {
+          retryCount++;
+          if (retryCount < 3) {
+            return retryCount;
+          } else {
+            throw (err);
+          }
+        }, 0).delay(1000);
+      })
+      .subscribe(hopData => {
+        this.used_hops[index] = hopData;
+        this.recipe.recipe_hops_attributes[index].hop_id = hopData.id;
+        this.recipe.recipe_hops_attributes[index].alpha = hopData.alpha;
+      },
+      error => {
+        alert("Failed to find " + sub.name)
+        console.error(error);
+      });
   }
 
   displayHopInfo(usage, time): string {
@@ -2429,7 +2412,23 @@ export class DesignerService {
 
   selectedHopEvent(event): void {
     for (let i = 0; i < event.hops.length; i++) {
-      this.onAddHop(event.hops[i]);
+      this.used_hops.push(Object.assign({}, event.hops[i]));
+
+      const newAddition = {
+        hop_id: event.hops[i].id, id: null,
+        quantity: 0, alpha: event.hops[i].alpha, time: 0, form: 'Pellet',
+        usage: 'boil'
+      };
+
+      if (event.hops[i].hop_type === 'Bittering') {
+        newAddition.time = 60;
+      } else if (event.hops[i].hop_type === 'Aroma') {
+        newAddition.time = 5;
+      } else {
+        newAddition.time = 15;
+      }
+
+      this.recipe.recipe_hops_attributes.push(newAddition);
     }
   }
 
@@ -2557,17 +2556,7 @@ export class DesignerService {
       this.add_misc = null;
     });
 
-    this.used_miscellaneous.push(Object.assign({}, add_misc));
-
-    const newAddition = {
-      miscellaneou_id: add_misc.id, id: null,
-      quantity: (add_misc.amount / add_misc.batch_size) * this.recipe.batch_size,
-      quantity_label: add_misc.amount_label, time: this._miscService.calculateTime(add_misc.time).time,
-      time_label: this.capitalizeFirstLetter(this._miscService.calculateTime(add_misc.time).label),
-      usage: add_misc.usage
-    };
-
-    this.recipe.recipe_miscellaneous_attributes.push(newAddition);
+    this.addUsedMisc(add_misc)
   }
 
   removeMiscellaneous(misc_index): void {
@@ -2577,7 +2566,18 @@ export class DesignerService {
 
   selectedMiscellaneousEvent(event): void {
     for (let i = 0; i < event.miscellaneous.length; i++) {
-      this.onAddMiscellaneous(event.miscellaneous[i]);
+      var misc = event.miscellaneous[i];
+      this.used_miscellaneous.push(Object.assign({}, misc));
+
+      const newAddition = {
+        miscellaneou_id: misc.id, id: null,
+        quantity: (misc.amount / misc.batch_size) * this.recipe.batch_size,
+        quantity_label: misc.amount_label, time: this._miscService.calculateTime(misc.time).time,
+        time_label: this.capitalizeFirstLetter(this._miscService.calculateTime(misc.time).label),
+        usage: misc.usage
+      };
+
+      this.recipe.recipe_miscellaneous_attributes.push(newAddition);
     }
   }
 
@@ -2730,11 +2730,7 @@ export class DesignerService {
       this.add_yeast = null;
     });
 
-    this.used_yeast.push(Object.assign({}, add_yeast));
-    this.recipe.recipe_yeasts_attributes.push({
-      id: null, yeast_id: add_yeast.id,
-      quantity: 1, fermentation_stage: stage
-    });
+    this.addUsedYeast(add_yeast, stage)
   }
 
   removeYeast(yeast): void {
@@ -2743,11 +2739,11 @@ export class DesignerService {
     this.recipe.recipe_yeasts_attributes.splice(index, 1);
   }
 
-  getYeastSubstitutes(relation_list): IYeast[] {
-    const yeast_list: IYeast[] = [];
+  getYeastSubstitutes(relation_list): {name:string, id:number, product_id:string}[] {
+    const yeast_list: {name:string, id:number, product_id:string}[] = [];
 
     relation_list.forEach((relation) => {
-      this.yeast.some((yeast) => {
+      this.yeast_name_list.some((yeast) => {
         if (yeast.id === relation.yeast_relation_id) {
           yeast_list.push(yeast);
           return true;
@@ -3965,39 +3961,54 @@ export class DesignerService {
         for (let i = 0; i < hop_list.length; i++) {
           const hop_node = hop_list[i];
           found = false;
-          this.hops.some((hop) => {
-            if (hop.name === hop_node.getElementsByTagName('NAME')[0].innerHTML) {
-              this.used_hops.push(hop);
-              const new_hop = {
-                hop_id: hop.id, id: null,
-                quantity: this.convertFromXml(parseFloat(hop_node.getElementsByTagName('AMOUNT')[0].innerHTML), 'hops'),
-                alpha: parseFloat(hop_node.getElementsByTagName('ALPHA')[0].innerHTML),
-                time: parseInt(hop_node.getElementsByTagName('TIME')[0].innerHTML, 10),
-                form: hop_node.getElementsByTagName('FORM')[0] ? hop_node.getElementsByTagName('FORM')[0].innerHTML : 'Pellet',
-                usage: hop_node.getElementsByTagName('USE')[0].innerHTML
-              };
 
-              if (new_hop.usage === 'Boil') {
-                new_hop.usage = 'boil';
-              } else if (new_hop.usage === 'First Wort') {
-                new_hop.usage = 'fwh';
-              } else if (new_hop.usage === 'Dry Hop') {
-                new_hop.usage = 'dryhop';
-                new_hop.time = new_hop.time / 24 / 60;
-              } else {
-                new_hop.usage = 'knockout';
-              }
+          var hop_item = this.hop_name_list.find(key => key.name === hop_node.getElementsByTagName('NAME')[0].innerHTML)
+          if (hop_item) {
+            this._hopService.getHop(hop_item.id)
+              .retryWhen((err) => {
+                return err.scan((retryCount) => {
+                  retryCount++;
+                  if (retryCount < 3) {
+                    return retryCount;
+                  } else {
+                    throw (err);
+                  }
+                }, 0).delay(1000);
+              })
+              .subscribe(hopData => {
+                this.used_hops.push(hopData);
 
-              if (new_hop.form === 'Plug' || new_hop.form === 'Leaf') {
-                new_hop.form = 'Whole/Plug';
-              }
+                const new_hop = {
+                  hop_id: hopData.id, id: null,
+                  quantity: this.convertFromXml(parseFloat(hop_node.getElementsByTagName('AMOUNT')[0].innerHTML), 'hops'),
+                  alpha: parseFloat(hop_node.getElementsByTagName('ALPHA')[0].innerHTML),
+                  time: parseInt(hop_node.getElementsByTagName('TIME')[0].innerHTML, 10),
+                  form: hop_node.getElementsByTagName('FORM')[0] ? hop_node.getElementsByTagName('FORM')[0].innerHTML : 'Pellet',
+                  usage: hop_node.getElementsByTagName('USE')[0].innerHTML
+                };
 
-              this.recipe.recipe_hops_attributes.push(new_hop);
-              found = true;
-              return true;
-            }
-          });
-          if (!found) {
+                if (new_hop.usage === 'Boil') {
+                  new_hop.usage = 'boil';
+                } else if (new_hop.usage === 'First Wort') {
+                  new_hop.usage = 'fwh';
+                } else if (new_hop.usage === 'Dry Hop') {
+                  new_hop.usage = 'dryhop';
+                  new_hop.time = new_hop.time / 24 / 60;
+                } else {
+                  new_hop.usage = 'knockout';
+                }
+
+                if (new_hop.form === 'Plug' || new_hop.form === 'Leaf') {
+                  new_hop.form = 'Whole/Plug';
+                }
+
+                this.recipe.recipe_hops_attributes.push(new_hop);
+              },
+              error => {
+                alert("Failed to find " + hop_node.getElementsByTagName('NAME')[0].innerHTML)
+                console.error(error);
+              });
+          } else {
             error_list.push('Hop named ' + hop_node.getElementsByTagName('NAME')[0].innerHTML + ' was not found.');
           }
         }
@@ -4006,24 +4017,37 @@ export class DesignerService {
         const malt_list = node.getElementsByTagName('FERMENTABLE');
         for (let i = 0; i < malt_list.length; i++) {
           const malt_node = malt_list[i];
-          found = false;
-          this.malts.some((malt) => {
-            if (malt.name === malt_node.getElementsByTagName('NAME')[0].innerHTML) {
-              this.used_malts.push(malt);
-              const new_malt = {
-                malt_id: malt.id, id: null,
-                quantity: this.convertFromXml(parseFloat(malt_node.getElementsByTagName('AMOUNT')[0].innerHTML), 'malts'),
-                color: this.convertFromXml(parseFloat(malt_node.getElementsByTagName('COLOR')[0].innerHTML), 'color'), malt_usage:
-                  ((this.maltTypes[malt.malt_type_id - 1].name === 'Grain' || this.maltTypes[malt.malt_type_id - 1].name === 'Adjunct') ?
-                    'Mash' : 'Boil')
-              };
+          var malt_item = this.malt_name_list.find(key => key.name === malt_node.getElementsByTagName('NAME')[0].innerHTML)
+          if (malt_item) {
+            this._maltService.getMalt(malt_item.id)
+              .retryWhen((err) => {
+                return err.scan((retryCount) => {
+                  retryCount++;
+                  if (retryCount < 3) {
+                    return retryCount;
+                  } else {
+                    throw (err);
+                  }
+                }, 0).delay(1000);
+              })
+              .subscribe(malt => {
+                this.used_malts.push(malt);
+                
+                const new_malt = {
+                  malt_id: malt.id, id: null,
+                  quantity: this.convertFromXml(parseFloat(malt_node.getElementsByTagName('AMOUNT')[0].innerHTML), 'malts'),
+                  color: this.convertFromXml(parseFloat(malt_node.getElementsByTagName('COLOR')[0].innerHTML), 'color'), malt_usage:
+                    ((this.maltTypes[malt.malt_type_id - 1].name === 'Grain' || this.maltTypes[malt.malt_type_id - 1].name === 'Adjunct') ?
+                      'Mash' : 'Boil')
+                };
 
-              this.recipe.recipe_malts_attributes.push(new_malt);
-              found = true;
-              return true;
-            }
-          });
-          if (!found) {
+                this.recipe.recipe_malts_attributes.push(new_malt);
+              },
+              error => {
+                alert("Failed to retrieve " + malt_item.name)
+                console.error(error);
+              });
+          } else {
             error_list.push('Fermentable named ' + malt_node.getElementsByTagName('NAME')[0].innerHTML + ' was not found.');
           }
         }
@@ -4032,26 +4056,38 @@ export class DesignerService {
         const yeast_list = node.getElementsByTagName('YEAST');
         for (let i = 0; i < yeast_list.length; i++) {
           const yeast_node = yeast_list[i];
-          found = false;
-          this.yeast.some((yeast) => {
-            if ((yeast_node.getElementsByTagName(
-              'PRODUCT_ID')[0] && yeast.product_id === yeast_node.getElementsByTagName('PRODUCT_ID')[0].innerHTML) ||
-              (!yeast_node.getElementsByTagName('PRODUCT_ID')[0] && yeast.name === yeast_node.getElementsByTagName(
-                'NAME')[0].innerHTML)) {
-              this.used_yeast.push(yeast);
-              const new_yeast = {
-                yeast_id: yeast.id, id: null,
-                quantity: this.convertFromXml(parseFloat(yeast_node.getElementsByTagName('AMOUNT')[0].innerHTML), 'yeasts'),
-                fermentation_stage: yeast_node.getElementsByTagName(
-                  'ADD_TO_SECONDARY')[0] ? (yeast_node.getElementsByTagName('ADD_TO_SECONDARY')[0].innerHTML === 'TRUE' ? 2 : 1) : 1
-              };
+          var yeast_item = this.yeast_name_list.find(key => (yeast_node.getElementsByTagName(
+              'PRODUCT_ID')[0] && key.product_id === yeast_node.getElementsByTagName('PRODUCT_ID')[0].innerHTML) ||
+              (!yeast_node.getElementsByTagName('PRODUCT_ID')[0] && key.name === yeast_node.getElementsByTagName(
+                'NAME')[0].innerHTML))
+          if (yeast_item) {
+            this._yeastService.getYeast(yeast_item.id)
+              .retryWhen((err) => {
+                return err.scan((retryCount) => {
+                  retryCount++;
+                  if (retryCount < 3) {
+                    return retryCount;
+                  } else {
+                    throw (err);
+                  }
+                }, 0).delay(1000);
+              })
+              .subscribe(yeast => {
+                this.used_yeast.push(yeast);
+                const new_yeast = {
+                  yeast_id: yeast.id, id: null,
+                  quantity: this.convertFromXml(parseFloat(yeast_node.getElementsByTagName('AMOUNT')[0].innerHTML), 'yeasts'),
+                  fermentation_stage: yeast_node.getElementsByTagName(
+                    'ADD_TO_SECONDARY')[0] ? (yeast_node.getElementsByTagName('ADD_TO_SECONDARY')[0].innerHTML === 'TRUE' ? 2 : 1) : 1
+                };
 
-              this.recipe.recipe_yeasts_attributes.push(new_yeast);
-              found = true;
-              return true;
-            }
-          });
-          if (!found) {
+                this.recipe.recipe_yeasts_attributes.push(new_yeast);
+              },
+              error => {
+                alert("Failed to retrieve " + yeast_item.name)
+                console.error(error);
+              });
+          } else {
             error_list.push('Yeast named ' + yeast_node.getElementsByTagName('NAME')[0].innerHTML + ' was not found.');
           }
         }
@@ -4133,35 +4169,49 @@ export class DesignerService {
             });
           } else {
             const misc_name = misc_step_node.getElementsByTagName('NAME')[0].innerHTML;
-            this.miscellaneous.some((misc) => {
-              if (misc.name === misc_name) {
-                const new_misc = {
-                  miscellaneou_id: misc.id, id: null,
-                  quantity: misc_step_node.getElementsByTagName('AMOUNT')[0].innerHTML,
-                  quantity_label: (misc_step_node.getElementsByTagName('AMOUNT_IS_WEIGHT').length > 0 ? 'kg' : 'l'),
-                  time: misc_step_node.getElementsByTagName('TIME')[0].innerHTML, time_label: 'Minutes',
-                  usage: misc_step_node.getElementsByTagName('USE')[0].innerHTML
-                };
-                if (misc_step_node.getElementsByTagName('AMOUNT_LABEL').length > 0) {
-                  new_misc.quantity_label = misc_step_node.getElementsByTagName('AMOUNT_LABEL')[0].innerHTML;
-                }
-                if (new_misc.time >= 120) {
-                  new_misc.time = new_misc.time / 60;
-                  new_misc.time_label = 'Hours';
-                  if (new_misc.time >= 48) {
-                    new_misc.time = new_misc.time / 24;
-                    new_misc.time_label = 'Days';
+
+            var misc_item = this.yeast_name_list.find(key => (key.name === misc_name))
+            if (misc_item) {
+              this._miscService.getMiscellaneous(misc_item.id)
+                .retryWhen((err) => {
+                  return err.scan((retryCount) => {
+                    retryCount++;
+                    if (retryCount < 3) {
+                      return retryCount;
+                    } else {
+                      throw (err);
+                    }
+                  }, 0).delay(1000);
+                })
+                .subscribe(misc => {
+                  const new_misc = {
+                    miscellaneou_id: misc.id, id: null,
+                    quantity: misc_step_node.getElementsByTagName('AMOUNT')[0].innerHTML,
+                    quantity_label: (misc_step_node.getElementsByTagName('AMOUNT_IS_WEIGHT').length > 0 ? 'kg' : 'l'),
+                    time: misc_step_node.getElementsByTagName('TIME')[0].innerHTML, time_label: 'Minutes',
+                    usage: misc_step_node.getElementsByTagName('USE')[0].innerHTML
+                  };
+                  if (misc_step_node.getElementsByTagName('AMOUNT_LABEL').length > 0) {
+                    new_misc.quantity_label = misc_step_node.getElementsByTagName('AMOUNT_LABEL')[0].innerHTML;
                   }
-                }
-                this.recipe.recipe_miscellaneous_attributes.push(new_misc);
-                this.used_miscellaneous.push(misc);
-                found = true;
-                return true;
-              }
-            });
-          }
-          if (!found) {
-            error_list.push('Misc named ' + misc_step_node.getElementsByTagName('NAME')[0].innerHTML + ' was not found.');
+                  if (new_misc.time >= 120) {
+                    new_misc.time = new_misc.time / 60;
+                    new_misc.time_label = 'Hours';
+                    if (new_misc.time >= 48) {
+                      new_misc.time = new_misc.time / 24;
+                      new_misc.time_label = 'Days';
+                    }
+                  }
+                  this.recipe.recipe_miscellaneous_attributes.push(new_misc);
+                  this.used_miscellaneous.push(misc);
+                },
+                error => {
+                  alert("Failed to retrieve " + misc_name)
+                  console.error(error);
+                });
+            } else {
+              error_list.push('Miscellaneous named ' + misc_name + ' was not found.');
+            }
           }
         }
         break;
@@ -4251,5 +4301,139 @@ export class DesignerService {
   openDetail(detailPopup, index = 0) {
     this.detailIndex = index;
     this.detailModal = this._modalService.open(detailPopup, { size: 'lg' });
+  }
+
+  findMaltListItem(id) {
+    return this.malt_name_list.find(m => m.id === id)
+  }
+
+  // Listing functions
+  addUsedMalt(malt) {
+    this._maltService.getMalt(malt.id)
+      .retryWhen((err) => {
+        return err.scan((retryCount) => {
+          retryCount++;
+          if (retryCount < 3) {
+            return retryCount;
+          } else {
+            throw (err);
+          }
+        }, 0).delay(1000);
+      })
+      .subscribe(maltData => {
+        this.used_malts.push(maltData);
+
+        this.recipe.recipe_malts_attributes.push({
+          'id': null, 'malt_id': maltData.id,
+          'color': maltData.color, 'quantity': 0, 'malt_usage':
+            ((this.maltTypes[maltData.malt_type_id - 1].name === 'Grain' || this.maltTypes[maltData.malt_type_id - 1].name === 'Adjunct') ?
+              'Mash' : 'Boil')
+        });
+      },
+        error => {
+          alert("Failed to add " + malt.name)
+          console.error(error);
+        });
+  }
+
+  findYeastListItem(id) {
+    return this.yeast_name_list.find(y => y.id === id)
+  }
+
+  addUsedYeast(yeast, stage) {
+    this._yeastService.getYeast(yeast.id)
+      .retryWhen((err) => {
+        return err.scan((retryCount) => {
+          retryCount++;
+          if (retryCount < 3) {
+            return retryCount;
+          } else {
+            throw (err);
+          }
+        }, 0).delay(1000);
+      })
+      .subscribe(yeastData => {
+        this.recipe.recipe_yeasts_attributes.push({
+          id: null, yeast_id: yeastData.id,
+          quantity: 1, fermentation_stage: stage
+        });
+        this.used_yeast.push(Object.assign({}, yeastData));
+      },
+        error => {
+          alert("Failed to add " + yeast.name)
+          console.error(error);
+        });
+  }
+
+  findHopListItem(id) {
+    return this.hop_name_list.find(h => h.id === id)
+  }
+
+  addUsedHop(hop) {
+    this._hopService.getHop(hop.id)
+      .retryWhen((err) => {
+        return err.scan((retryCount) => {
+          retryCount++;
+          if (retryCount < 3) {
+            return retryCount;
+          } else {
+            throw (err);
+          }
+        }, 0).delay(1000);
+      })
+      .subscribe(hopData => {
+        this.used_hops.push(hopData);
+
+        const newAddition = {
+          hop_id: hopData.id, id: null,
+          quantity: 0, alpha: hopData.alpha, time: 0, form: 'Pellet',
+          usage: 'boil'
+        };
+
+        if (hopData.hop_type === 'Bittering') {
+          newAddition.time = 60;
+        } else if (hopData.hop_type === 'Aroma') {
+          newAddition.time = 5;
+        } else {
+          newAddition.time = 15;
+        }
+
+        this.recipe.recipe_hops_attributes.push(newAddition);
+      },
+        error => {
+          alert("Failed to add " + hop.name)
+          console.error(error);
+        });
+  }
+
+  addUsedMisc(misc) {
+    this._miscService.getMiscellaneous(misc.id)
+      .retryWhen((err) => {
+        return err.scan((retryCount) => {
+          retryCount++;
+          if (retryCount < 3) {
+            return retryCount;
+          } else {
+            throw (err);
+          }
+        }, 0).delay(1000);
+      })
+      .subscribe(misc => {
+        this.used_miscellaneous.push(Object.assign({}, misc));
+
+        const newAddition = {
+          miscellaneou_id: misc.id, id: null,
+          quantity: (misc.amount / misc.batch_size) * this.recipe.batch_size,
+          quantity_label: misc.amount_label, time: this._miscService.calculateTime(misc.time).time,
+          time_label: this.capitalizeFirstLetter(this._miscService.calculateTime(misc.time).label),
+          usage: misc.usage
+        };
+
+        this.recipe.recipe_miscellaneous_attributes.push(newAddition);
+      },
+      error => {
+        alert("Failed to retrieve " + misc.name)
+        console.error(error);
+      });
   }
 }

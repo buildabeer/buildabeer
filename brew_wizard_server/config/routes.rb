@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   put '/water_agents/:id', to: 'water_agents#update'
   resources :water_agents
 
+  get '/malts/names', to: 'malts#name_index'
   get '/malts/:id', to: 'malts#show'
   put '/malts/:id', to: 'malts#update'
   resources :malts
@@ -24,13 +25,13 @@ Rails.application.routes.draw do
   get '/mash_steps', to: 'mash_steps#index'
   get '/mash_steps/:id', to: 'mash_steps#show'
 
+  get '/styles/names', to: 'styles#name_index'
   get '/styles/:id', to: 'styles#show'
-  get '/style_names', to: 'styles#index_names'
   put '/styles/:id', to: 'styles#update'
   resources :styles
 
+  get '/hops/names', to: 'hops#name_index'
   get '/hops/:id', to: 'hops#show'
-  get '/hop_names', to: 'hops#index_names'
   put '/hops/:id', to: 'hops#update'
   resources :hops
 
@@ -46,12 +47,13 @@ Rails.application.routes.draw do
   post '/style_yeast_relations', to: 'style_yeast_relations#create'
   delete '/style_yeast_relations/:id', to: 'style_yeast_relations#destroy'
 
+  get '/miscellaneous/names', to: 'miscellaneous#name_index'
   get '/miscellaneous/:id', to: 'miscellaneous#show'
   put '/miscellaneous/:id', to: 'miscellaneous#update'
   resources :miscellaneous
 
+  get '/yeasts/names', to: 'yeasts#name_index'
   get '/yeasts/:id', to: 'yeasts#show'
-  get '/yeast_names', to: 'yeasts#index_names'
   put '/yeasts/:id', to: 'yeasts#update'
   resources :yeasts
 

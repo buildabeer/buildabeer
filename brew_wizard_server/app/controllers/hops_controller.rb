@@ -15,14 +15,14 @@ class HopsController < ApplicationController
     render json: @hops.sort_by { |hop| hop.name.downcase }, methods: :recipe_count, include: [:hop_relations]
   end
 
-  def index_names
+  def name_index
     if !user_signed_in?
-      @hops = Hop.where(global: true)
+      @hops = Hop.select("id, name, origin").where(global: true)
     else
-      @hops = Hop.where("global = ? OR user_id = ?", true, current_user.id)
+      @hops = Hop.select("id, name, origin").where("global = ? OR user_id = ?", true, current_user.id)
     end
 
-    render json: @hops.select("id, name, origin").sort_by { |hop| hop.name.downcase }
+    render json: @hops.sort_by { |hop| hop.name.downcase }
   end
 
   # GET /hops/1

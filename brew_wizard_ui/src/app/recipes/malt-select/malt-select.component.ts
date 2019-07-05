@@ -10,7 +10,6 @@ import { IMalt } from '../../malt/malt';
 })
 export class MaltSelectComponent implements OnInit {
 
-  @Input()
   maltOptions: IMalt[];
 
   @Input()
@@ -25,11 +24,13 @@ export class MaltSelectComponent implements OnInit {
   search = '';
   filterBase = 'any';
   filterType = 'any';
+  is_loading = true;
+  loading_message = "Retrieving Fermentable Data"
+  error = false;
 
   constructor(private _maltService: MaltService, private _modalService: NgbModal) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   addMaltSubmit(form: any): void {
     this.selectedMalt.emit({malts: this.selected_malts});
@@ -42,6 +43,26 @@ export class MaltSelectComponent implements OnInit {
     this.filterType = 'any';
     this.selected_malts = [];
     this.maltSelectModal = this._modalService.open(addMalt, { size: 'lg' });
+    
+    this._maltService.getMalts()
+      .retryWhen((err) => {
+        return err.scan((retryCount) => {
+          retryCount++;
+          if (retryCount < 3) {
+            return retryCount;
+          } else {
+            throw (err);
+          }
+        }, 0).delay(1000);
+      })
+      .subscribe(maltData => {
+        this.maltOptions = maltData;
+        this.is_loading = false
+      },
+        error => {
+          this.error = true;
+          console.error(error);
+        });
   }
 
   selectRow(row: IMalt): void {

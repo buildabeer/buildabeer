@@ -25,6 +25,12 @@ export class MaltService {
       .catch(this.handleError);
   }
 
+  getMaltNames(): any {
+    return this.http.get(`${environment.token_auth_config.apiBase}/malts/names`)
+      .map((response: any) => response)
+      .catch(this.handleError);
+  }
+
   createMalt(malt: IMalt): any {
     return this.http.post(`${environment.token_auth_config.apiBase}/malts/`, {malt});
   }

@@ -10,7 +10,6 @@ import { IYeast } from '../../yeast/yeast';
 })
 export class YeastSelectComponent implements OnInit {
 
-  @Input()
   yeastOptions: IYeast[];
 
   @Input()
@@ -27,6 +26,9 @@ export class YeastSelectComponent implements OnInit {
   filterType = 'All';
   yeastLabs: string[];
   suggestYeast = false;
+  is_loading = true;
+  loading_message = "Retrieving Yeast Data"
+  error = false;
 
   constructor(private _yeastService: YeastService, private _modalService: NgbModal) { }
 
@@ -39,11 +41,31 @@ export class YeastSelectComponent implements OnInit {
   }
 
   open(addYeast) {
+    this._yeastService.getYeasts()
+      .retryWhen((err) => {
+        return err.scan((retryCount) => {
+          retryCount++;
+          if (retryCount < 3) {
+            return retryCount;
+          } else {
+            throw (err);
+          }
+        }, 0).delay(1000);
+      })
+      .subscribe(yeastData => {
+        this.yeastOptions = yeastData;
+        this.is_loading = false;
+        this.yeastLabs = [...Array.from(new Set(this.yeastOptions.map(item => item.lab)))];
+      },
+        error => {
+          this.error = true;
+          console.error(error);
+        });
+
     this.search = '';
     this.filterLab = 'All';
     this.filterType = 'All';
     this.selected_yeast = [];
-    this.yeastLabs = [...Array.from(new Set(this.yeastOptions.map(item => item.lab)))];
     this.yeastSelectModal = this._modalService.open(addYeast, { size: 'lg' });
   }
 

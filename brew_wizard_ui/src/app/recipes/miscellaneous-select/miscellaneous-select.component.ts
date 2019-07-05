@@ -10,7 +10,6 @@ import { IMiscellaneous } from '../../miscellaneous/miscellaneous';
 })
 export class MiscellaneousSelectComponent implements OnInit {
 
-  @Input()
   miscellaneousOptions: IMiscellaneous[];
 
   @Output()
@@ -22,6 +21,9 @@ export class MiscellaneousSelectComponent implements OnInit {
   search = '';
   filterUsage = 'All';
   filterType = 'All';
+  is_loading = true;
+  loading_message = "Retrieving Miscellaneous Data"
+  error = false;
 
   misc_types: string[] = ['Spice', 'Fining', 'Herb', 'Flavor', 'Other'];
   misc_usages: string[] = ['Boil', 'Mash', 'Primary', 'Secondary', 'Bottling'];
@@ -37,6 +39,26 @@ export class MiscellaneousSelectComponent implements OnInit {
   }
 
   open(addMiscellaneous) {
+    this._miscellaneousService.getMiscellanies()
+      .retryWhen((err) => {
+        return err.scan((retryCount) => {
+          retryCount++;
+          if (retryCount < 3) {
+            return retryCount;
+          } else {
+            throw (err);
+          }
+        }, 0).delay(1000);
+      })
+      .subscribe(miscData => {
+        this.miscellaneousOptions = miscData;
+        this.is_loading = false;
+      },
+        error => {
+          this.error = true;
+          console.error(error);
+        });
+
     this.search = '';
     this.filterType = 'All';
     this.filterUsage = 'All';

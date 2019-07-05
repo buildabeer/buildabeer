@@ -13,6 +13,17 @@ class MaltsController < ApplicationController
     render json: @malts.sort_by { |malt| malt.name.downcase }, :include => { malt_type: { :only => [:name, :efficiency_impact] } }, methods: :recipe_count
   end
 
+  # GET /malts/names
+  def name_index
+    if !user_signed_in?
+      @malts = Malt.select("id, name").where(global: true)
+    else
+      @malts = Malt.select("id, name").where("global = ? OR user_id = ?", true, current_user.id)
+    end
+
+    render json: @malts.sort_by { |malt| malt.name.downcase }
+  end
+
   # GET /malts/1
   def show
     render json: @malt, :include => { malt_type: { :only => [:name, :efficiency_impact] } }, methods: :recipe_count

@@ -20,7 +20,7 @@ export class StyleService {
   }
 
   getStyleNames(): any {
-    return this.http.get(`${environment.token_auth_config.apiBase}/style_names`)
+    return this.http.get(`${environment.token_auth_config.apiBase}/styles/names`)
       .map((response: any) => response)
       .catch(this.handleError);
   }

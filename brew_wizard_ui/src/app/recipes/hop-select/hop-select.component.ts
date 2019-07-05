@@ -10,7 +10,6 @@ import { IHop } from '../../hop/hop';
 })
 export class HopSelectComponent implements OnInit {
 
-  @Input()
   hopOptions: IHop[];
 
   @Output()
@@ -26,6 +25,9 @@ export class HopSelectComponent implements OnInit {
   fullAromaList: string[] = [];
   aromaCheckbox: boolean[] = [];
   aromaSearch = '';
+  is_loading = true;
+  loading_message = "Retrieving Hop Data"
+  error = false;
 
   constructor(private _hopService: HopService, private _modalService: NgbModal) { }
 
@@ -38,15 +40,34 @@ export class HopSelectComponent implements OnInit {
   }
 
   open(addHop) {
+    this.hopSelectModal = this._modalService.open(addHop, { size: 'lg' });
     this.search = '';
     this.filterType = 'All';
     this.filterOrigin = 'All';
     this.selected_hops = [];
-    this.hopOrigins = [...Array.from(new Set(this.hopOptions.map(item => item.origin)))];
-    this.hopSelectModal = this._modalService.open(addHop, { size: 'lg' });
-    this.fullAromaList = this.getFullAromaList();
-    console.log(this.fullAromaList);
-    this.aromaCheckbox.fill(false, 0, this.fullAromaList.length - 1);
+    
+    this._hopService.getHops()
+      .retryWhen((err) => {
+        return err.scan((retryCount) => {
+          retryCount++;
+          if (retryCount < 3) {
+            return retryCount;
+          } else {
+            throw (err);
+          }
+        }, 0).delay(1000);
+      })
+      .subscribe(hopData => {
+        this.hopOptions = hopData;
+        this.is_loading = false;
+        this.hopOrigins = [...Array.from(new Set(this.hopOptions.map(item => item.origin)))];
+        this.fullAromaList = this.getFullAromaList();
+        this.aromaCheckbox.fill(false, 0, this.fullAromaList.length - 1);
+      },
+        error => {
+          this.error = true;
+          console.error(error);
+        });
   }
 
   selectRow(row: IHop): void {

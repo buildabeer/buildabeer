@@ -16,14 +16,14 @@ class YeastsController < ApplicationController
     render json: @yeasts.sort_by { |yeast| yeast.name.downcase }, include: [:style_yeasts, :yeast_relations], methods: :recipe_count
   end
 
-  def index_names
+  def name_index
     if !user_signed_in?
-      @yeasts = Yeast.where(global: true)
+      @yeasts = Yeast.select("id, name, product_id").where(global: true)
     else
-      @yeasts = Yeast.where("global = ? OR user_id = ?", true, current_user.id)
+      @yeasts = Yeast.select("id, name, product_id").where("global = ? OR user_id = ?", true, current_user.id)
     end
 
-    render json: @yeasts.select("id, name, product_id").sort_by { |yeast| yeast.name.downcase }
+    render json: @yeasts.sort_by { |yeast| yeast.name.downcase }
   end
 
   # GET /yeasts/1

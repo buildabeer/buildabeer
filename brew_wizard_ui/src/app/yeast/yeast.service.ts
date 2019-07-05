@@ -26,7 +26,7 @@ export class YeastService {
   }
 
   getYeastNames(): any {
-    return this.http.get(`${environment.token_auth_config.apiBase}/yeast_names`)
+    return this.http.get(`${environment.token_auth_config.apiBase}/yeasts/names`)
       .map((response: any) => response)
       .catch(this.handleError);
   }
